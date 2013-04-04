@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources>
+    <string name="default_empty_text">Изображения не загружены</string>
+    <string name="menu_settings">Настройки</string>
+    <string name="title_activity_main">Главная страница</string>
+    <string name="hello_world">Привет мир!</string>
+    <string name="main_activity_load_butt">Загрузить изображения</string>
+    <string name="back_image_descript">Фоновое изображение</string>
+    <string name="action_settings">Настройки</string>
+    <string name="app_name">Mozart test</string>
+    <string name="butt_details_text">Подробнее</string>
+    <string name="main_activity_show_butt">Показать коллекцию</string>
+    <string name="error_save_image">Ошибка. Невозможно сохранить файла на SD карту</string>
+    <string name="error_media_mount">Ошибка. Нет доступа к SD карте</string>
+    <string name="error_404"> файл не найден</string>
+</resources>

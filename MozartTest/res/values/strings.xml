@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<resources>
+    <string name="app_name">MozartTest</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="default_empty_text">No images loaded</string>
+    <string name="back_image_descript">Background image</string>
+    <string name="butt_details_text">Details</string>
+    <string name="action_settings">Settings</string>
+    <string name="main_activity_load_butt">Load images</string>
+    <string name="main_activity_show_butt">Show collection</string>
+    <string name="error_save_image">Error. Can not save image to SD card</string>
+    <string name="error_media_mount">Error. Can not access SD card</string>
+    <string name="error_404"> file not found</string>
+</resources>
