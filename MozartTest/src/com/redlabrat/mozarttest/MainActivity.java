@@ -1,8 +1,13 @@
 package com.redlabrat.mozarttest;
 
+import static com.redlabrat.mozarttest.Constants.*;
+
+import com.redlabrat.mozarttest.helpers.FileHelper;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -12,11 +17,23 @@ public class MainActivity extends Activity implements OnClickListener{
 
 	private Button loadButton = null;
 	private Button showButton = null;
+	private SharedPreferences prefs = null;
+	private FileHelper fh;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		prefs = getSharedPreferences(preferencesName, MODE_PRIVATE);
+		SharedPreferences.Editor prefsEditor = prefs.edit();
+		fh = new FileHelper(getApplicationContext());
+		// if it is a first start we need to copy 
+		// default XML catalog to internal memory
+		if (!prefs.getBoolean(pref_XMLCatalogCopied, false)) {
+			fh.copyXMLCatalogToInternalMemory();
+			prefsEditor.putBoolean(pref_XMLCatalogCopied, true);
+			prefsEditor.apply();
+		}
 		
 		loadButton = (Button) findViewById(R.id.loadDataButton);
 		loadButton.setOnClickListener(this);

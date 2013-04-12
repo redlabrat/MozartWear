@@ -5,8 +5,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 
@@ -15,6 +17,7 @@ import com.redlabrat.mozarttest.R;
 import static com.redlabrat.mozarttest.Constants.*;
 
 import android.content.Context;
+import android.graphics.AvoidXfermode.Mode;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
@@ -37,7 +40,7 @@ public class FileHelper {
 		ObjectInputStream ois = null;
 		ArrayList<String> outData = null;
 		try {
-			fis = mContext.openFileInput(internalDataFileName);
+			fis = mContext.openFileInput(internalArrayFileName);
 			ois = new ObjectInputStream(fis);
 			outData = (ArrayList<String>) ois.readObject();
 		} catch (FileNotFoundException e) {
@@ -70,7 +73,7 @@ public class FileHelper {
 		ObjectOutputStream oos = null;
 		
 		try {
-			dataStream = mContext.openFileOutput(internalDataFileName, Context.MODE_PRIVATE);
+			dataStream = mContext.openFileOutput(internalArrayFileName, Context.MODE_PRIVATE);
 			oos = new ObjectOutputStream(dataStream);
 			oos.writeObject(outData);
 		} catch (FileNotFoundException e) {
@@ -171,15 +174,6 @@ public class FileHelper {
 				return imageFile.getAbsolutePath();
 			} else {
 				Log.i("INFO", "Picture " + fileName + " not exist");
-//				imageFile.delete();
-//				Bitmap image = new ImageHelper(mContext).downloadImage("http://mozartwear.com/assets/images/zima/" + fileName);
-//				if (image != null) {
-//					saveImageToChache(image, fileName);
-//				} else {
-//					Log.e("IMAGE LOAD", "Error loading image");
-//					imageFile.delete();
-//					return null;
-//				}
 				// loading necessary file
 				new ImageHelper(mContext).loadAndSaveImageToCache("http://mozartwear.com/assets/images/zima/" + fileName);
 				imageFile = new File(folderForPics, fileName);
@@ -192,6 +186,43 @@ public class FileHelper {
 			Log.e("ERROR", "Media not mounted!");
 			return null;
 		}
+	}
+	
+	/**
+	 * Method user after application installation. Copies XML catalog
+	 * to internal app folder
+	 */
+	public boolean copyXMLCatalogToInternalMemory() {
+		FileOutputStream fos = null;
+		InputStream is = mContext.getResources().openRawResource(R.raw.catalog);
+		byte [] buffer = new byte[100];
+		int bytesReaded = 0;
+		try {
+			fos = mContext.openFileOutput(internalXMLCatalogFileName, Context.MODE_PRIVATE);
+			while ((bytesReaded = is.read(buffer)) != -1) {
+				fos.write(buffer, 0, bytesReaded);
+			}
+		} catch (FileNotFoundException e) {
+			Log.e("ERROR", "Error open out stream for saving images names array");
+			e.printStackTrace();
+			return false;
+		} catch (IOException e) {
+			Log.e("ERROR", "Can not write XML catalog to internal file");
+			e.printStackTrace();
+			return false;
+		}
+		finally {
+			if (fos != null) {
+				try {
+					fos.close();
+					is.close();
+				} catch (IOException e) {
+					Log.e("ERROR", "Can not close XML file after copy");
+					e.printStackTrace();
+				}
+			}
+		}
+		return true;
 	}
 
 }

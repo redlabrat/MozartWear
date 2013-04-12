@@ -1,30 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<collection name="Лето 2013" >
-    <image url="http://mozartwear.com/assets/images/summer_2012/IMG_0131.jpg" >
-        <product name="S-1333" >
+<data xmlns="" >
+
+    <collection name="Лето 2013" >
+        <image url="http://mozartwear.com/assets/images/summer_2012/IMG_0131.jpg" >
+            <product name="S-1333" >
             жакет 36% хлопок, 28% вискоза, 26% полиамид, 10% кашемир
-        </product>
-        <product name="S-1321" >
+            </product>
+            <product name="S-1321" >
             джемпер 45% вискоза, 30% ПАН, 15% шелк, 10% хлопок
-        </product>
-        <product name="S-1323" >
+            </product>
+            <product name="S-1323" >
             юбка 100% полиэстер
-        </product>
-    </image>
-    <image url="http://mozartwear.com/assets/images/summer_2012/IMG_7187.jpg" >
-        <product name="S-1325" >
+            </product>
+        </image>
+        <image url="http://mozartwear.com/assets/images/summer_2012/IMG_7187.jpg" >
+            <product name="S-1325" >
             джемпер 45% вискоза, 30% ПАН, 15% шелк, 10% хлопок
-        </product>
-        <product name="S-1328" >
+            </product>
+            <product name="S-1328" >
             юбка 100% полиэстер
-        </product>
-    </image>
-    <image url="http://mozartwear.com/assets/images/summer_2012/IMG_7315.jpg" >
-        <product name="S-1326" >
+            </product>
+        </image>
+        <image url="http://mozartwear.com/assets/images/summer_2012/IMG_7315.jpg" >
+            <product name="S-1326" >
             джемпер 45% вискоза, 30% ПАН, 15% шелк, 10% хлопок
-        </product>
-        <product name="S-1327" >
+            </product>
+            <product name="S-1327" >
             юбка 100% полиэстер
-        </product>
-    </image>
-</collection>
+            </product>
+        </image>
+    </collection>
+
+</data>
