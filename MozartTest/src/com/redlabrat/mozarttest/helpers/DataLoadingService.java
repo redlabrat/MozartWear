@@ -1,12 +1,19 @@
 package com.redlabrat.mozarttest.helpers;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import org.xmlpull.v1.XmlPullParserException;
+
+import com.redlabrat.mozarttest.R;
+import com.redlabrat.mozarttest.data.Collection;
+
 import android.app.Service;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -16,6 +23,7 @@ public class DataLoadingService extends Service {
 	private ArrayList<String> imageNames = null;
 	private static ImageHelper ih = null;
 	private static FileHelper fh = null;
+	private IBinder binder = null;
 	/**
 	 *  1. Load XML file
 	 *  2. Check for changes
@@ -24,8 +32,11 @@ public class DataLoadingService extends Service {
 	 */
 	@Override
 	public IBinder onBind(Intent arg0) {
+		binder = new Binder();
 		ih = new ImageHelper(getApplicationContext());
 		fh = new FileHelper(getApplicationContext());
+		
+		// if there is no Internet connection return error
 		// 4. Load new data
 		// get URL of images from XML
 		getImagesURLs();
@@ -34,14 +45,29 @@ public class DataLoadingService extends Service {
 		
 		// save products description as array in preferences
 		
-		return null;
+		return binder;
 	}
 	
 	private void getImagesURLs() {
+		XMLParser parser = new XMLParser();
+		
+		InputStream is = getResources().openRawResource(R.raw.catalog);
+		try {
+			parser.parse(is);
+		} catch (XmlPullParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		ArrayList<Collection> coll = parser.getListOfParsedCollections(); 
+		
 		imageURLs = new ArrayList<String>();
 		imageNames = new ArrayList<String>();
 		
-		imageURLs.add("http://mozartwear.com/assets/images/zima/img1.jpg");
+		imageURLs.add(coll.get(0).getListOfImages().get(0).getUrl());
 		imageURLs.add("http://mozartwear.com/assets/images/zima/img2.jpg");
 		imageURLs.add("http://mozartwear.com/assets/images/zima/img3.jpg");
 		imageURLs.add("http://mozartwear.com/assets/images/zima/img4.jpg");

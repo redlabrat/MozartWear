@@ -26,5 +26,7 @@ public class Collection {
 	public void addImageToCollection(ImageWithProducts newImage) {
 		listOfImages.add(newImage);
 	}
-
+	public ArrayList<ImageWithProducts> getListOfImages() {
+		return listOfImages;
+	}
 }

@@ -2,12 +2,18 @@ package com.redlabrat.mozarttest;
 
 import static com.redlabrat.mozarttest.Constants.*;
 
+import com.redlabrat.mozarttest.helpers.DataLoadingService;
 import com.redlabrat.mozarttest.helpers.FileHelper;
 
 import android.os.Bundle;
+import android.os.IBinder;
 import android.app.Activity;
+import android.app.Service;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -52,7 +58,13 @@ public class MainActivity extends Activity implements OnClickListener{
 		switch (v.getId()) {
 		case R.id.loadDataButton: {
 			// Start update service
-
+			Intent service = new Intent(getApplicationContext(), DataLoadingService.class);
+			ServiceConnection conn = new DataLoadingServiceConnection();
+			if (bindService(service, conn, BIND_AUTO_CREATE)) {
+				Log.i("INFO", "Service successfully started");
+			} else {
+				Log.i("INFO", "Can not bind to service");
+			}
 			break;
 		}
 		case R.id.showCollectionButton: {
@@ -60,6 +72,19 @@ public class MainActivity extends Activity implements OnClickListener{
 			startActivity(intent);
 			break;
 		}
+		}
+		
+	}
+	
+	private class DataLoadingServiceConnection implements ServiceConnection {
+
+		public void onServiceConnected(ComponentName name, IBinder service) {
+			
+		}
+
+		public void onServiceDisconnected(ComponentName name) {
+			// TODO Auto-generated method stub
+			
 		}
 		
 	}

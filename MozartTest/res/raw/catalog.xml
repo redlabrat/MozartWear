@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<data xmlns="" >
+<catalog xmlns="" >
 
     <collection name="Лето 2013" >
         <image url="http://mozartwear.com/assets/images/summer_2012/IMG_0131.jpg" >
@@ -31,4 +31,4 @@
         </image>
     </collection>
 
-</data>
+</catalog>

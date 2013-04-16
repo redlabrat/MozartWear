@@ -15,10 +15,13 @@ public class Constants {
 	public static final String preferencesName = "preferences";
 	public static final String pref_XMLCatalogCopied = "copyCatalog";
 	
-	public static final String dataTagName = "data";
+	public static final String catalogTagName = "catalog";
 	public static final String collectionTagName = "collection";
 	public static final String imageTagName = "image";
 	public static final String productTagName = "product";
+	public static final String xmlAttributeName = "name";
+	public static final String xmlAttributeUrl = "url";
+
 	/**
 	 *  Method converts dp points to corresponding device specific value of pixels 
 	 * @param dp  Value of DIP need to convert
