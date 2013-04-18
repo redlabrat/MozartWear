@@ -4,13 +4,15 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 
 public class Constants {
-	public static final String fragmentImageID = "imageID";
-	public static final String fragmentImageURL = "imageURL";
-	public static final String fragmentImagePath = "imagePath";
+	public static final String fragmentImage = "image";
+	public static final String activityCollectionNumber = "coll_number";
+//	public static final String fragmentImageURL = "imageURL";
+//	public static final String fragmentImagePath = "imagePath";
 	public static final String imagesFolderName = "images";
 //	public static final String internalFolderName = "data";
 	public static final String internalArrayFileName = "names.dat";
 	public static final String internalXMLCatalogFileName = "catalog.xml";
+	public static final String no_imageFileName = "no_image.png";
 
 	public static final String preferencesName = "preferences";
 	public static final String pref_XMLCatalogCopied = "copyCatalog";

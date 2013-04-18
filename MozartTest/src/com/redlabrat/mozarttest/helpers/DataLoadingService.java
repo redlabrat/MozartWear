@@ -8,8 +8,11 @@ import java.util.ArrayList;
 
 import org.xmlpull.v1.XmlPullParserException;
 
+import static com.redlabrat.mozarttest.Constants.*;
+
 import com.redlabrat.mozarttest.R;
 import com.redlabrat.mozarttest.data.Collection;
+import com.redlabrat.mozarttest.data.ImageWithProducts;
 
 import android.app.Service;
 import android.content.Intent;
@@ -19,8 +22,7 @@ import android.util.Log;
 
 public class DataLoadingService extends Service {
 
-	private ArrayList<String> imageURLs = null;
-	private ArrayList<String> imageNames = null;
+	private ArrayList<Collection> collections = null;
 	private static ImageHelper ih = null;
 	private static FileHelper fh = null;
 	private IBinder binder = null;
@@ -36,24 +38,27 @@ public class DataLoadingService extends Service {
 		ih = new ImageHelper(getApplicationContext());
 		fh = new FileHelper(getApplicationContext());
 		
+		// download XML
 		// if there is no Internet connection return error
+		
+		// check for changes
+		
 		// 4. Load new data
-		// get URL of images from XML
-		getImagesURLs();
-		// get description of products
-		getImagesFromNetwork();
+		// get images from XML
+		getImagesFromXML();
 		
 		// save products description as array in preferences
 		
 		return binder;
 	}
 	
-	private void getImagesURLs() {
+	private void getImagesFromXML() {
 		XMLParser parser = new XMLParser();
 		
 		InputStream is = getResources().openRawResource(R.raw.catalog);
 		try {
 			parser.parse(is);
+			collections = parser.getListOfParsedCollections();
 		} catch (XmlPullParserException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -62,51 +67,46 @@ public class DataLoadingService extends Service {
 			e.printStackTrace();
 		}
 		
-		ArrayList<Collection> coll = parser.getListOfParsedCollections(); 
+		collections = parser.getListOfParsedCollections(); 
 		
-		imageURLs = new ArrayList<String>();
-		imageNames = new ArrayList<String>();
+		downloadCollections(collections);
 		
-		imageURLs.add(coll.get(0).getListOfImages().get(0).getUrl());
-		imageURLs.add("http://mozartwear.com/assets/images/zima/img2.jpg");
-		imageURLs.add("http://mozartwear.com/assets/images/zima/img3.jpg");
-		imageURLs.add("http://mozartwear.com/assets/images/zima/img4.jpg");
-		imageURLs.add("http://mozartwear.com/assets/images/zima/img5.jpg");
-		imageURLs.add("http://mozartwear.com/assets/images/zima/img6.jpg");
-		imageURLs.add("http://mozartwear.com/assets/images/zima/img7.jpg");
-		imageURLs.add("http://mozartwear.com/assets/images/zima/img10.jpg");
-		imageURLs.add("http://mozartwear.com/assets/images/zima/img11.jpg");
 	}
 	
-	private void getImagesFromNetwork() {
+	private void downloadCollections(ArrayList<Collection> coll) {
 		String str = null;
-		for (int counter = 0; counter < imageURLs.size(); counter++) {
-			str = imageURLs.get(counter);
-			try {
-				if (new URL(str).getContent() != null) {
-					ih.loadAndSaveImageToCache(str);
-				} else {
-					Log.i("INFO", "Incorrect URL or file type " + str);
-					// remove image name if it is not on server
-					imageURLs.remove(counter);
+		ArrayList<ImageWithProducts> imagesArray = null;
+		int startSubString = 0;
+		String fileName = null;
+
+		for (int counter = 0; counter < coll.size(); counter++) {
+			imagesArray = coll.get(counter).getListOfImages();
+			for (int imgCounter = 0; imgCounter < imagesArray.size(); imgCounter++) {
+				str = imagesArray.get(imgCounter).getUrl();
+				try {
+					if (new URL(str).getContent() != null) {
+						ih.loadAndSaveImageToCache(str);
+						// cutting image name
+						startSubString = str.lastIndexOf("/");
+						fileName = str.substring(startSubString);
+					} else {
+						Log.i("INFO", "Incorrect URL or file type " + str);
+						// if this url is not available set default image
+						fileName = no_imageFileName;
+						
+					}
+				} catch (MalformedURLException e) {
+					Log.e("ERROR", "Incorrect URL " + str);
+					e.printStackTrace();
+				} catch (IOException e) {
+					Log.e("ERROR", "Can not load image " + str);
+					e.printStackTrace();
 				}
-			} catch (MalformedURLException e) {
-				Log.e("ERROR", "Incorrect URL " + str);
-				e.printStackTrace();
-			} catch (IOException e) {
-				Log.e("ERROR", "Can not load image " + str);
-				e.printStackTrace();
+				imagesArray.get(imgCounter).setName(fileName);
 			}
 		}
-		// cutting images names to separate array
-		int startSubString = 0;
-		for (int counter = 0; counter < imageURLs.size(); counter++) {
-			str = imageURLs.get(counter);
-			startSubString = str.lastIndexOf("/");
-			String fileName = str.substring(startSubString);
-			imageNames.add(fileName);
-		}
-		// save images names list
-		fh.saveImagesNames(imageNames);
+		// save saving collection of images
+		// without filePath
+		fh.saveListOfCollections(coll);
 	}
 }

@@ -68,7 +68,9 @@ public class MainActivity extends Activity implements OnClickListener{
 			break;
 		}
 		case R.id.showCollectionButton: {
-			Intent intent = new Intent(getApplicationContext(), ProductViewActivity.class);
+			Intent intent = new Intent(getApplicationContext(), CollectionViewActivity.class);
+			//TODO: change for appropriate collection number
+			intent.putExtra(activityCollectionNumber, 0);
 			startActivity(intent);
 			break;
 		}

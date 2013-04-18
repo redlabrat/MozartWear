@@ -9,12 +9,6 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true" >
 
-        <ImageView
-            android:id="@+id/backImageView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="@string/back_image_descript"
-            android:src="@drawable/img1" />
     </FrameLayout>
     
     
@@ -65,5 +59,13 @@
         android:text="@string/default_empty_text"
         android:visibility="invisible" >
     </TextView>
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/defaultText"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/no_image" />
 
 </RelativeLayout>

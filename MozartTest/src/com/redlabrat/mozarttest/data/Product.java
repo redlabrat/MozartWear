@@ -1,11 +1,14 @@
 package com.redlabrat.mozarttest.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * class representing one product that could be mentioned on image
  * @author redlabrat
  *
  */
-public class Product {
+public class Product implements Parcelable{
 
 	private String name;
 	private String description;
@@ -17,6 +20,11 @@ public class Product {
 	public Product(String mName, String mDesc) {
 		name = mName;
 		description = mDesc;
+	}
+
+	public Product(Parcel source) {
+		name = source.readString();
+		description = source.readString();
 	}
 
 	public String getName() {
@@ -34,6 +42,25 @@ public class Product {
 	public void setDescription(String mDesc) {
 		this.description = mDesc;
 	}
+
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(name);
+		dest.writeString(description);
+	}
 	
-	
+	public static final Parcelable.Creator<Product> CREATOR = new Creator<Product>() {
+		
+		public Product[] newArray(int size) {
+			return new Product[size];
+		}
+		
+		public Product createFromParcel(Parcel source) {
+			return new Product(source);
+		}
+	};
 }

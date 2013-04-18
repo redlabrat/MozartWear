@@ -1,6 +1,10 @@
 package com.redlabrat.mozarttest.View;
 
+import java.util.ArrayList;
+
 import com.redlabrat.mozarttest.R;
+import com.redlabrat.mozarttest.data.ImageWithProducts;
+import com.redlabrat.mozarttest.data.Product;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -18,10 +22,10 @@ import static com.redlabrat.mozarttest.Constants.*;
 public class ProductsScreenSliderFragment extends Fragment {
 
 	private FrameLayout contentFrame = null;
-	private ImageView image = null;
+	private ImageView imageView = null;
 	private TextView textViewDescript = null;
 	private String description = null;
-	private String imagePath = null;
+	private ImageWithProducts imageData = null;
 
 	public ProductsScreenSliderFragment() {
 		super();
@@ -33,7 +37,7 @@ public class ProductsScreenSliderFragment extends Fragment {
 		ViewGroup rootView = (ViewGroup) inflater.inflate(
 				R.layout.page_to_scroll, container, false);
 		contentFrame = (FrameLayout) rootView.findViewById(R.id.descriptionFrame);
-		image = (ImageView) rootView.findViewById(R.id.imageToShow);
+		imageView = (ImageView) rootView.findViewById(R.id.imageToShow);
 		textViewDescript = (TextView) rootView.findViewById(R.id.descriptionText);
 
 		// TODO:  need to set valid for device frame size
@@ -47,21 +51,29 @@ public class ProductsScreenSliderFragment extends Fragment {
 //		contentFrame.setMinimumWidth(minWidth);
 		
 		addImageToScrollView();
-		description = "Default description\n" + "image path: " + imagePath;
-		textViewDescript.setText(description);
+		setDescriptionText();
 
 		return rootView;
 	}
 	
 	@Override
 	public void setArguments(Bundle args) {
-		imagePath = args.getString(fragmentImagePath);
-		Log.i("INFO", "Image path " + imagePath + " recived");
+		imageData = args.getParcelable(fragmentImage);
+		Log.i("INFO", "Image path " + imageData.getFilePath() + " recieved");
 	};
 	
 	private void addImageToScrollView() {
-		Drawable drawable = Drawable.createFromPath(imagePath);
-		image.setImageDrawable(drawable);
-		image.setScaleType(ImageView.ScaleType.CENTER_CROP);
+		Drawable drawable = Drawable.createFromPath(imageData.getFilePath());
+		imageView.setImageDrawable(drawable);
+		imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+	}
+	
+	private void setDescriptionText() {
+		description = "";
+		ArrayList<Product> products = imageData.getListOfProducts();
+		for (int counter = 0; counter < products.size(); counter++) {
+			description += products.get(counter).getDescription() + "\n";
+		}
+		textViewDescript.setText(description);
 	}
 }

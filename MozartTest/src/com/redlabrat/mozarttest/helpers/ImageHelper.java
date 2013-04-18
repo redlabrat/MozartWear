@@ -37,8 +37,6 @@ public class ImageHelper {
 				Log.i("THREAD", "Download finished and image setted");
 			}
 		}).start();
-//		this.imageAddress = address;
-//		run();
 		return image;
 	}
 

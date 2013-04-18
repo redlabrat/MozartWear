@@ -12,7 +12,9 @@ import java.io.OutputStream;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 
+import com.redlabrat.mozarttest.MozartApplication;
 import com.redlabrat.mozarttest.R;
+import com.redlabrat.mozarttest.data.Collection;
 
 import static com.redlabrat.mozarttest.Constants.*;
 
@@ -35,14 +37,14 @@ public class FileHelper {
 	}
 	
 	@SuppressWarnings("unchecked") // casting from Object in file to ArrayList 
-	public ArrayList<String> loadImagesNames() {
+	public ArrayList<Collection> loadListOfCollections() {
 		FileInputStream fis = null;
 		ObjectInputStream ois = null;
-		ArrayList<String> outData = null;
+		ArrayList<Collection> outData = null;
 		try {
 			fis = mContext.openFileInput(internalArrayFileName);
 			ois = new ObjectInputStream(fis);
-			outData = (ArrayList<String>) ois.readObject();
+			outData = (ArrayList<Collection>) ois.readObject();
 		} catch (FileNotFoundException e) {
 			Log.e("ERROR", "Error open input stream for loading images names array");
 			e.printStackTrace();
@@ -53,7 +55,7 @@ public class FileHelper {
 			Log.e("ERROR", "Can not read input stream for ArrayList");
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			Log.e("ERROR", "Can not cast object to ArrayList");
+			Log.e("ERROR", "Can not cast object to ArrayList of collections");
 			e.printStackTrace();
 		} finally {
 			if (ois != null) {
@@ -68,16 +70,20 @@ public class FileHelper {
 		return outData;
 	}
 	
-	public void saveImagesNames(ArrayList<String> outData) {
+	public void saveListOfCollections(ArrayList<Collection> outData) {
 		FileOutputStream dataStream = null;
 		ObjectOutputStream oos = null;
+		
+		// update of global variable
+		MozartApplication app = (MozartApplication) mContext.getApplicationContext();
+		app.setCollectionsArray(outData);
 		
 		try {
 			dataStream = mContext.openFileOutput(internalArrayFileName, Context.MODE_PRIVATE);
 			oos = new ObjectOutputStream(dataStream);
 			oos.writeObject(outData);
 		} catch (FileNotFoundException e) {
-			Log.e("ERROR", "Error open out stream for saving images names array");
+			Log.e("ERROR", "Error open out stream for saving collections array");
 			e.printStackTrace();
 		} catch (IOException e) {
 			Log.e("ERROR", "Can not write array to file");

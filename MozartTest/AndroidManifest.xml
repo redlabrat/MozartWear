@@ -15,9 +15,10 @@
         android:allowBackup="false"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme" 
+        android:name="com.redlabrat.mozarttest.MozartApplication">
         <activity
-            android:name="com.redlabrat.mozarttest.ProductViewActivity"
+            android:name="com.redlabrat.mozarttest.CollectionViewActivity"
             android:label="@string/title_activity_main" >
         </activity>
         <activity

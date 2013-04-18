@@ -3,6 +3,8 @@ package com.redlabrat.mozarttest;
 import java.util.ArrayList;
 
 import com.redlabrat.mozarttest.View.ProductsScreenSliderFragment;
+import com.redlabrat.mozarttest.data.Collection;
+import com.redlabrat.mozarttest.data.ImageWithProducts;
 import com.redlabrat.mozarttest.helpers.FileHelper;
 
 import static com.redlabrat.mozarttest.Constants.*;
@@ -16,19 +18,21 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 
-public class ProductViewActivity extends FragmentActivity {
+public class CollectionViewActivity extends FragmentActivity {
 
 	private ViewPager pager = null;
 	private PagerAdapter adapter = null;
-
-	private ArrayList<String> imagesPaths = null;
+	private ArrayList<ImageWithProducts> currCollection;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_product_view);
-
-		getImagesPaths();
+		
+		MozartApplication app = (MozartApplication) getApplicationContext();
+		int collNumber = getIntent().getIntExtra(activityCollectionNumber, 0);
+		currCollection = app.getCollectionsArray().get(collNumber).getListOfImages();
+		
 		pager = (ViewPager) findViewById(R.id.productsPager);
 		adapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
 		pager.setAdapter(adapter);
@@ -39,27 +43,7 @@ public class ProductViewActivity extends FragmentActivity {
 		//				ImageHelper().downloadImage("http://mozartwear.com/assets/images/zima/img1.jpg"));
 		// loadImages();
 	}
-
-	private void getImagesPaths() {
-		imagesPaths = new ArrayList<String>();
-		
-		FileHelper fh = new FileHelper(getApplicationContext());
-		// after service finished
-		//imagesPaths = fh.loadImagesNames();
-		
-		imagesPaths.add(fh.getImagePath("img1.jpg"));
-		imagesPaths.add(fh.getImagePath("img2.jpg"));
-		imagesPaths.add(fh.getImagePath("img3.jpg"));
-		imagesPaths.add(fh.getImagePath("img4.jpg"));
-		imagesPaths.add(fh.getImagePath("img5.jpg"));
-		imagesPaths.add(fh.getImagePath("img6.jpg"));
-		imagesPaths.add(fh.getImagePath("img7.jpg"));
-		imagesPaths.add(fh.getImagePath("img8.jpg"));
-		imagesPaths.add(fh.getImagePath("img10.jpg"));
-		imagesPaths.add(fh.getImagePath("img11.jpg"));
-		imagesPaths.add(fh.getImagePath("img12.jpg"));
-	}
-
+	
 	private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
 		public ScreenSlidePagerAdapter(FragmentManager fm) {
 			super(fm);
@@ -69,14 +53,14 @@ public class ProductViewActivity extends FragmentActivity {
 		public Fragment getItem(int position) {
 			ProductsScreenSliderFragment fragment = new ProductsScreenSliderFragment();
 			Bundle params = new Bundle();
-			params.putString(fragmentImagePath, imagesPaths.get(position));
+			params.putParcelable(fragmentImage, currCollection.get(position));
 			fragment.setArguments(params);
 			return fragment;
 		}
 
 		@Override
 		public int getCount() {
-			return imagesPaths.size();
+			return currCollection.size();
 		}
 	}
 
