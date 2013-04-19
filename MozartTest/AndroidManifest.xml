@@ -31,7 +31,8 @@
             </intent-filter>
         </activity>
 
-        <service android:name="com.redlabrat.mozarttest.helpers.DataLoadingService" >
+        <service android:name="com.redlabrat.mozarttest.helpers.DataLoadingService" 
+            android:isolatedProcess="true">
         </service>
     </application>
 

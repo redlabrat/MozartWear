@@ -1,5 +1,6 @@
 package com.redlabrat.mozarttest.data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import android.os.Parcel;
@@ -11,8 +12,12 @@ import android.os.Parcelable;
  * @author redlabrat
  *
  */
-public class ImageWithProducts implements Parcelable{
+public class ImageWithProducts implements Parcelable, Serializable{
 
+	/**
+	 * for Serialization
+	 */
+	private static final long serialVersionUID = 1L;
 	private ArrayList<Product> listOfProducts;
 	private String url = null;
 	private String name = null;

@@ -4,5 +4,7 @@
         </style>
     <color name="blackHalfTransparent">#88000000</color>
     <color name="descriptionText">#FFF</color>
+    <color name="backgoundColor">#FFF</color>
+    <color name="collectionNameColor">#000</color>
 
 </resources>

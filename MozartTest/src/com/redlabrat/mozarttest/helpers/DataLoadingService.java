@@ -5,11 +5,13 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import org.xmlpull.v1.XmlPullParserException;
 
 import static com.redlabrat.mozarttest.Constants.*;
 
+import com.redlabrat.mozarttest.MozartApplication;
 import com.redlabrat.mozarttest.R;
 import com.redlabrat.mozarttest.data.Collection;
 import com.redlabrat.mozarttest.data.ImageWithProducts;
@@ -26,6 +28,7 @@ public class DataLoadingService extends Service {
 	private static ImageHelper ih = null;
 	private static FileHelper fh = null;
 	private IBinder binder = null;
+
 	/**
 	 *  1. Load XML file
 	 *  2. Check for changes
@@ -40,9 +43,29 @@ public class DataLoadingService extends Service {
 		
 		// download XML
 		// if there is no Internet connection return error
+		LoadAndParseXMLTask loadXml = new LoadAndParseXMLTask();
+		loadXml.execute(xmlUrl);
+		ArrayList<Collection> newColl = null;
+		ArrayList<Collection> currColl = ((MozartApplication) getApplicationContext()).getCollectionsArray();
+		try {
+			newColl = loadXml.get();
+		} catch (InterruptedException e) {
+			Log.e("ERROR", "Not loaded xml");
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			Log.e("ERROR", "Error while loading xml");
+			e.printStackTrace();
+		}
+		
 		
 		// check for changes
-		
+		if (newColl.equals(currColl)) {
+			Log.i("INFO", "Xml not changed");
+		} else {
+			Log.i("INFO", "Xml changed!");
+			fh.saveListOfCollections(newColl);
+			downloadCollections(newColl);
+		}
 		// 4. Load new data
 		// get images from XML
 		getImagesFromXML();
@@ -51,6 +74,8 @@ public class DataLoadingService extends Service {
 		
 		return binder;
 	}
+	
+	
 	
 	private void getImagesFromXML() {
 		XMLParser parser = new XMLParser();
@@ -86,6 +111,7 @@ public class DataLoadingService extends Service {
 				try {
 					if (new URL(str).getContent() != null) {
 						ih.loadAndSaveImageToCache(str);
+						
 						// cutting image name
 						startSubString = str.lastIndexOf("/");
 						fileName = str.substring(startSubString);

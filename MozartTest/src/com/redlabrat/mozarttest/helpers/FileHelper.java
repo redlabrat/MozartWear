@@ -12,6 +12,8 @@ import java.io.OutputStream;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 
+import org.xmlpull.v1.XmlPullParserException;
+
 import com.redlabrat.mozarttest.MozartApplication;
 import com.redlabrat.mozarttest.R;
 import com.redlabrat.mozarttest.data.Collection;
@@ -192,6 +194,23 @@ public class FileHelper {
 			Log.e("ERROR", "Media not mounted!");
 			return null;
 		}
+	}
+	
+	public ArrayList<Collection> parseInternalXml() {
+		ArrayList<Collection> catalog = null;
+		XMLParser parser = new XMLParser();
+		InputStream is = mContext.getResources().openRawResource(R.raw.catalog);
+		try {
+			parser.parse(is);
+		} catch (XmlPullParserException e) {
+			Log.e("ERROR", "Can not parse XML");
+			e.printStackTrace();
+		} catch (IOException e) {
+			Log.e("ERROR", "Can not read from stream while parsing XML");
+			e.printStackTrace();
+		}
+		catalog = parser.getListOfParsedCollections();
+		return catalog;
 	}
 	
 	/**

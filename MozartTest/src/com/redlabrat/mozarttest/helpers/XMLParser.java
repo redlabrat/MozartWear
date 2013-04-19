@@ -99,12 +99,25 @@ public class XMLParser {
 	}
 
 	private String readText(XmlPullParser xmlParser) throws XmlPullParserException, IOException {
-		String text = "";
+		StringBuilder text = new StringBuilder("");
 		if (xmlParser.next() == XmlPullParser.TEXT) {
-			text = xmlParser.getText();
+			text.append(xmlParser.getText());
 			xmlParser.nextTag();
 		}
-		return text;
+		int space = text.indexOf(" ");
+		if (space != -1) {
+			text.setCharAt(space, '\n');
+		}
+		while (space < text.length()) {
+			space = text.indexOf(", ", space);
+			if (space != -1) {
+				text.setCharAt(++space, '\n');
+			} else {
+				space = text.length();
+			}
+		}
+		
+		return text.toString();
 	}
 	
 	private void skip(XmlPullParser xmlParser) throws XmlPullParserException, IOException {

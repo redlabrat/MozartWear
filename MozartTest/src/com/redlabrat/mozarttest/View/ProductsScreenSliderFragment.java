@@ -24,7 +24,7 @@ public class ProductsScreenSliderFragment extends Fragment {
 	private FrameLayout contentFrame = null;
 	private ImageView imageView = null;
 	private TextView textViewDescript = null;
-	private String description = null;
+	//private String description = null;
 	private ImageWithProducts imageData = null;
 
 	public ProductsScreenSliderFragment() {
@@ -69,11 +69,13 @@ public class ProductsScreenSliderFragment extends Fragment {
 	}
 	
 	private void setDescriptionText() {
-		description = "";
+		StringBuilder description = new StringBuilder("");
 		ArrayList<Product> products = imageData.getListOfProducts();
 		for (int counter = 0; counter < products.size(); counter++) {
-			description += products.get(counter).getDescription() + "\n";
+			description.append(products.get(counter).getDescription());
+			description.append("\n\n");
 		}
+		description.delete(description.length() - 2, description.length());
 		textViewDescript.setText(description);
 	}
 }

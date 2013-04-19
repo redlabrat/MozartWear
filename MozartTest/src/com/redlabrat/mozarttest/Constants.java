@@ -23,6 +23,7 @@ public class Constants {
 	public static final String productTagName = "product";
 	public static final String xmlAttributeName = "name";
 	public static final String xmlAttributeUrl = "url";
+	public static final String xmlUrl = "http://mozartwear.com/xml/catalog.xml";
 
 	/**
 	 *  Method converts dp points to corresponding device specific value of pixels 

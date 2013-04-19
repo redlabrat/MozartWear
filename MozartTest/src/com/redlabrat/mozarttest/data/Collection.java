@@ -1,9 +1,14 @@
 package com.redlabrat.mozarttest.data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Collection {
+public class Collection implements Serializable{
 	
+	/**
+	 * for Serialization
+	 */
+	private static final long serialVersionUID = 1L;
 	private String name;
 	private ArrayList<ImageWithProducts> listOfImages;
 	

@@ -15,6 +15,8 @@ import android.util.Log;
 
 public class LoadAndParseXMLTask extends AsyncTask<String, Void, ArrayList<Collection>>{
 
+	//TODO: create loading dialog to show progress
+	
 	@Override
 	protected void onPreExecute() {
 		

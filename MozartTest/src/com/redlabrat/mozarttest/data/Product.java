@@ -1,5 +1,7 @@
 package com.redlabrat.mozarttest.data;
 
+import java.io.Serializable;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -8,8 +10,12 @@ import android.os.Parcelable;
  * @author redlabrat
  *
  */
-public class Product implements Parcelable{
-
+public class Product implements Parcelable, Serializable{
+	
+	/**
+	 * for Serialization
+	 */
+	private static final long serialVersionUID = 1L;
 	private String name;
 	private String description;
 	
