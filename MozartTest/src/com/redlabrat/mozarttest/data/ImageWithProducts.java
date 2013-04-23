@@ -95,4 +95,15 @@ public class ImageWithProducts implements Parcelable, Serializable{
 			return new ImageWithProducts(source);
 		}
 	};
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o.getClass() == ImageWithProducts.class) {
+			ImageWithProducts img = (ImageWithProducts) o;
+			if ((img.url == url) && (img.listOfProducts.equals(listOfProducts))) {
+				return true;
+			}
+		}
+		return super.equals(o);
+	}
 }

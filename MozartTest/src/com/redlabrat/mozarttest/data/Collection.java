@@ -34,4 +34,22 @@ public class Collection implements Serializable{
 	public ArrayList<ImageWithProducts> getListOfImages() {
 		return listOfImages;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o.getClass() == Collection.class) {
+			Collection col = (Collection) o;
+			if (col.name == name) {
+				if (col.listOfImages.equals(listOfImages)) {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		} else {
+			return super.equals(o);
+		}
+	}
 }

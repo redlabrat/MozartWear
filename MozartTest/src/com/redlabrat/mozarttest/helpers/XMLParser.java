@@ -104,6 +104,7 @@ public class XMLParser {
 			text.append(xmlParser.getText());
 			xmlParser.nextTag();
 		}
+		// editing spaces for description
 		int space = text.indexOf(" ");
 		if (space != -1) {
 			text.setCharAt(space, '\n');

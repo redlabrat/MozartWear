@@ -9,21 +9,26 @@ import com.redlabrat.mozarttest.data.Product;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Layout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import static com.redlabrat.mozarttest.Constants.*;
 
-public class ProductsScreenSliderFragment extends Fragment {
+public class ProductsScreenSliderFragment extends Fragment implements View.OnTouchListener {
 
 	private FrameLayout contentFrame = null;
 	private ImageView imageView = null;
-	private TextView textViewDescript = null;
+	//private TextView textViewDescript = null;
+	private LinearLayout descriptLayout = null;
 	//private String description = null;
 	private ImageWithProducts imageData = null;
 
@@ -38,20 +43,21 @@ public class ProductsScreenSliderFragment extends Fragment {
 				R.layout.page_to_scroll, container, false);
 		contentFrame = (FrameLayout) rootView.findViewById(R.id.descriptionFrame);
 		imageView = (ImageView) rootView.findViewById(R.id.imageToShow);
-		textViewDescript = (TextView) rootView.findViewById(R.id.descriptionText);
+		descriptLayout = (LinearLayout) rootView.findViewById(R.id.descriptionLayout);
+		//textViewDescript = (TextView) rootView.findViewById(R.id.descriptionText);
 
 		// TODO:  need to set valid for device frame size
-		int minHeight = (int) getResources().getDimension(R.dimen.descript_frame_default_height);
-		int minWidth = (int)getResources().getDimension(R.dimen.descript_frame_default_width);
-		LayoutParams lp = contentFrame.getLayoutParams();
-		lp.width = minWidth;
-		lp.height = minHeight;
-		contentFrame.setLayoutParams(lp);
+//		int minHeight = (int) getResources().getDimension(R.dimen.descript_frame_default_height);
+//		int minWidth = (int)getResources().getDimension(R.dimen.descript_frame_default_width);
+//		LayoutParams lp = contentFrame.getLayoutParams();
+//		lp.width = minWidth;
+//		lp.height = android.app.ActionBar.LayoutParams.WRAP_CONTENT;
+//		contentFrame.setLayoutParams(lp);
 //		contentFrame.setMinimumHeight(minHeight);
 //		contentFrame.setMinimumWidth(minWidth);
 		
 		addImageToScrollView();
-		setDescriptionText();
+		setDescription();
 
 		return rootView;
 	}
@@ -62,20 +68,46 @@ public class ProductsScreenSliderFragment extends Fragment {
 		Log.i("INFO", "Image path " + imageData.getFilePath() + " recieved");
 	};
 	
+	
+	
 	private void addImageToScrollView() {
 		Drawable drawable = Drawable.createFromPath(imageData.getFilePath());
 		imageView.setImageDrawable(drawable);
 		imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 	}
 	
-	private void setDescriptionText() {
-		StringBuilder description = new StringBuilder("");
+	private void setDescription() {
 		ArrayList<Product> products = imageData.getListOfProducts();
 		for (int counter = 0; counter < products.size(); counter++) {
-			description.append(products.get(counter).getDescription());
-			description.append("\n\n");
+			TextView header = new TextView(getActivity());
+			header.setTextAppearance(getActivity(), R.style.TextHeaderAppearence);
+			header.setText(products.get(counter).getName());
+			header.setGravity(Gravity.CENTER);
+			descriptLayout.addView(header);
+			TextView contains = new TextView(getActivity());
+			contains.setTextAppearance(getActivity(), R.style.TextContainsAppearence);
+			contains.setText(products.get(counter).getDescription());
+			contains.setGravity(Gravity.CENTER);
+			descriptLayout.addView(contains);
 		}
-		description.delete(description.length() - 2, description.length());
-		textViewDescript.setText(description);
+	}
+
+	private float xPoint;
+	private float yPoint;
+	public boolean onTouch(View v, MotionEvent event) {
+		switch (event.getAction()) {
+			case MotionEvent.ACTION_DOWN: {
+				xPoint = event.getX();
+				yPoint = event.getY();
+				break;
+			}
+			case MotionEvent.ACTION_UP: {
+				if ((xPoint == event.getX()) && (yPoint == event.getY())) {
+					
+				}
+				break;
+			}
+		}
+		return false;
 	}
 }

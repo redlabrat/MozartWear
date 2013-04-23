@@ -69,4 +69,15 @@ public class Product implements Parcelable, Serializable{
 			return new Product(source);
 		}
 	};
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o.getClass() == Product.class) {
+			Product prod = (Product) o;
+			if ((prod.name == name) && (prod.description == description)) {
+				return true;
+			}
+		}
+		return super.equals(o);
+	}
 }
