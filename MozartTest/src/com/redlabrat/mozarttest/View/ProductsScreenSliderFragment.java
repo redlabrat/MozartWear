@@ -2,12 +2,15 @@ package com.redlabrat.mozarttest.View;
 
 import java.util.ArrayList;
 
+import com.redlabrat.mozarttest.DetailedViewActivity;
 import com.redlabrat.mozarttest.R;
 import com.redlabrat.mozarttest.data.ImageWithProducts;
 import com.redlabrat.mozarttest.data.Product;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.text.Layout;
 import android.util.Log;
@@ -23,7 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import static com.redlabrat.mozarttest.Constants.*;
 
-public class ProductsScreenSliderFragment extends Fragment implements View.OnTouchListener {
+public class ProductsScreenSliderFragment extends Fragment implements View.OnClickListener {
 
 	private FrameLayout contentFrame = null;
 	private ImageView imageView = null;
@@ -43,6 +46,7 @@ public class ProductsScreenSliderFragment extends Fragment implements View.OnTou
 				R.layout.page_to_scroll, container, false);
 		contentFrame = (FrameLayout) rootView.findViewById(R.id.descriptionFrame);
 		imageView = (ImageView) rootView.findViewById(R.id.imageToShow);
+		imageView.setOnClickListener(this);
 		descriptLayout = (LinearLayout) rootView.findViewById(R.id.descriptionLayout);
 		//textViewDescript = (TextView) rootView.findViewById(R.id.descriptionText);
 
@@ -71,9 +75,11 @@ public class ProductsScreenSliderFragment extends Fragment implements View.OnTou
 	
 	
 	private void addImageToScrollView() {
-		Drawable drawable = Drawable.createFromPath(imageData.getFilePath());
-		imageView.setImageDrawable(drawable);
-		imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+		if (imageData.getFilePath() != null) {
+			Drawable drawable = Drawable.createFromPath(imageData.getFilePath());
+			imageView.setImageDrawable(drawable);
+			imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+		}
 	}
 	
 	private void setDescription() {
@@ -92,22 +98,11 @@ public class ProductsScreenSliderFragment extends Fragment implements View.OnTou
 		}
 	}
 
-	private float xPoint;
-	private float yPoint;
-	public boolean onTouch(View v, MotionEvent event) {
-		switch (event.getAction()) {
-			case MotionEvent.ACTION_DOWN: {
-				xPoint = event.getX();
-				yPoint = event.getY();
-				break;
-			}
-			case MotionEvent.ACTION_UP: {
-				if ((xPoint == event.getX()) && (yPoint == event.getY())) {
-					
-				}
-				break;
-			}
-		}
-		return false;
+	public void onClick(View v) {
+		Intent intent = new Intent(getActivity(), DetailedViewActivity.class);
+		Bundle params = new Bundle();
+		params.putParcelable(imageDataForDetailedActivity, imageData);
+		intent.putExtras(params);
+		startActivity(intent);
 	}
 }

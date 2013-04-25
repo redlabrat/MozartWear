@@ -183,7 +183,7 @@ public class FileHelper {
 			} else {
 				Log.i("INFO", "Picture " + fileName + " not exist");
 				// loading necessary file
-				new ImageHelper(mContext).loadAndSaveImageToCache("http://mozartwear.com/assets/images/zima/" + fileName);
+				//new ImageHelper(mContext).loadAndSaveImageToCache("http://mozartwear.com/assets/images/zima/" + fileName);
 				imageFile = new File(folderForPics, fileName);
 				Log.i("INFO", "Picture " + fileName + " loaded and returned");
 				return imageFile.getAbsolutePath();

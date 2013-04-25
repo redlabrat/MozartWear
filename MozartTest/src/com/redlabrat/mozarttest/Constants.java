@@ -6,6 +6,7 @@ import android.util.DisplayMetrics;
 public class Constants {
 	public static final String fragmentImage = "image";
 	public static final String activityCollectionNumber = "coll_number";
+	public static final String imageDataForDetailedActivity = "image_data";
 //	public static final String fragmentImageURL = "imageURL";
 //	public static final String fragmentImagePath = "imagePath";
 	public static final String imagesFolderName = "images";

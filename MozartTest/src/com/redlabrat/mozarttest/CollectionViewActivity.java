@@ -62,6 +62,7 @@ public class CollectionViewActivity extends FragmentActivity {
 		public int getCount() {
 			return currCollection.size();
 		}
+		
 	}
 
 	@Override

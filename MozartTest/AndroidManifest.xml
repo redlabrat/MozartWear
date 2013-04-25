@@ -36,6 +36,12 @@
             android:isolatedProcess="true" >
         </service>
 
+        <activity
+            android:name="com.redlabrat.mozarttest.DetailedViewActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_detailed_view"
+            android:theme="@style/FullscreenTheme" >
+        </activity>
     </application>
 
 </manifest>
