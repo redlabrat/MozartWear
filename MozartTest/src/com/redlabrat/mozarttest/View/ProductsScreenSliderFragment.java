@@ -75,11 +75,14 @@ public class ProductsScreenSliderFragment extends Fragment implements View.OnCli
 	
 	
 	private void addImageToScrollView() {
+		Drawable drawable = null;
 		if (imageData.getFilePath() != null) {
-			Drawable drawable = Drawable.createFromPath(imageData.getFilePath());
-			imageView.setImageDrawable(drawable);
-			imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+			drawable = Drawable.createFromPath(imageData.getFilePath());
+		} else {
+			drawable = getResources().getDrawable(R.drawable.no_image);
 		}
+		imageView.setImageDrawable(drawable);
+		imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 	}
 	
 	private void setDescription() {

@@ -32,8 +32,7 @@
         </activity>
 
         <service
-            android:name="com.redlabrat.mozarttest.helpers.DataLoadingService"
-            android:isolatedProcess="true" >
+            android:name="com.redlabrat.mozarttest.helpers.DataLoadingService" >
         </service>
 
         <activity

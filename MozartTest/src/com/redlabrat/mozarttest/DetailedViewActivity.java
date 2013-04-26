@@ -29,7 +29,6 @@ public class DetailedViewActivity extends Activity {
 		final WebView contentView = (WebView) findViewById(R.id.detailedWebVeiw);
 		
 		ImageWithProducts imageData = getIntent().getExtras().getParcelable(imageDataForDetailedActivity);
-		imageData.setFilePath(new FileHelper(getApplicationContext()).getImagePath("img1.jpg"));
 		String imagePath = "file://" + imageData.getFilePath();
 		Drawable imageDraw = Drawable.createFromPath(imageData.getFilePath());
 		Display display = getWindowManager().getDefaultDisplay();

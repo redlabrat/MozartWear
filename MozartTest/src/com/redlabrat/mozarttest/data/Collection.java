@@ -35,6 +35,10 @@ public class Collection implements Serializable{
 		return listOfImages;
 	}
 	
+	public int getAmountOfImages() {
+		return listOfImages.size();
+	}
+	
 	@Override
 	public boolean equals(Object o) {
 		if (o.getClass() == Collection.class) {

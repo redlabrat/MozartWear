@@ -2,6 +2,7 @@ package com.redlabrat.mozarttest.helpers;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
@@ -40,9 +41,9 @@ public class ImageHelper {
 		return image;
 	}
 
-	public void loadAndSaveImageToCache(final String fileURL) {
+	public Thread loadAndSaveImageToCache(final String fileURL) {
 		final Handler handler = new Handler();
-		new Thread(new Runnable() {
+		Thread th = new Thread(new Runnable() {
 			public void run() {
 				Log.i("THREAD", "Download thread started");
 				try {
@@ -68,10 +69,11 @@ public class ImageHelper {
 				Log.i("THREAD", "Download finished and image saved");
 				image = null;
 			}
-		}).start();
+		});
+		th.start();
+		return th;
 	}
 	
-
 	private Bitmap loadImageFromNetwork(Bitmap bitmap, String imageUrl) throws URISyntaxException {
 		try {
 			bitmap = BitmapFactory.decodeStream((InputStream) new URL(imageUrl)

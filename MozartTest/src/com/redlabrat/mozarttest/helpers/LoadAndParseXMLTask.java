@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -57,12 +58,13 @@ public class LoadAndParseXMLTask extends AsyncTask<String, Void, ArrayList<Colle
 
 	private InputStream downloadUrl(String address) throws IOException {
 		URL url = new URL(address);
-		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		conn.setReadTimeout(10000 /* milliseconds */);
-		conn.setConnectTimeout(15000 /* milliseconds */);
-		conn.setRequestMethod("GET");
-		conn.setDoInput(true);
-		conn.connect();
+		URLConnection conn = url.openConnection();
+//		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+//		conn.setReadTimeout(10000 /* milliseconds */);
+//		conn.setConnectTimeout(15000 /* milliseconds */);
+//		conn.setRequestMethod("GET");
+//		conn.setDoInput(true);
+//		conn.connect();
 		return conn.getInputStream();
 	}
 
