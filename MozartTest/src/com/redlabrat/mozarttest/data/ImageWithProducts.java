@@ -33,7 +33,6 @@ public class ImageWithProducts implements Parcelable, Serializable{
 		this.url = url;
 	}
 
-	//@SuppressWarnings("unchecked")
 	public ImageWithProducts(Parcel source) {
 		listOfProducts = new ArrayList<Product>();
 		source.readTypedList(listOfProducts, Product.CREATOR);

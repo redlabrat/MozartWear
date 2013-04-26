@@ -44,7 +44,7 @@ public class DataLoadingService extends Service {
 		// download XML
 		// if there is no Internet connection return error
 		LoadAndParseXMLTask loadXml = new LoadAndParseXMLTask();
-		loadXml.execute(xmlUrl);
+		loadXml.execute(xmlUrl_debug);
 		ArrayList<Collection> newColl = null;
 		ArrayList<Collection> currColl = ((MozartApplication) getApplicationContext()).getCollectionsArray();
 		try {
