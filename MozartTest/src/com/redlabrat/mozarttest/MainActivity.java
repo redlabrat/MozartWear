@@ -102,12 +102,13 @@ public class MainActivity extends Activity implements OnClickListener {
 			case R.id.startLoadService: {
 				// Start update service
 				Intent service = new Intent(getApplicationContext(), DataLoadingService.class);
-				ServiceConnection conn = new DataLoadingServiceConnection();
-				if (bindService(service, conn, BIND_AUTO_CREATE)) {
-					Log.i("INFO", "Service successfully started!");
-				} else {
-					Log.i("INFO", "Can not bind to service");
-				}
+//				ServiceConnection conn = new DataLoadingServiceConnection();
+//				if (bindService(service, conn, BIND_AUTO_CREATE)) {
+//					Log.i("INFO", "Service successfully started!");
+//				} else {
+//					Log.i("INFO", "Can not bind to service");
+//				}
+				startService(service);
 				break;
 			}
 		}

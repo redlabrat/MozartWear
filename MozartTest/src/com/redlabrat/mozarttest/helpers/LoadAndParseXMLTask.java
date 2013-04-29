@@ -10,12 +10,20 @@ import java.util.ArrayList;
 import org.xmlpull.v1.XmlPullParserException;
 
 import com.redlabrat.mozarttest.data.Collection;
+import static com.redlabrat.mozarttest.Constants.*;
 
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
 
 public class LoadAndParseXMLTask extends AsyncTask<String, Void, ArrayList<Collection>>{
 
+	private AsyncTaskListener resultListener;
+	
+	public LoadAndParseXMLTask(AsyncTaskListener listener) {
+		super();
+		resultListener = listener;
+	}
 	//TODO: create loading dialog to show progress
 	
 	@Override
@@ -58,14 +66,25 @@ public class LoadAndParseXMLTask extends AsyncTask<String, Void, ArrayList<Colle
 
 	private InputStream downloadUrl(String address) throws IOException {
 		URL url = new URL(address);
-		URLConnection conn = url.openConnection();
-//		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-//		conn.setReadTimeout(10000 /* milliseconds */);
-//		conn.setConnectTimeout(15000 /* milliseconds */);
-//		conn.setRequestMethod("GET");
-//		conn.setDoInput(true);
-//		conn.connect();
+//		URLConnection conn = url.openConnection();
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		conn.setReadTimeout(10000 /* milliseconds */);
+		conn.setConnectTimeout(15000 /* milliseconds */);
+		conn.setRequestMethod("GET");
+		conn.setRequestProperty("User-Agent","Mozilla/5.0 ( compatible ) ");
+		conn.setRequestProperty("Accept","*/*");
+		conn.setDoInput(true);
+		conn.connect();
 		return conn.getInputStream();
 	}
 
+	@Override
+	protected void onPostExecute(ArrayList<Collection> result) {
+		Bundle data = new Bundle();
+		data.putInt(asyncTaskId, loadXmlAsyncTaskID);
+		data.putParcelableArrayList(loadedXmlResult, result);
+		resultListener.onPostExecuteTask(data);
+		super.onPostExecute(result);
+	}
+	
 }

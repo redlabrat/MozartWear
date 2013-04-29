@@ -3,6 +3,8 @@ package com.redlabrat.mozarttest.data;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import static com.redlabrat.mozarttest.Constants.*;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -42,7 +44,7 @@ public class ImageWithProducts implements Parcelable, Serializable{
 	}
 
 	public String getUrl() {
-		return url;
+		return serverAddress + url;
 	}
 
 	public void setUrl(String url) {

@@ -13,4 +13,9 @@
     <string name="error_save_image">Ошибка. Невозможно сохранить файла на SD карту</string>
     <string name="error_media_mount">Ошибка. Нет доступа к SD карте</string>
     <string name="error_404"> файл не найден</string>
+    <string name="update_status_begining">фото из</string>
+    <string name="startServiceOption">Проверить/обновить данные</string>
+    <string name="update_status_ending">загружено</string>
+    <string name="confirm_download_question">Вы уверены, что хотите продолжить?</string>
+    <string name="confirm_download_size">Необходимо загрузить</string>
 </resources>

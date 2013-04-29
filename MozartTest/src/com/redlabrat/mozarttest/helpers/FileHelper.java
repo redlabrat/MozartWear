@@ -115,7 +115,7 @@ public class FileHelper {
 	public void saveImageToChache(Bitmap image, String fileName) {
 		if (Environment.MEDIA_MOUNTED.equals(Environment
 				.getExternalStorageState())) {
-			File extChacheDir = mContext.getExternalCacheDir();
+			File extChacheDir = mContext.getExternalFilesDir(null);
 			folderForPics = new File(extChacheDir, imagesFolderName);
 			// create folder for images
 			if (!folderForPics.exists()) {

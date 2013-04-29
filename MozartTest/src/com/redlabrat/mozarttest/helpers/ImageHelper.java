@@ -2,11 +2,13 @@ package com.redlabrat.mozarttest.helpers;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
 import com.redlabrat.mozarttest.R;
+import static com.redlabrat.mozarttest.Constants.*;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -39,6 +41,19 @@ public class ImageHelper {
 			}
 		}).start();
 		return image;
+	}
+	
+	public int getImageSize(String address) throws IOException {
+		URL url = new URL(serverAddress + address);
+//		URLConnection conn = url.openConnection();
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		conn.setReadTimeout(10000 /* milliseconds */);
+		conn.setConnectTimeout(15000 /* milliseconds */);
+		conn.setRequestMethod("GET");
+		conn.setRequestProperty("User-Agent","Mozilla/5.0 ( compatible ) ");
+		conn.setRequestProperty("Accept","*/*");
+		conn.setDoInput(true);
+		return conn.getContentLength();
 	}
 
 	public Thread loadAndSaveImageToCache(final String fileURL) {

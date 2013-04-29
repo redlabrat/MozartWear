@@ -7,7 +7,16 @@ public class Constants {
 	public static final String fragmentImage = "image";
 	public static final String activityCollectionNumber = "coll_number";
 	public static final String imageDataForDetailedActivity = "image_data";
-//	public static final String fragmentImageURL = "imageURL";
+
+	// constants for receiving results from AsyncTasks
+	public static final String asyncTaskId = "id_of_asynctask";
+	public static final int loadXmlAsyncTaskID = 1;
+	public static final int calculateSizeAsyncTaskID = 2;
+	public static final int loadImagesAsyncTaskID = 3;
+	public static final String loadedXmlResult = "parsed_xml";
+	public static final String calculateSizeResult = "result_size";
+	
+	//	public static final String fragmentImageURL = "imageURL";
 //	public static final String fragmentImagePath = "imagePath";
 	public static final String imagesFolderName = "images";
 //	public static final String internalFolderName = "data";
@@ -24,7 +33,8 @@ public class Constants {
 	public static final String productTagName = "product";
 	public static final String xmlAttributeName = "name";
 	public static final String xmlAttributeUrl = "url";
-	public static final String xmlUrl = "http://mozartwear.com/xml/catalog.xml";
+	public static final String serverAddress = "http://mozartwear.com/";
+	public static final String xmlUrl = serverAddress + "catalog.xml";
 	public static final String xmlUrl_debug = "file:///mnt/sdcard/Android/data/com.redlabrat.mozarttest/catalog.xml";
 
 	/**
