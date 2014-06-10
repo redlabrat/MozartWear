@@ -10,17 +10,29 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
+/**
+ * Service for loading data from Network
+ * @author Alexandr Brich
+ * @version 1.1
+ */
 public class DataLoadingService extends Service {
 
 	private ArrayList<String> imageURLs = null;
 	private ArrayList<String> imageNames = null;
 	private static ImageHelper ih = null;
 	private static FileHelper fh = null;
-	/**
+	/*
 	 *  1. Load XML file
-	 *  2. Check for changes
-	 *  3. If not changed - finish work
-	 *  4. If changed - load new data
+	 *  2. Check for changes // How to check for changes ?
+	 *  3. If not changed - finish work // It's mean that images is up-to-date
+	 *  4. If changed - load new data //Load only new data?
+	 */
+	
+	/** 
+	 * Get the list of images URL and download the images from Network
+	 * @see android.app.Service#onBind(android.content.Intent)
+	 * @param arg0 intent
+	 * @return null
 	 */
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -37,6 +49,10 @@ public class DataLoadingService extends Service {
 		return null;
 	}
 	
+	/**
+	 * Get list of images URL
+	 * get URL of images from XML
+	 */
 	private void getImagesURLs() {
 		imageURLs = new ArrayList<String>();
 		imageNames = new ArrayList<String>();
@@ -52,6 +68,12 @@ public class DataLoadingService extends Service {
 		imageURLs.add("http://mozartwear.com/assets/images/zima/img11.jpg");
 	}
 	
+	/**
+	 * Get list of images and list of images name from Network
+	 * get description of products
+	 * @exception MalformedURLException Incorrect URL
+	 * @exception IOException Cannot load an image from Network
+	 */
 	private void getImagesFromNetwork() {
 		String str = null;
 		for (int counter = 0; counter < imageURLs.size(); counter++) {
@@ -72,15 +94,16 @@ public class DataLoadingService extends Service {
 				e.printStackTrace();
 			}
 		}
-		// cutting images names to separate array
+
+		//get from each URL name of the image by cutting all after slash
 		int startSubString = 0;
 		for (int counter = 0; counter < imageURLs.size(); counter++) {
 			str = imageURLs.get(counter);
 			startSubString = str.lastIndexOf("/");
 			String fileName = str.substring(startSubString);
-			imageNames.add(fileName);
+			imageNames.add(fileName);//add to list of image names
 		}
-		// save images names list
+		// save images names list to the file internalDataFileName
 		fh.saveImagesNames(imageNames);
 	}
 }
