@@ -14,19 +14,38 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import static com.redlabrat.mozarttest.Constants.*;
-
+/**
+ * Class represents how the fragment of the Product will be shown at the Screen
+ * @author Alexandr Brich
+ * @version 1.1
+ */
 public class ProductsScreenSliderFragment extends Fragment {
-
+	/*** @serial Rectangle of the screen in which will be represented the product*/
 	private FrameLayout contentFrame = null;
+	/*** @serial Contains an image of the product*/
 	private ImageView image = null;
+	/*** @serial The View of description*/
 	private TextView textViewDescript = null;
+	/*** @serial string with description of the product*/
 	private String description = null;
+	/*** @serial path to the selected product(image)*/
 	private String imagePath = null;
 
+	/**
+	 * Constructor invoke the call of constructor of super class
+	 */
 	public ProductsScreenSliderFragment() {
 		super();
 	}
 	
+	/** 
+	 * Creates a Fragment view of the product by using the view of the product and the device settings
+	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
+	 * @param inflater 
+	 * @param container set of views in which the particular product will be shown
+	 * @param savedInstanceState State of the view
+	 * @return View of the product's fragment which will be shown on the screen
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -53,12 +72,21 @@ public class ProductsScreenSliderFragment extends Fragment {
 		return rootView;
 	}
 	
+	/**
+	 * Set the argument of the image path
+	 * @param args storages the image path
+	 * @see android.support.v4.app.Fragment#setArguments(android.os.Bundle)
+	 */
 	@Override
 	public void setArguments(Bundle args) {
 		imagePath = args.getString(fragmentImagePath);
 		Log.i("INFO", "Image path " + imagePath + " recived");
 	};
 	
+	/**
+	 * Add selected image to the Scroll View to enable scrolling
+	 * and customize the way it will be shown on the screen
+	 */
 	private void addImageToScrollView() {
 		Drawable drawable = Drawable.createFromPath(imagePath);
 		image.setImageDrawable(drawable);
