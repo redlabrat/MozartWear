@@ -6,7 +6,6 @@ import android.util.DisplayMetrics;
  * Class contains all the constants strings used in the application
  * @author Alexandr Brich
  * @version 1.1
- * Created on July 10 2014
  */
 public class Constants {
 	public static final String fragmentImageID = "imageID";
@@ -22,11 +21,9 @@ public class Constants {
 	 * @param context  Context of application
 	 * @return  Corresponding value of pixels
 	 */
-	
 	public static float convertDpToPixels(float dp, Context context) {
 		DisplayMetrics metrics= context.getResources().getDisplayMetrics();
 		float px = dp * metrics.density;
 		return px;
 	}
-
 }
