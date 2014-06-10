@@ -19,18 +19,36 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
-import android.provider.OpenableColumns;
+//import android.provider.OpenableColumns;
 import android.util.Log;
 import android.widget.Toast;
 
+/**
+ * Help to organize the process of saving image to the file on local memory card
+ * @author Alexandr Brich
+ * @version 1.1
+ */
 public class FileHelper {
 	private Context mContext;
+	/*** @serial Folder in which we save images*/
 	private File folderForPics;
 	
+	/**
+	 * Constructor
+	 * @param context Context of the application
+	 */
 	public FileHelper(Context context) {
 		mContext = context;
 	}
 	
+	/**
+	 * Load from file internalDataFileName list of images name
+	 * @return list of images names
+	 * @exception FileNotFoundException The internalDataFileName wasn't found
+	 * @exception StreamCorruptedException There isn't an object in stream
+	 * @exception IOException Couldn't read from file or Couldn't close a stream
+	 * @exception ClassNotFoundException Cannot convert the object we read from file to ArrayList 
+	 */
 	@SuppressWarnings("unchecked") // casting from Object in file to ArrayList 
 	public ArrayList<String> loadImagesNames() {
 		FileInputStream fis = null;
@@ -65,6 +83,12 @@ public class FileHelper {
 		return outData;
 	}
 	
+	/**
+	 * Save list of images name to file internalDataFileName
+	 * @param outData list of images name
+	 * @exception FileNotFoundException Couldn't open a stream to save the list to file internalDataFileName
+	 * @exception IOException Couldn't write to file or Couldn't close a stream 
+	 */
 	public void saveImagesNames(ArrayList<String> outData) {
 		FileOutputStream dataStream = null;
 		ObjectOutputStream oos = null;
@@ -92,7 +116,16 @@ public class FileHelper {
 		}
 	}
 	
+	/**
+	 * Save the image to specific file in directory folderForPics
+	 * @param image an object which contain an image we want to save to file 
+	 * @param fileName Name of file to save the image 
+	 * @exception FileNotFoundException Couldn't open a stream to save the image to selected file
+	 * @exception IOException Cannot close a stream 
+	 * @exception NullPointerException There is no image to save
+	 */
 	public void saveImageToChache(Bitmap image, String fileName) {
+		//Must exist an external storage and the directory to save files imagesFolderName
 		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
 			File extChacheDir = mContext.getExternalCacheDir();
 			folderForPics = new File(extChacheDir, imagesFolderName);
@@ -134,6 +167,13 @@ public class FileHelper {
 		}
 	}
 	
+	/**
+	 * Load the image from file in directory folderForPics to object image
+	 * @param image an object which will contain an image we want to load from file 
+	 * @param fileName Name of file which contains the image 
+	 * @exception FileNotFoundException There is no file with such name
+	 * @return true if image was loaded successfully, false if the folder or file don't exist or in any other cases
+	 */
 	public boolean loadImageFromCache(Bitmap image, String fileName) {
 		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
 			File extChacheDir = mContext.getExternalCacheDir();
@@ -157,6 +197,12 @@ public class FileHelper {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param fileName Name of file which contains the image 
+	 * @exception FileNotFoundException There is no file with such name
+	 * @return absolute path to image
+ 	 */
 	public String getImagePath(String fileName) {
 		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
 			File extChacheDir = mContext.getExternalCacheDir();
@@ -181,6 +227,7 @@ public class FileHelper {
 //					return null;
 //				}
 				// loading necessary file
+				//if file with an image not exist, than need to download and save the image to this file
 				new ImageHelper(mContext).loadAndSaveImageToCache("http://mozartwear.com/assets/images/zima/" + fileName);
 				imageFile = new File(folderForPics, fileName);
 				Log.i("INFO", "Picture " + fileName + " loaded and returned");
