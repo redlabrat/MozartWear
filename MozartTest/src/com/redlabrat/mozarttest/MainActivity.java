@@ -8,11 +8,21 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+/**
+ * Main Activity
+ * @author Alexandr Brich
+ * @version 1.1
+ */
 public class MainActivity extends Activity implements OnClickListener{
 
 	private Button loadButton = null;
 	private Button showButton = null;
 	
+	/**
+	 * Create an instance of main activity and initialize it by creating buttons
+	 * @param savedInstanceState previously saved state of the activity
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -24,18 +34,26 @@ public class MainActivity extends Activity implements OnClickListener{
 		showButton.setOnClickListener(this);
 	}
 
+	/** Inflate the main menu
+	 * @param menu items to add to action bar
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 * @return true if menu was created without a problems, false if it wasn't created or an error 
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
 
+	/**
+	 * Process the button click event 
+	 * and if it was a ShowCollectionButton then it open ProductView Activity
+	 * @param v view of the button which was clicked
+	 */
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.loadDataButton: {
 			// Start update service
-
 			break;
 		}
 		case R.id.showCollectionButton: {
@@ -44,6 +62,5 @@ public class MainActivity extends Activity implements OnClickListener{
 			break;
 		}
 		}
-		
 	}
 }
