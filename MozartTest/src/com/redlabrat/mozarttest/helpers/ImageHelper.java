@@ -13,15 +13,33 @@ import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
-
+/**
+ * Help to organize the process of download and save the images from Network
+ * @author Alexandr Brich
+ * @version 1.1
+ */
 public class ImageHelper {
 	private Context mContext;
+
+	/**
+	 * @serial object which stores the image of the product 
+	 */
 	private Bitmap image = null;
 	
+	/**
+	 * Constructor
+	 * @param context Context of the application
+	 */
 	public ImageHelper(Context context) {
 		mContext = context;
 	}
 	
+	/**
+	 * Download the image from network by address of this image
+	 * @param address address where the image is situated
+	 * @return image object if it was successfully download otherwise it rise an error
+	 * @exception URISyntaxException Wrong URL
+	 */
 	public Bitmap downloadImage(final String address) {
 		new Thread(new Runnable() {
 			public void run() {
@@ -42,6 +60,11 @@ public class ImageHelper {
 		return image;
 	}
 
+	/**
+	 * Load and Save the desired image on the fileURL in thread to the object image
+	 * @param fileURL URL of the image
+	 * @exception URISyntaxException Wrong URL
+	 */
 	public void loadAndSaveImageToCache(final String fileURL) {
 		final Handler handler = new Handler();
 		new Thread(new Runnable() {
@@ -64,6 +87,7 @@ public class ImageHelper {
 					e.printStackTrace();
 					return;
 				}
+				//get from URL the name of the image to save
 				int startSubString = fileURL.lastIndexOf("/");
 				String fileName = fileURL.substring(startSubString);
 				new FileHelper(mContext).saveImageToChache(image, fileName);
@@ -73,7 +97,13 @@ public class ImageHelper {
 		}).start();
 	}
 	
-
+	/**
+	 * Load the image from network
+	 * @param bitmap object which will contain an image
+	 * @param imageUrl URL of the image
+	 * @return Object which contains an downloading image
+	 * @throws URISyntaxException Wrong URL
+	 */
 	private Bitmap loadImageFromNetwork(Bitmap bitmap, String imageUrl) throws URISyntaxException {
 		try {
 			bitmap = BitmapFactory.decodeStream((InputStream) new URL(imageUrl)
@@ -87,5 +117,4 @@ public class ImageHelper {
 		}
 		return bitmap;
 	}
-
 }
