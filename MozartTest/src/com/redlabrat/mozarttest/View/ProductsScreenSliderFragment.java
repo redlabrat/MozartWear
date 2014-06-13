@@ -1,5 +1,9 @@
 package com.redlabrat.mozarttest.View;
 
+import com.redlabrat.mozarttest.CollectionActivity;
+import com.redlabrat.mozarttest.Image;
+import com.redlabrat.mozarttest.Product;
+import com.redlabrat.mozarttest.ProductViewActivity;
 import com.redlabrat.mozarttest.R;
 
 import android.graphics.drawable.Drawable;
@@ -53,6 +57,7 @@ public class ProductsScreenSliderFragment extends Fragment {
 				R.layout.page_to_scroll, container, false);
 		contentFrame = (FrameLayout) rootView.findViewById(R.id.descriptionFrame);
 		image = (ImageView) rootView.findViewById(R.id.imageToShow);
+		//image
 		textViewDescript = (TextView) rootView.findViewById(R.id.descriptionText);
 
 		// TODO:  need to set valid for device frame size
@@ -66,9 +71,14 @@ public class ProductsScreenSliderFragment extends Fragment {
 //		contentFrame.setMinimumWidth(minWidth);
 		
 		addImageToScrollView();
-		description = "Default description\n" + "image path: " + imagePath;
+		description = "";//"Default description : \n";
+		Image i = CollectionActivity.collections.get(CollectionActivity.collectionNumber).images.get(ProductViewActivity.Pos);
+		for(Product p : i.products)
+		{
+			description += p.number + " :\n";
+			description += p.description + "\n";// + "image path: " + imagePath;
+		}
 		textViewDescript.setText(description);
-
 		return rootView;
 	}
 	
@@ -91,5 +101,9 @@ public class ProductsScreenSliderFragment extends Fragment {
 		Drawable drawable = Drawable.createFromPath(imagePath);
 		image.setImageDrawable(drawable);
 		image.setScaleType(ImageView.ScaleType.CENTER_CROP);
+	}
+	
+	public void Rrefresh() {
+		//image.refreshDrawableState();
 	}
 }

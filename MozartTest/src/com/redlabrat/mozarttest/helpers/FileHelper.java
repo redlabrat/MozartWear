@@ -203,7 +203,7 @@ public class FileHelper {
 	 * @exception FileNotFoundException There is no file with such name
 	 * @return absolute path to image
  	 */
-	public String getImagePath(String fileName) {
+	public String getImagePath(String fileNameURL, int r) {
 		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
 			File extChacheDir = mContext.getExternalCacheDir();
 			folderForPics = new File(extChacheDir, imagesFolderName);
@@ -211,6 +211,11 @@ public class FileHelper {
 				Log.i("INFO", "Pictures folder not exist");
 				folderForPics.mkdir();
 			}
+			
+			//get from URL the name of the image to save
+			int startSubString = fileNameURL.lastIndexOf("/");
+			String fileName = fileNameURL.substring(startSubString);
+			
 			File imageFile = new File(folderForPics, fileName);
 			if (imageFile.exists()) {
 				Log.i("INFO", "Picture " + imageFile.getAbsolutePath() + " returned");
@@ -228,9 +233,12 @@ public class FileHelper {
 //				}
 				// loading necessary file
 				//if file with an image not exist, than need to download and save the image to this file
-				new ImageHelper(mContext).loadAndSaveImageToCache("http://mozartwear.com/assets/images/zima/" + fileName);
+				if (r != 0)
+				{
+					new ImageHelper(mContext).loadAndSaveImageToCache(fileNameURL);
+					Log.i("INFO", "Picture " + fileName + " loaded and returned");
+				}
 				imageFile = new File(folderForPics, fileName);
-				Log.i("INFO", "Picture " + fileName + " loaded and returned");
 				return imageFile.getAbsolutePath();
 			}
 		} else {

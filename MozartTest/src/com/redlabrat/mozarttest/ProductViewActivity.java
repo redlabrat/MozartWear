@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.redlabrat.mozarttest.View.ProductsScreenSliderFragment;
 import com.redlabrat.mozarttest.helpers.FileHelper;
+import com.redlabrat.mozarttest.helpers.ImageHelper;
 
 import static com.redlabrat.mozarttest.Constants.*;
 
@@ -26,6 +27,7 @@ public class ProductViewActivity extends FragmentActivity {
 	private ViewPager pager = null;
 	private PagerAdapter adapter = null;
 	
+	public static int Pos = 0;
 	/*** @serial list of the image's paths*/
 	private ArrayList<String> imagesPaths = null;
 
@@ -40,6 +42,7 @@ public class ProductViewActivity extends FragmentActivity {
 		setContentView(R.layout.activity_product_view);
 
 		getImagesPaths();
+		
 		pager = (ViewPager) findViewById(R.id.productsPager);
 		adapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
 		pager.setAdapter(adapter);
@@ -60,8 +63,13 @@ public class ProductViewActivity extends FragmentActivity {
 		FileHelper fh = new FileHelper(getApplicationContext());
 		// after service finished
 		//imagesPaths = fh.loadImagesNames();
+		int num = CollectionActivity.collectionNumber;
+		for (Image im : CollectionActivity.collections.get(num).images)
+		{
+			imagesPaths.add(fh.getImagePath(im.URL, 0));
+		}
 		
-		imagesPaths.add(fh.getImagePath("img1.jpg"));
+		/*imagesPaths.add(fh.getImagePath("img1.jpg"));
 		imagesPaths.add(fh.getImagePath("img2.jpg"));
 		imagesPaths.add(fh.getImagePath("img3.jpg"));
 		imagesPaths.add(fh.getImagePath("img4.jpg"));
@@ -71,7 +79,7 @@ public class ProductViewActivity extends FragmentActivity {
 		imagesPaths.add(fh.getImagePath("img8.jpg"));
 		imagesPaths.add(fh.getImagePath("img10.jpg"));
 		imagesPaths.add(fh.getImagePath("img11.jpg"));
-		imagesPaths.add(fh.getImagePath("img12.jpg"));
+		imagesPaths.add(fh.getImagePath("img12.jpg"));*/
 	}
 
 	/**
@@ -94,7 +102,14 @@ public class ProductViewActivity extends FragmentActivity {
 		public Fragment getItem(int position) {
 			ProductsScreenSliderFragment fragment = new ProductsScreenSliderFragment();
 			Bundle params = new Bundle();
-			params.putString(fragmentImagePath, imagesPaths.get(position));
+			
+			Pos = position;
+			FileHelper fh = new FileHelper(getApplicationContext());
+			int num = CollectionActivity.collectionNumber;
+			fh.getImagePath(CollectionActivity.collections.get(num).images.get(Pos).URL, 1);
+			
+			params.putString(fragmentImagePath, imagesPaths.get(Pos));
+			
 			fragment.setArguments(params);
 			return fragment;
 		}
@@ -121,5 +136,4 @@ public class ProductViewActivity extends FragmentActivity {
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
 	}
-
 }
