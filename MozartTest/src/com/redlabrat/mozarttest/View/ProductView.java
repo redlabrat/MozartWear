@@ -9,7 +9,7 @@ import android.widget.FrameLayout;
  */
 public class ProductView extends FrameLayout {
 	/**
-	 * Method send the context of the application to the super class constructor 
+	 * Class constructor
 	 * @param context Context of application
 	 */
 	public ProductView(Context context) {
