@@ -17,6 +17,7 @@ public class MainActivity extends Activity implements OnClickListener{
 
 	private Button loadButton = null;
 	private Button showButton = null;
+	static LoadFromNet mAnotherOpinion;	//Побочный поток
 	
 	/**
 	 * Create an instance of main activity and initialize it by creating buttons
@@ -50,10 +51,26 @@ public class MainActivity extends Activity implements OnClickListener{
 	 * and if it was a ShowCollectionButton then it open ProductView Activity
 	 * @param v view of the button which was clicked
 	 */
-	public void onClick(View v) {
+	public synchronized  void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.loadDataButton: {
 			// Start update service
+	        /*if(mAnotherOpinion.isAlive())	//Если оппонент еще не сказал последнее слово
+	        {
+	            try{
+	                mAnotherOpinion.join();	//Подождать пока оппонент закончит высказываться.
+	            }catch(InterruptedException e)
+	            {
+	            	System.out.println("INTERRAPTED!!!!! OH");
+	            }
+	            System.out.println("Первым появилось яйцо!");
+	        }
+	        else	//если оппонент уже закончил высказываться
+	        {
+	            System.out.println("Первой появилась курица!");
+	        }*/
+			Intent intent = new Intent(getApplicationContext(), CollectionActivity.class);
+			startActivity(intent);
 			break;
 		}
 		case R.id.showCollectionButton: {

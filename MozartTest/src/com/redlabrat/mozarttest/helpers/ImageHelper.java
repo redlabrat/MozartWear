@@ -10,6 +10,7 @@ import com.redlabrat.mozarttest.R;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapFactory.Options;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
@@ -106,8 +107,17 @@ public class ImageHelper {
 	 */
 	private Bitmap loadImageFromNetwork(Bitmap bitmap, String imageUrl) throws URISyntaxException {
 		try {
-			bitmap = BitmapFactory.decodeStream((InputStream) new URL(imageUrl)
-					.getContent());
+			bitmap = BitmapFactory.decodeStream((InputStream) new URL(imageUrl).getContent());
+		 /*InputStream ip = (InputStream)new URL(imageUrl).getContent();
+		 int av = ip.available();
+		 Log.i("BITMAP", "Available - "+ av);
+		 byte[] buffer = new byte[av];
+		 int read = ip.read(buffer);
+		 Log.i("BITMAP", "READ - "+ read);
+		 
+		 bitmap = BitmapFactory.decodeByteArray(buffer, 0, buffer.length);
+		 
+		 */
 		} catch (IOException e) {
 			// case when file not exist (HTTP 404 server answer)
 			throw new URISyntaxException(imageUrl, "404. File not found");

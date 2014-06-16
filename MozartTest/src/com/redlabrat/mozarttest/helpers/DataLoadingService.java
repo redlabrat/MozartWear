@@ -56,17 +56,7 @@ public class DataLoadingService extends Service {
 	private void getImagesURLs() {
 		imageURLs = new ArrayList<String>();
 		imageNames = new ArrayList<String>();
-		//leto
-		/*
-		imageURLs.add("http://mozartwear.com/assets/images/leto/img1.jpg");
-		imageURLs.add("http://mozartwear.com/assets/images/leto/img2.jpg");
-		imageURLs.add("http://mozartwear.com/assets/images/leto/img3.jpg");
-		imageURLs.add("http://mozartwear.com/assets/images/leto/img4.jpg");
-		imageURLs.add("http://mozartwear.com/assets/images/leto/img5.jpg");
-		imageURLs.add("http://mozartwear.com/assets/images/leto/img6.jpg");
-		imageURLs.add("http://mozartwear.com/assets/images/leto/img7.jpg");
-		imageURLs.add("http://mozartwear.com/assets/images/leto/img10.jpg");
-		imageURLs.add("http://mozartwear.com/assets/images/leto/img11.jpg");*/
+		//imageURLs.add("http://mozartwear.com/assets/images/leto/img1.jpg");
 	}
 	
 	/**

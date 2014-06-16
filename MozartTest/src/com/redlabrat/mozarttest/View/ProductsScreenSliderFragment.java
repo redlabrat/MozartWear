@@ -6,6 +6,8 @@ import com.redlabrat.mozarttest.Product;
 import com.redlabrat.mozarttest.ProductViewActivity;
 import com.redlabrat.mozarttest.R;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -35,6 +37,9 @@ public class ProductsScreenSliderFragment extends Fragment {
 	/*** @serial path to the selected product(image)*/
 	private String imagePath = null;
 
+	////////
+	public static int w;
+	public static int h;
 	/**
 	 * Constructor invoke the call of constructor of super class
 	 */
@@ -66,17 +71,22 @@ public class ProductsScreenSliderFragment extends Fragment {
 		LayoutParams lp = contentFrame.getLayoutParams();
 		lp.width = minWidth;
 		lp.height = minHeight;
+		
+		w = image.getWidth();
+		h = image.getHeight();
+		
 		contentFrame.setLayoutParams(lp);
 //		contentFrame.setMinimumHeight(minHeight);
 //		contentFrame.setMinimumWidth(minWidth);
 		
 		addImageToScrollView();
-		description = "";//"Default description : \n";
-		Image i = CollectionActivity.collections.get(CollectionActivity.collectionNumber).images.get(ProductViewActivity.Pos);
-		for(Product p : i.products)
+		description = "";
+		//Image i = CollectionActivity.collections.get(CollectionActivity.collectionNumber).images.get(ProductViewActivity.Pos);
+		Image i = CollectionActivity.collections.get(CollectionActivity.collectionNumber).getImages().get(ProductViewActivity.Pos);
+		for (Product p : i.getProducts())
 		{
-			description += p.number + " :\n";
-			description += p.description + "\n";// + "image path: " + imagePath;
+			description += p.getNumber() + " :\n";
+			description += p.getDescription() + "\n";
 		}
 		textViewDescript.setText(description);
 		return rootView;
@@ -100,9 +110,34 @@ public class ProductsScreenSliderFragment extends Fragment {
 	private void addImageToScrollView() {
 		Drawable drawable = Drawable.createFromPath(imagePath);
 		image.setImageDrawable(drawable);
-		image.setScaleType(ImageView.ScaleType.CENTER_CROP);
+		image.setScaleType(ImageView.ScaleType.CENTER_INSIDE);//CENTER_CROP
+		//CENTER_INSIDE - the blank sides exist, can be by side or from all sides of the picture
+		//CENTER_CROP - none of the white sides 
 	}
 	
+	private void setPic(String imagePath, ImageView destination) {
+	    int targetW = destination.getWidth();
+	    int targetH = destination.getHeight();
+	    // Get the dimensions of the bitmap
+	    BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+	    bmOptions.inJustDecodeBounds = true;
+	    BitmapFactory.decodeFile(imagePath, bmOptions);
+	    int photoW = bmOptions.outWidth;
+	    int photoH = bmOptions.outHeight;
+
+	    // Determine how much to scale down the image
+	    int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+	    // Decode the image file into a Bitmap sized to fill the View
+	    bmOptions.inJustDecodeBounds = false;
+	    bmOptions.inSampleSize = scaleFactor;
+	    bmOptions.inPurgeable = true;
+
+	    Bitmap bitmap = BitmapFactory.decodeFile(imagePath, bmOptions);
+	    destination.setImageBitmap(bitmap);
+	}
+	
+	//Refresh the viewed fragment
 	public void Rrefresh() {
 		//image.refreshDrawableState();
 	}

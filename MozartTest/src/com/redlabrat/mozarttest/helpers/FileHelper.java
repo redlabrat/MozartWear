@@ -10,17 +10,23 @@ import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 
+import com.redlabrat.mozarttest.CollectionActivity;
 import com.redlabrat.mozarttest.R;
+import com.redlabrat.mozarttest.View.ProductsScreenSliderFragment;
 
 import static com.redlabrat.mozarttest.Constants.*;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory.Options;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
-//import android.provider.OpenableColumns;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.ViewGroup;
+import android.webkit.WebView.FindListener;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 /**
@@ -137,11 +143,32 @@ public class FileHelper {
 			FileOutputStream fos = null;
 			try {
 				fos = new FileOutputStream(imageFile);
-				if (!image.compress(CompressFormat.PNG, 0, fos)) {
+				//////////////////////////////////////////////
+				//Scaled the image
+				int imWidth = image.getWidth();
+				int imHeight = image.getHeight();
+				int viewWidth = CollectionActivity.w;
+				int viewHeight = CollectionActivity.h;
+				double picture = 0.667;
+				double device = 0.6;
+				try {
+					picture = imHeight/imWidth;
+					device = viewHeight/viewWidth;
+				}
+				catch (ArithmeticException e) {
+					Log.i("ERROR", "Divided by zero ");
+				}
+				double scale = Math.min(picture, device);
+				int pixW = (int)(imWidth*scale);
+				int pixH = (int)(imHeight*scale);
+				Bitmap bit = Bitmap.createScaledBitmap(image, pixW, pixH, false);
+				////////////////////////////////
+				if (!bit.compress(CompressFormat.PNG, 0, fos)) {
 					String errorText = mContext.getResources().getString(R.string.error_save_image);
 					Toast.makeText(mContext, errorText, Toast.LENGTH_SHORT).show();
 					Log.e("ERROR", "Error while compressing bitmap!");
 				}
+				///////////////////////////////////////////////
 			} catch (FileNotFoundException e) {
 				Log.e("ERROR", "Error open out stream for saving file");
 				e.printStackTrace();
@@ -222,15 +249,6 @@ public class FileHelper {
 				return imageFile.getAbsolutePath();
 			} else {
 				Log.i("INFO", "Picture " + fileName + " not exist");
-//				imageFile.delete();
-//				Bitmap image = new ImageHelper(mContext).downloadImage("http://mozartwear.com/assets/images/zima/" + fileName);
-//				if (image != null) {
-//					saveImageToChache(image, fileName);
-//				} else {
-//					Log.e("IMAGE LOAD", "Error loading image");
-//					imageFile.delete();
-//					return null;
-//				}
 				// loading necessary file
 				//if file with an image not exist, than need to download and save the image to this file
 				if (r != 0)

@@ -1,6 +1,5 @@
 package com.redlabrat.mozarttest;
 
-import static com.redlabrat.mozarttest.Constants.imagesFolderName;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,7 +9,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
+//import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -21,17 +20,22 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import android.content.Context;
-import android.graphics.Bitmap.CompressFormat;
 import android.os.Environment;
 import android.util.Log;
-import android.widget.Toast;
+
+import com.redlabrat.mozarttest.Collection;
+import com.redlabrat.mozarttest.CollectionActivity;
+import com.redlabrat.mozarttest.Image;
+import com.redlabrat.mozarttest.Product;
+
+//import static com.redlabrat.mozarttest.Constants.*;
 
 public class LoadFromNet extends Thread {
-	public String Catalog = "http://mozart.com.ru/catalog.xml"; //Catalog URL
-	
+	//public String Catalog = "http://mozart.com.ru/catalog.xml"; //Catalog URL
 	public Collection col;
 	public Image im;
 	public Product pr;
+	public String Catalog = null;
 	
 	public Context mContext = null;
 	public String Catatog = null;
@@ -43,7 +47,6 @@ public class LoadFromNet extends Thread {
 		mContext = context;
 		Catalog = catalogURL;
 		extChacheDir = mContext.getExternalCacheDir();
-		//new File("/mnt/sdcard/");//context.getExternalCacheDir();
         /*File folderForPics = new File(extChacheDir, imagesFolderName);
 		if (!folderForPics.exists()) {
 			Log.i("INFO", "Pictures folder not exist");
@@ -55,10 +58,9 @@ public class LoadFromNet extends Thread {
 	}
 	
 	@Override
-	public void run()//downloadCatalog()
+	public void run()
 	{
 		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-			//File extChacheDir = mContext.getExternalCacheDir();
 			/*File folderForPics = new File(extChacheDir, imagesFolderName);
 			// create folder for images
 			if (!folderForPics.exists()) {
@@ -70,35 +72,32 @@ public class LoadFromNet extends Thread {
 			FileOutputStream fos = null;
 			try {
 				fos = new FileOutputStream(imageFile);
-				//
-				//try{
-			    	//set the download URL, a url that points to a file on the internet
-			        //this is the file to be downloaded
-			        URL url = new URL(Catalog);
-			        //create the new connection
-			        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+				//set the download URL, a url that points to a file on the internet
+		        //this is the file to be downloaded
+		        URL url = new URL(Catalog);
+		        //create the new connection
+		        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
-			        //set up some things on the connection
-			        urlConnection.setRequestMethod("GET");
-			        urlConnection.setDoOutput(true);
-			        urlConnection.connect();
-			        InputStream inputStream = urlConnection.getInputStream();
-			        //create a buffer...
-			        byte[] buffer = new byte[1024];
-			        int bufferLength = 0; //used to store a temporary size of the buffer
-			        System.out.println("BEFORE WHILE");
-			        //now, read through the input buffer and write the contents to the file
-			        while ( (bufferLength = inputStream.read(buffer)) > 0 ) {
-			        	//content+=buffer.toString();
-			        	System.out.println("IN WHILE ");
-			        	//add the data in the buffer to the file in the file output stream (the file on the sd card
-			        	fos.write(buffer, 0, bufferLength);
-			        	//add up the size so we know how much is downloaded
-			        	//downloadedSize += bufferLength;
-			        	//this is where you would do something to report the progress, like this maybe
-			        }
-			        Log.i("THREAD", "File length : " + String.valueOf(imageFile.length()));
-				//}
+		        //set up some things on the connection
+		        urlConnection.setRequestMethod("GET");
+		        urlConnection.setDoOutput(true);
+		        urlConnection.connect();
+		        InputStream inputStream = urlConnection.getInputStream();
+		        //create a buffer...
+		        byte[] buffer = new byte[1024];
+		        int bufferLength = 0; //used to store a temporary size of the buffer
+		        System.out.println("BEFORE WHILE");
+		        //now, read through the input buffer and write the contents to the file
+		        while ( (bufferLength = inputStream.read(buffer)) > 0 ) {
+		        	//content+=buffer.toString();
+		        	System.out.println("IN WHILE ");
+		        	//add the data in the buffer to the file in the file output stream (the file on the sd card
+		        	fos.write(buffer, 0, bufferLength);
+		        	//add up the size so we know how much is downloaded
+		        	//downloadedSize += bufferLength;
+		        	//this is where you would do something to report the progress, like this maybe
+		        }
+		        Log.i("THREAD", "File length : " + String.valueOf(imageFile.length()));
 			} catch (FileNotFoundException e) {
 				Log.e("ERROR", "Error open out stream for saving file");
 				e.printStackTrace();
@@ -107,11 +106,9 @@ public class LoadFromNet extends Thread {
 				imageFile.delete();
 				e.printStackTrace();
 			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
 				Log.i("ERROR", "MalformedURL");
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				Log.i("ERROR", "IOEXception");
 				e.printStackTrace();
 			}
@@ -126,77 +123,12 @@ public class LoadFromNet extends Thread {
 				}
 			}
 			}
+			
 			ReadXml();
 		} else {
 			String errorText = mContext.getResources().getString(R.string.error_media_mount);
 			Log.e("ERROR", "Media not mounted! "+errorText);
 		}
-		
-		//new Thread(new Runnable() {
-		//	public void run() {
-		/*Log.i("THREAD", "DOWNLOAD STARTED");
-		try{
-    	//set the download URL, a url that points to a file on the internet
-        //this is the file to be downloaded
-        URL url = new URL(Catalog);
-        //create the new connection
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-
-        //set up some things on the connection
-        urlConnection.setRequestMethod("GET");
-        urlConnection.setDoOutput(true);
-        urlConnection.connect();
-
-        //set the path where we want to save the file
-        //in this case, going to save it on the cache directory of the 
-        //application.
-		//File catalogFile = new File(extChacheDir, fileName);
-		
-	        File SDCardRoot = Environment.getExternalStorageDirectory();
-	        //create a new file, specifying the path, and the filename
-	        //which we want to save the file as.
-	        File catalogFile = new File(SDCardRoot, "catalog.xml");
-	        Log.i("THREAD", "after new File");
-	        //this will be used to write the downloaded data into the file we created
-	        FileOutputStream fileOutput = new FileOutputStream(catalogFile);
-	        Log.i("THREAD", "after fileoutput");
-	        //this will be used in reading the data from the internet
-	        InputStream inputStream = urlConnection.getInputStream();
-	        
-	        //this is the total size of the file
-	        //int totalSize = urlConnection.getContentLength();
-	        //variable to store total downloaded bytes
-	        //int downloadedSize = 0;
-	
-	        //create a buffer...
-	        byte[] buffer = new byte[1024];
-	        int bufferLength = 0; //used to store a temporary size of the buffer
-	        System.out.println("BEFORE WHILE");
-	        //now, read through the input buffer and write the contents to the file
-	        while ( (bufferLength = inputStream.read(buffer)) > 0 ) {
-	        	//content+=buffer.toString();
-	        	System.out.println("IN WHILE ");
-	        	//add the data in the buffer to the file in the file output stream (the file on the sd card
-	        	fileOutput.write(buffer, 0, bufferLength);
-	        	//add up the size so we know how much is downloaded
-	        	//downloadedSize += bufferLength;
-	        	//this is where you would do something to report the progress, like this maybe
-	        }
-	        Log.i("THREAD", "File length : " + String.valueOf(catalogFile.length()));
-	        fileOutput.close();
-	        Log.i("THREAD", "DOWNLOAD FINISHED Starting to read from FILE");
-		//}
-		ReadXml();
-		Log.i("THREAD", String.valueOf(CollectionActivity.collections.size()) + "DONE Read from FILE");
-	    } catch (MalformedURLException e) {
-	        e.printStackTrace();
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	    }
-		
-		Log.i("THREAD", "END of THREAD");*/
-		//	}
-		//}).start();
 	}
 	/*
 	public  String ReadFromFile()
@@ -233,23 +165,24 @@ public class LoadFromNet extends Thread {
 	{
 		Log.i("THREAD", "Read Xml :");
 		try {
-			
-			//File folderForPics = new File(extChacheDir, imagesFolderName);
 			File fXmlFile = new File(extChacheDir, fileName);
 			//File SDCardRoot = Environment.getExternalStorageDirectory();
 	        //File fXmlFile = new File(SDCardRoot, "catalog.xml");
-	        if (!fXmlFile.exists()) Log.i("THREAD", "FILE NOT EXIST");
+	        if (!fXmlFile.exists()) {
+	        	Log.i("THREAD", "FILE NOT EXIST");
+	        	return;
+	        }
 	        
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(fXmlFile);
 			doc.getDocumentElement().normalize();
-			Log.i("THREAD", "Root : "+doc.getDocumentElement().getNodeName());
+			Log.i("THREAD", "Root : " + doc.getDocumentElement().getNodeName());
 			
 			printNote(doc.getChildNodes());
 			
 		    } catch (Exception e) {
-			e.printStackTrace();
+		    	e.printStackTrace();
 		    }
 	}
 	
@@ -263,30 +196,31 @@ public class LoadFromNet extends Thread {
 				{
 					System.out.println("Collection " + tempNode.getAttributes().item(0).getNodeValue());
 					col = new Collection();
-					col.name = tempNode.getAttributes().item(0).getNodeValue();
-					col.images = new ArrayList<Image>();
+					col.setName(tempNode.getAttributes().item(0).getNodeValue());
+					//col.name = tempNode.getAttributes().item(0).getNodeValue();
+					//col.images = new ArrayList<Image>();
 				}
 				if (tempNode.getNodeName().contains("im"))
 				{
 					System.out.println("Image " + tempNode.getAttributes().item(0).getNodeValue());
 					im = new Image();
-					im.URL = "http://mozartwear.com/" + tempNode.getAttributes().item(0).getNodeValue();
-					int startSubString = im.URL.lastIndexOf("/");
-					im.name = im.URL.substring(startSubString);
-					im.products = new ArrayList<Product>();
+					im.setURL("http://mozartwear.com/" + tempNode.getAttributes().item(0).getNodeValue());
+					//im.URL = "http://mozartwear.com/" + tempNode.getAttributes().item(0).getNodeValue();
+					int startSubString = im.getURL().lastIndexOf("/");
+					im.setName(im.getURL().substring(startSubString));
+					//im.name = im.URL.substring(startSubString);
+					//im.products = new ArrayList<Product>();
 				}
 				if (tempNode.getNodeName().contains("pr"))
 				{
 					System.out.println("Product " + tempNode.getAttributes().item(0).getNodeValue() + " Description : " + tempNode.getTextContent());
 					pr = new Product();
-					pr.number = tempNode.getAttributes().item(0).getNodeValue();
-					pr.description = tempNode.getTextContent();
+					pr.setNumber(tempNode.getAttributes().item(0).getNodeValue());
+					pr.setDescription(tempNode.getTextContent());
+					//pr.number = tempNode.getAttributes().item(0).getNodeValue();
+					//pr.description = tempNode.getTextContent();
 				}
-				/*System.out.println("\nNODE Name : " + tempNode.getNodeName() + " [OPEN]");
-				if (tempNode.hasAttributes()) {
-					// get attributes names and values
-					System.out.println(tempNode.getAttributes().item(0).getNodeName() + tempNode.getAttributes().item(0).getNodeValue());
-				}*/
+				
 				if (tempNode.hasChildNodes()) {
 					// loop again if has child nodes
 					printNote(tempNode.getChildNodes());
@@ -298,11 +232,13 @@ public class LoadFromNet extends Thread {
 				}
 				if (tempNode.getNodeName().contains("im"))
 				{
-					col.images.add(im);
+					//col.images.add(im);
+					col.addImage(im);
 				}
 				if (tempNode.getNodeName().contains("pr"))
 				{
-					im.products.add(pr);
+					//im.products.add(pr);
+					im.addProduct(pr);
 				}		
 			}
 	    }
