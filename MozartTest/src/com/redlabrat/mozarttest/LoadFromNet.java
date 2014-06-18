@@ -42,16 +42,14 @@ public class LoadFromNet extends Thread {
 	public String fileName = null;
 	public File extChacheDir = null;
 	
-	public LoadFromNet(Context context, String catalogURL)
+	public boolean update = false;
+	
+	public LoadFromNet(Context context, String catalogURL, boolean updateOptions)
 	{
 		mContext = context;
 		Catalog = catalogURL;
 		extChacheDir = mContext.getExternalCacheDir();
-        /*File folderForPics = new File(extChacheDir, imagesFolderName);
-		if (!folderForPics.exists()) {
-			Log.i("INFO", "Pictures folder not exist");
-			folderForPics.mkdir();
-		}*/
+		update = updateOptions;
 		//get from URL the name of the image to save
 		int startSubString = Catalog.lastIndexOf("/");
 		fileName = Catalog.substring(startSubString);
@@ -60,14 +58,14 @@ public class LoadFromNet extends Thread {
 	@Override
 	public void run()
 	{
-		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-			/*File folderForPics = new File(extChacheDir, imagesFolderName);
+		/*if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+			File folderForPics = new File(extChacheDir, imagesFolderName);
 			// create folder for images
 			if (!folderForPics.exists()) {
 				folderForPics.mkdir();
 			}*/
 			File imageFile = new File(extChacheDir, fileName);
-			if (!imageFile.exists())
+			if (!imageFile.exists() || update) // if file not exist or we choose to update everything
 			{
 			FileOutputStream fos = null;
 			try {
@@ -86,11 +84,9 @@ public class LoadFromNet extends Thread {
 		        //create a buffer...
 		        byte[] buffer = new byte[1024];
 		        int bufferLength = 0; //used to store a temporary size of the buffer
-		        System.out.println("BEFORE WHILE");
 		        //now, read through the input buffer and write the contents to the file
 		        while ( (bufferLength = inputStream.read(buffer)) > 0 ) {
 		        	//content+=buffer.toString();
-		        	System.out.println("IN WHILE ");
 		        	//add the data in the buffer to the file in the file output stream (the file on the sd card
 		        	fos.write(buffer, 0, bufferLength);
 		        	//add up the size so we know how much is downloaded
@@ -125,10 +121,10 @@ public class LoadFromNet extends Thread {
 			}
 			
 			ReadXml();
-		} else {
+		/*} else {
 			String errorText = mContext.getResources().getString(R.string.error_media_mount);
 			Log.e("ERROR", "Media not mounted! "+errorText);
-		}
+		}*/
 	}
 	/*
 	public  String ReadFromFile()
@@ -163,7 +159,6 @@ public class LoadFromNet extends Thread {
 	*/
 	public void ReadXml()
 	{
-		Log.i("THREAD", "Read Xml :");
 		try {
 			File fXmlFile = new File(extChacheDir, fileName);
 			//File SDCardRoot = Environment.getExternalStorageDirectory();
@@ -177,7 +172,6 @@ public class LoadFromNet extends Thread {
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(fXmlFile);
 			doc.getDocumentElement().normalize();
-			Log.i("THREAD", "Root : " + doc.getDocumentElement().getNodeName());
 			
 			printNote(doc.getChildNodes());
 			
@@ -194,31 +188,24 @@ public class LoadFromNet extends Thread {
 			if (tempNode.getNodeType() == Node.ELEMENT_NODE) {
 				if (tempNode.getNodeName().contains("col"))
 				{
-					System.out.println("Collection " + tempNode.getAttributes().item(0).getNodeValue());
+					//System.out.println("Collection " + tempNode.getAttributes().item(0).getNodeValue());
 					col = new Collection();
 					col.setName(tempNode.getAttributes().item(0).getNodeValue());
-					//col.name = tempNode.getAttributes().item(0).getNodeValue();
-					//col.images = new ArrayList<Image>();
 				}
 				if (tempNode.getNodeName().contains("im"))
 				{
-					System.out.println("Image " + tempNode.getAttributes().item(0).getNodeValue());
+					//System.out.println("Image " + tempNode.getAttributes().item(0).getNodeValue());
 					im = new Image();
 					im.setURL("http://mozartwear.com/" + tempNode.getAttributes().item(0).getNodeValue());
-					//im.URL = "http://mozartwear.com/" + tempNode.getAttributes().item(0).getNodeValue();
 					int startSubString = im.getURL().lastIndexOf("/");
 					im.setName(im.getURL().substring(startSubString));
-					//im.name = im.URL.substring(startSubString);
-					//im.products = new ArrayList<Product>();
 				}
 				if (tempNode.getNodeName().contains("pr"))
 				{
-					System.out.println("Product " + tempNode.getAttributes().item(0).getNodeValue() + " Description : " + tempNode.getTextContent());
+					//System.out.println("Product " + tempNode.getAttributes().item(0).getNodeValue() + " Description : " + tempNode.getTextContent());
 					pr = new Product();
 					pr.setNumber(tempNode.getAttributes().item(0).getNodeValue());
 					pr.setDescription(tempNode.getTextContent());
-					//pr.number = tempNode.getAttributes().item(0).getNodeValue();
-					//pr.description = tempNode.getTextContent();
 				}
 				
 				if (tempNode.hasChildNodes()) {
@@ -232,12 +219,10 @@ public class LoadFromNet extends Thread {
 				}
 				if (tempNode.getNodeName().contains("im"))
 				{
-					//col.images.add(im);
 					col.addImage(im);
 				}
 				if (tempNode.getNodeName().contains("pr"))
 				{
-					//im.products.add(pr);
 					im.addProduct(pr);
 				}		
 			}

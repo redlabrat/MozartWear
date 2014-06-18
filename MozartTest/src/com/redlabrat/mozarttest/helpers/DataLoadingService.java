@@ -5,6 +5,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import com.redlabrat.mozarttest.ProductViewActivity;
+
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
@@ -37,7 +39,7 @@ public class DataLoadingService extends Service {
 	@Override
 	public IBinder onBind(Intent arg0) {
 		ih = new ImageHelper(getApplicationContext());
-		fh = new FileHelper(getApplicationContext());
+		fh = new FileHelper(getApplicationContext(), ProductViewActivity.collectionName);
 		// 4. Load new data
 		// get URL of images from XML
 		getImagesURLs();
@@ -71,7 +73,7 @@ public class DataLoadingService extends Service {
 			str = imageURLs.get(counter);
 			try {
 				if (new URL(str).getContent() != null) {
-					ih.loadAndSaveImageToCache(str);
+					//ih.loadAndSaveImageToCache(str);
 				} else {
 					Log.i("INFO", "Incorrect URL or file type " + str);
 					// remove image name if it is not on server

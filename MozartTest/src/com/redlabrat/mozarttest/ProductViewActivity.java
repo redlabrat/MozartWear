@@ -2,6 +2,7 @@ package com.redlabrat.mozarttest;
 
 import java.util.ArrayList;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.redlabrat.mozarttest.View.ProductsScreenSliderFragment;
 import com.redlabrat.mozarttest.helpers.FileHelper;
 
@@ -26,7 +27,10 @@ public class ProductViewActivity extends FragmentActivity {
 	private ViewPager pager = null;
 	private PagerAdapter adapter = null;
 	
+	public static int num = 0;
 	public static int Pos = 0;
+	public static String collectionName = null;
+	public static String URL = null;
 	/*** @serial list of the image's paths*/
 	private ArrayList<String> imagesPaths = null;
 
@@ -39,18 +43,15 @@ public class ProductViewActivity extends FragmentActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_product_view);
-
+		
+		num = CollectionActivity.collectionNumber;
+		collectionName = CollectionActivity.collections.get(num).getName();
+		
 		getImagesPaths();
 		
 		pager = (ViewPager) findViewById(R.id.productsPager);
 		adapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
 		pager.setAdapter(adapter);
-		// ImageView image2 = new ImageView(getApplicationContext());
-		// scroll = (LinearLayout) findViewById(R.id.horizontallScroll);
-		// descriptionText = (TextView) findViewById(R.id.descriptionText);
-		// image.setImageBitmap(new
-		//				ImageHelper().downloadImage("http://mozartwear.com/assets/images/zima/img1.jpg"));
-		// loadImages();
 	}
 
 	/**
@@ -58,27 +59,12 @@ public class ProductViewActivity extends FragmentActivity {
 	 */
 	private void getImagesPaths() {
 		imagesPaths = new ArrayList<String>();
-		
-		FileHelper fh = new FileHelper(getApplicationContext());
-		// after service finished
+		FileHelper fh = new FileHelper(getApplicationContext(), collectionName);
 		//imagesPaths = fh.loadImagesNames();
-		int num = CollectionActivity.collectionNumber;
 		for (Image im : CollectionActivity.collections.get(num).getImages())
-		{
-			imagesPaths.add(fh.getImagePath(im.getURL(), 0));
-		}
-		
-		/*imagesPaths.add(fh.getImagePath("img1.jpg"));
-		imagesPaths.add(fh.getImagePath("img2.jpg"));
-		imagesPaths.add(fh.getImagePath("img3.jpg"));
-		imagesPaths.add(fh.getImagePath("img4.jpg"));
-		imagesPaths.add(fh.getImagePath("img5.jpg"));
-		imagesPaths.add(fh.getImagePath("img6.jpg"));
-		imagesPaths.add(fh.getImagePath("img7.jpg"));
-		imagesPaths.add(fh.getImagePath("img8.jpg"));
-		imagesPaths.add(fh.getImagePath("img10.jpg"));
-		imagesPaths.add(fh.getImagePath("img11.jpg"));
-		imagesPaths.add(fh.getImagePath("img12.jpg"));*/
+			imagesPaths.add(im.getURL());
+			//imagesPaths.add(fh.getImagePath(im.getURL(), 0));
+		//imagesPaths.add(fh.getImagePath("img1.jpg"));
 	}
 
 	/**
@@ -103,10 +89,9 @@ public class ProductViewActivity extends FragmentActivity {
 			Bundle params = new Bundle();
 			
 			Pos = position;
-			FileHelper fh = new FileHelper(getApplicationContext());
-			int num = CollectionActivity.collectionNumber;
-			
-			fh.getImagePath(CollectionActivity.collections.get(num).getImages().get(Pos).getURL(), 1);
+			//FileHelper fh = new FileHelper(getApplicationContext(), collectionName);
+			//URL = CollectionActivity.collections.get(num).getImages().get(Pos).getURL();
+			//fh.getImagePath(CollectionActivity.collections.get(num).getImages().get(Pos).getURL(), 1);
 			params.putString(fragmentImagePath, imagesPaths.get(Pos));
 			
 			fragment.setArguments(params);

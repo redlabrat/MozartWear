@@ -11,6 +11,7 @@ import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 
 import com.redlabrat.mozarttest.CollectionActivity;
+import com.redlabrat.mozarttest.ProductViewActivity;
 import com.redlabrat.mozarttest.R;
 import com.redlabrat.mozarttest.View.ProductsScreenSliderFragment;
 
@@ -38,13 +39,31 @@ public class FileHelper {
 	private Context mContext;
 	/*** @serial Folder in which we save images*/
 	private File folderForPics;
-	
+	/////////////////////////
+	private File folderForCollection;
 	/**
 	 * Constructor
 	 * @param context Context of the application
 	 */
-	public FileHelper(Context context) {
+	public FileHelper(Context context, String collectionName) {
 		mContext = context;
+		//Must exist an external storage and the directory to save files imagesFolderName
+		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+			File extChacheDir = mContext.getExternalCacheDir();
+			folderForPics = new File(extChacheDir, imagesFolderName);
+			// create folder for images
+			if (!folderForPics.exists()) {
+				folderForPics.mkdir();
+			}
+			folderForCollection = new File(folderForPics, collectionName);
+			if (!folderForCollection.exists()) {
+				folderForCollection.mkdir();
+			}
+		} else {
+			String errorText = mContext.getResources().getString(R.string.error_media_mount);
+			Toast.makeText(mContext, errorText, Toast.LENGTH_SHORT).show();
+			Log.e("ERROR", "Media not mounted!");
+		}
 	}
 	
 	/**
@@ -98,7 +117,6 @@ public class FileHelper {
 	public void saveImagesNames(ArrayList<String> outData) {
 		FileOutputStream dataStream = null;
 		ObjectOutputStream oos = null;
-		
 		try {
 			dataStream = mContext.openFileOutput(internalDataFileName, Context.MODE_PRIVATE);
 			oos = new ObjectOutputStream(dataStream);
@@ -132,28 +150,36 @@ public class FileHelper {
 	 */
 	public void saveImageToChache(Bitmap image, String fileName) {
 		//Must exist an external storage and the directory to save files imagesFolderName
-		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+		/*if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
 			File extChacheDir = mContext.getExternalCacheDir();
 			folderForPics = new File(extChacheDir, imagesFolderName);
 			// create folder for images
 			if (!folderForPics.exists()) {
 				folderForPics.mkdir();
 			}
-			File imageFile = new File(folderForPics, fileName);
+			folderForCollection = new File(folderForPics, ProductViewActivity.collectionName);
+			if (!folderForCollection.exists()) {
+				folderForCollection.mkdir();
+			}*/
+			//File imageFile = new File(folderForPics, fileName);
+			File imageFile = new File(folderForCollection, fileName);
 			FileOutputStream fos = null;
 			try {
 				fos = new FileOutputStream(imageFile);
 				//////////////////////////////////////////////
 				//Scaled the image
-				int imWidth = image.getWidth();
-				int imHeight = image.getHeight();
-				int viewWidth = CollectionActivity.w;
-				int viewHeight = CollectionActivity.h;
+				double imWidth = image.getWidth();
+				double imHeight = image.getHeight();
+				double displayWidth = CollectionActivity.w;
+				double displayHeight = CollectionActivity.h;
+				Log.i("BITMAP", imWidth+" x "+imHeight);//Height - высота
+				Log.i("BITMAP display", displayWidth+" x "+displayHeight);//Height - высота
 				double picture = 0.667;
 				double device = 0.6;
 				try {
-					picture = imHeight/imWidth;
-					device = viewHeight/viewWidth;
+					picture = imWidth/imHeight;
+					device = displayWidth/displayHeight;
+					//Log.i("BITMAP", "Picture="+picture+" Device="+device);//Height - высота
 				}
 				catch (ArithmeticException e) {
 					Log.i("ERROR", "Divided by zero ");
@@ -161,13 +187,15 @@ public class FileHelper {
 				double scale = Math.min(picture, device);
 				int pixW = (int)(imWidth*scale);
 				int pixH = (int)(imHeight*scale);
+				Log.i("BITMAP PIX", pixW+" x "+pixH);
 				Bitmap bit = Bitmap.createScaledBitmap(image, pixW, pixH, false);
 				////////////////////////////////
-				if (!bit.compress(CompressFormat.PNG, 0, fos)) {
+				if (!bit.compress(CompressFormat.JPEG, 70, fos)) { //PNG 70 saves the image to file
 					String errorText = mContext.getResources().getString(R.string.error_save_image);
 					Toast.makeText(mContext, errorText, Toast.LENGTH_SHORT).show();
 					Log.e("ERROR", "Error while compressing bitmap!");
 				}
+				Log.i("BITMAP FILE", "Size : "+imageFile.length());
 				///////////////////////////////////////////////
 			} catch (FileNotFoundException e) {
 				Log.e("ERROR", "Error open out stream for saving file");
@@ -187,11 +215,11 @@ public class FileHelper {
 					}
 				}
 			}
-		} else {
+		/*} else {
 			String errorText = mContext.getResources().getString(R.string.error_media_mount);
 			Toast.makeText(mContext, errorText, Toast.LENGTH_SHORT).show();
 			Log.e("ERROR", "Media not mounted!");
-		}
+		}*/
 	}
 	
 	/**
@@ -202,13 +230,14 @@ public class FileHelper {
 	 * @return true if image was loaded successfully, false if the folder or file don't exist or in any other cases
 	 */
 	public boolean loadImageFromCache(Bitmap image, String fileName) {
-		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+		/*if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
 			File extChacheDir = mContext.getExternalCacheDir();
 			folderForPics = new File(extChacheDir, imagesFolderName);
 			if (!folderForPics.exists()) {
 				return false;
-			}
-			File imageFile = new File(folderForPics, fileName);
+			}*/
+			File imageFile = new File(folderForCollection, fileName);
+			Log.i("LOAD FROM CACHE", fileName+" size : "+imageFile.length());
 			try {
 				image = BitmapFactory.decodeStream(new FileInputStream(imageFile));
 			} catch (FileNotFoundException e) {
@@ -216,12 +245,12 @@ public class FileHelper {
 				e.printStackTrace();
 			}
 			return true;
-		} else {
+		/*} else {
 			String errorText = mContext.getResources().getString(R.string.error_media_mount);
 			Toast.makeText(mContext, errorText, Toast.LENGTH_SHORT).show();
 			Log.e("ERROR", "Media not mounted!");
 			return false;
-		}
+		}*/
 	}
 	
 	/**
@@ -231,40 +260,52 @@ public class FileHelper {
 	 * @return absolute path to image
  	 */
 	public String getImagePath(String fileNameURL, int r) {
-		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+		/*if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
 			File extChacheDir = mContext.getExternalCacheDir();
 			folderForPics = new File(extChacheDir, imagesFolderName);
 			if (!folderForPics.exists()) {
 				Log.i("INFO", "Pictures folder not exist");
 				folderForPics.mkdir();
-			}
-			
+			}*/
+		
 			//get from URL the name of the image to save
 			int startSubString = fileNameURL.lastIndexOf("/");
 			String fileName = fileNameURL.substring(startSubString);
 			
-			File imageFile = new File(folderForPics, fileName);
-			if (imageFile.exists()) {
-				Log.i("INFO", "Picture " + imageFile.getAbsolutePath() + " returned");
-				return imageFile.getAbsolutePath();
-			} else {
-				Log.i("INFO", "Picture " + fileName + " not exist");
-				// loading necessary file
+			//File imageFile = new File(folderForPics, fileName);
+			File imageFile = new File(folderForCollection, fileName);
+			if (!imageFile.exists()) {
 				//if file with an image not exist, than need to download and save the image to this file
 				if (r != 0)
 				{
-					new ImageHelper(mContext).loadAndSaveImageToCache(fileNameURL);
+					Log.i("INFO", "Picture " + fileName + " not exist");
+					/////////////////////////////
+					ImageHelper ih = new ImageHelper(mContext);
+					ih.setURL(fileNameURL);
+					ih.start();
+					if(ih.isAlive())
+			        {
+						try {
+							ih.join(); //wait till thread is over
+						} catch (InterruptedException e) {
+							Log.i("THREAD", "Was interrupted!!!");
+							e.printStackTrace();
+						}
+			        }
+					Log.i("BITMAP", "WAS LOADED and saved");
+					/////////////////////////////
+					//new ImageHelper(mContext).loadAndSaveImageToCache(fileNameURL);
 					Log.i("INFO", "Picture " + fileName + " loaded and returned");
 				}
 				imageFile = new File(folderForPics, fileName);
-				return imageFile.getAbsolutePath();
 			}
-		} else {
+			return imageFile.getAbsolutePath();
+		/*} else {
 			String errorText = mContext.getResources().getString(R.string.error_media_mount);
 			Toast.makeText(mContext, errorText, Toast.LENGTH_SHORT).show();
 			Log.e("ERROR", "Media not mounted!");
 			return null;
-		}
+		}*/
 	}
 
 }

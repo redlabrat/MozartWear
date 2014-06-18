@@ -1,5 +1,7 @@
 package com.redlabrat.mozarttest.View;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.redlabrat.mozarttest.CollectionActivity;
 import com.redlabrat.mozarttest.Image;
 import com.redlabrat.mozarttest.Product;
@@ -37,9 +39,6 @@ public class ProductsScreenSliderFragment extends Fragment {
 	/*** @serial path to the selected product(image)*/
 	private String imagePath = null;
 
-	////////
-	public static int w;
-	public static int h;
 	/**
 	 * Constructor invoke the call of constructor of super class
 	 */
@@ -62,6 +61,7 @@ public class ProductsScreenSliderFragment extends Fragment {
 				R.layout.page_to_scroll, container, false);
 		contentFrame = (FrameLayout) rootView.findViewById(R.id.descriptionFrame);
 		image = (ImageView) rootView.findViewById(R.id.imageToShow);
+		
 		//image
 		textViewDescript = (TextView) rootView.findViewById(R.id.descriptionText);
 
@@ -71,9 +71,10 @@ public class ProductsScreenSliderFragment extends Fragment {
 		LayoutParams lp = contentFrame.getLayoutParams();
 		lp.width = minWidth;
 		lp.height = minHeight;
-		
-		w = image.getWidth();
-		h = image.getHeight();
+		//////////////////////////////////////
+		image.setMaxHeight(CollectionActivity.h);
+		image.setMaxWidth(CollectionActivity.w);
+		///////////////////////////////////////
 		
 		contentFrame.setLayoutParams(lp);
 //		contentFrame.setMinimumHeight(minHeight);
@@ -108,14 +109,16 @@ public class ProductsScreenSliderFragment extends Fragment {
 	 * and customize the way it will be shown on the screen
 	 */
 	private void addImageToScrollView() {
-		Drawable drawable = Drawable.createFromPath(imagePath);
+		//String uri = "http://mozartwear.com/assets/images/summer_14/prev/IMG_3122.JPG";
+		ImageLoader.getInstance().displayImage(imagePath, image);
+		/*Drawable drawable = Drawable.createFromPath(imagePath);
 		image.setImageDrawable(drawable);
-		image.setScaleType(ImageView.ScaleType.CENTER_INSIDE);//CENTER_CROP
+		image.setScaleType(ImageView.ScaleType.CENTER_CROP);//CENTER_CROP*/
 		//CENTER_INSIDE - the blank sides exist, can be by side or from all sides of the picture
 		//CENTER_CROP - none of the white sides 
 	}
 	
-	private void setPic(String imagePath, ImageView destination) {
+	/*private void setPic(String imagePath, ImageView destination) {
 	    int targetW = destination.getWidth();
 	    int targetH = destination.getHeight();
 	    // Get the dimensions of the bitmap
@@ -135,10 +138,10 @@ public class ProductsScreenSliderFragment extends Fragment {
 
 	    Bitmap bitmap = BitmapFactory.decodeFile(imagePath, bmOptions);
 	    destination.setImageBitmap(bitmap);
-	}
+	}*/
 	
 	//Refresh the viewed fragment
-	public void Rrefresh() {
+	public void Refresh() {
 		//image.refreshDrawableState();
 	}
 }
