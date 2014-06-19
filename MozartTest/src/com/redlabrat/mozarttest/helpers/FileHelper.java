@@ -11,23 +11,14 @@ import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 
 import com.redlabrat.mozarttest.CollectionActivity;
-import com.redlabrat.mozarttest.ProductViewActivity;
 import com.redlabrat.mozarttest.R;
-import com.redlabrat.mozarttest.View.ProductsScreenSliderFragment;
-
 import static com.redlabrat.mozarttest.Constants.*;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
-import android.graphics.BitmapFactory.Options;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.ViewGroup;
-import android.webkit.WebView.FindListener;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 /**
@@ -172,14 +163,14 @@ public class FileHelper {
 				double imHeight = image.getHeight();
 				double displayWidth = CollectionActivity.w;
 				double displayHeight = CollectionActivity.h;
-				Log.i("BITMAP", imWidth+" x "+imHeight);//Height - высота
-				Log.i("BITMAP display", displayWidth+" x "+displayHeight);//Height - высота
+				Log.i("BITMAP", imWidth+" x "+imHeight);//Height - пїЅпїЅпїЅпїЅпїЅпїЅ
+				Log.i("BITMAP display", displayWidth+" x "+displayHeight);//Height - пїЅпїЅпїЅпїЅпїЅпїЅ
 				double picture = 0.667;
 				double device = 0.6;
 				try {
 					picture = imWidth/imHeight;
 					device = displayWidth/displayHeight;
-					//Log.i("BITMAP", "Picture="+picture+" Device="+device);//Height - высота
+					//Log.i("BITMAP", "Picture="+picture+" Device="+device);//Height - пїЅпїЅпїЅпїЅпїЅпїЅ
 				}
 				catch (ArithmeticException e) {
 					Log.i("ERROR", "Divided by zero ");
