@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <resources>
+
     <string name="app_name">MozartTest</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
@@ -13,4 +14,9 @@
     <string name="error_save_image">Error. Can not save image to SD card</string>
     <string name="error_media_mount">Error. Can not access SD card</string>
     <string name="error_404"> file not found</string>
+    <string name="title_activity_collection">CollectionActivity</string>
+    <string name="title_activity_grid">GridActivity</string>
+    <string name="title_activity_full_image">FullImageActivity</string>
+
+    <string name="collection">Доступные коллекции :</string>
 </resources>

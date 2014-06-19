@@ -2,7 +2,6 @@ package com.redlabrat.mozarttest;
 
 import java.util.ArrayList;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.redlabrat.mozarttest.View.ProductsScreenSliderFragment;
 import com.redlabrat.mozarttest.helpers.FileHelper;
 

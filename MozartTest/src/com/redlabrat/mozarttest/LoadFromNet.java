@@ -1,6 +1,5 @@
 package com.redlabrat.mozarttest;
 
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -20,7 +19,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import android.content.Context;
-import android.os.Environment;
 import android.util.Log;
 
 import com.redlabrat.mozarttest.Collection;
@@ -174,7 +172,6 @@ public class LoadFromNet extends Thread {
 			doc.getDocumentElement().normalize();
 			
 			printNote(doc.getChildNodes());
-			
 		    } catch (Exception e) {
 		    	e.printStackTrace();
 		    }
