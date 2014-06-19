@@ -17,8 +17,10 @@ import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.content.Context;
 import android.content.Intent;
@@ -26,6 +28,7 @@ import android.content.res.ColorStateList;
 import android.content.res.XmlResourceParser;
 import android.graphics.Bitmap;
 import android.view.Display;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -111,24 +114,21 @@ public class CollectionActivity extends Activity implements OnClickListener {
 		return true;
 	}
 	
-	/**
-	 * Process the button click event 
-	 * @param v view of the button which was clicked
-	 */
-	public void onClick(View v) {
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		// TODO Auto-generated method stub
+		//Toast.makeText(this, "Меню", Toast.LENGTH_SHORT).show();
 		if (!isNetworkAvailable()) {
 			Toast.makeText(this, "Нет интернет соединения!", Toast.LENGTH_SHORT).show();
-			return;
+			return false;
 		}
-		int id = v.getId();
-		if (id == collections.size()) { //button Update click
+		if (item.getItemId() == R.id.action_settings) {
 			lin = (LinearLayout)findViewById(R.id.layoutCollection);
 			lin.removeAllViews();
-			
 			collections.clear();
 			if (collections.size() != 0) {
 				Log.i("onClick", "Cannot clear the collection set!");
-				return;
+				return false;
 			}
 			load = new LoadFromNet(getApplicationContext(), catalog, true);
 			load.start();//download the catalog from Net
@@ -144,21 +144,26 @@ public class CollectionActivity extends Activity implements OnClickListener {
 			Toast.makeText(this, "Обновлено!", Toast.LENGTH_SHORT).show();
 			addViews();
 		}
-		else {
-			collectionNumber = id;
-			Intent intent = new Intent(getApplicationContext(), GridActivity.class);
-			startActivity(intent);
+		return super.onMenuItemSelected(featureId, item);
+	}
+	/**
+	 * Process the button click event 
+	 * @param v view of the button which was clicked
+	 */
+	public void onClick(View v) {
+		if (!isNetworkAvailable()) {
+			Toast.makeText(this, "Нет интернет соединения!", Toast.LENGTH_SHORT).show();
+			return;
 		}
+		int id = v.getId();
+		collectionNumber = id;
+		Intent intent = new Intent(getApplicationContext(), GridActivity.class);
+		startActivity(intent);
 	}
 	
 	public void addViews() {
-		File extChacheDir = mContext.getExternalCacheDir();
-		File folderForPics = new File(extChacheDir, imagesFolderName);
+		//File extChacheDir = mContext.getExternalCacheDir();
 		lin = (LinearLayout)findViewById(R.id.layoutCollection);
-		
-		Button button;
-		int Count = collections.size();
-		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
 		ColorStateList colors = null;
 		try {
             XmlResourceParser parser = getResources().getXml(R.color.your_color);
@@ -166,6 +171,10 @@ public class CollectionActivity extends Activity implements OnClickListener {
         } catch (Exception e) {
             // handle exceptions
         }
+		
+		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+		Button button;
+		int Count = collections.size();
 		int i = 0;
 	    for(i = 0; i < Count; i++){
 	    	if (collections.get(i).getCountOfImages() != 0)
@@ -185,14 +194,6 @@ public class CollectionActivity extends Activity implements OnClickListener {
 				}*/
 	    	}
 	    }
-	    button = new Button(this);
-	    button.setText("Обновить");
-        button.setLayoutParams(layoutParams);
-        button.setTextColor(colors);
-        button.setTextSize(18);
-        button.setId(i);
-        button.setOnClickListener(this);
-        lin.addView(button);
 	}
 	
 	public boolean isNetworkAvailable() {
