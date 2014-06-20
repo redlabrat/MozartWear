@@ -30,4 +30,21 @@
 		<nature>com.android.ide.eclipse.adt.AndroidNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>libs/photo-view.jar</name>
+			<type>1</type>
+			<location>C:/Users/Kate/MozartWear/MozartTest/libs/photo-view.jar</location>
+		</link>
+		<link>
+			<name>libs/universal-image-loader-1.9.2-with-sources.jar</name>
+			<type>1</type>
+			<location>C:/Users/Kate/MozartWear/MozartTest/libs/universal-image-loader-1.9.2-with-sources.jar</location>
+		</link>
+		<link>
+			<name>res/drawable-hdpi/search_icon.png</name>
+			<type>1</type>
+			<location>C:/Users/Kate/MozartWear/MozartTest/Very-Basic-Search-icon.png</location>
+		</link>
+	</linkedResources>
 </projectDescription>
