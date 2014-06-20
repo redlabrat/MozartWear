@@ -3,7 +3,6 @@ package com.redlabrat.mozarttest;
 import java.util.ArrayList;
 
 import com.redlabrat.mozarttest.View.ProductsScreenSliderFragment;
-import com.redlabrat.mozarttest.helpers.FileHelper;
 
 import static com.redlabrat.mozarttest.Constants.*;
 
@@ -58,7 +57,7 @@ public class ProductViewActivity extends FragmentActivity {
 	 */
 	private void getImagesPaths() {
 		imagesPaths = new ArrayList<String>();
-		FileHelper fh = new FileHelper(getApplicationContext(), collectionName);
+		//FileHelper fh = new FileHelper(getApplicationContext(), collectionName);
 		//imagesPaths = fh.loadImagesNames();
 		for (Image im : CollectionActivity.collections.get(num).getImages())
 			imagesPaths.add(im.getURL());

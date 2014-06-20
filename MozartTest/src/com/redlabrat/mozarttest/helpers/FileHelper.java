@@ -11,23 +11,15 @@ import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 
 import com.redlabrat.mozarttest.CollectionActivity;
-import com.redlabrat.mozarttest.ProductViewActivity;
 import com.redlabrat.mozarttest.R;
-import com.redlabrat.mozarttest.View.ProductsScreenSliderFragment;
 
 import static com.redlabrat.mozarttest.Constants.*;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
-import android.graphics.BitmapFactory.Options;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.ViewGroup;
-import android.webkit.WebView.FindListener;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 /**

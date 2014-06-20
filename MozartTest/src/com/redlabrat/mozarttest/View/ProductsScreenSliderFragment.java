@@ -1,16 +1,12 @@
 package com.redlabrat.mozarttest.View;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.redlabrat.mozarttest.CollectionActivity;
 import com.redlabrat.mozarttest.Image;
 import com.redlabrat.mozarttest.Product;
 import com.redlabrat.mozarttest.ProductViewActivity;
 import com.redlabrat.mozarttest.R;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;

@@ -3,6 +3,7 @@ package com.redlabrat.mozarttest;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,7 +17,13 @@ public class GridActivity extends Activity {
 		
 		int number = CollectionActivity.collectionNumber;
 		GridView gridview = (GridView) findViewById(R.id.gridView1);
-		double col = CollectionActivity.w/160;
+		//setting the number of columns showing on the screen
+		double col = 0;
+		if (isPortraitOrientation()) 
+			col = CollectionActivity.w/160;
+		else
+			col = CollectionActivity.h/160;
+		
 		gridview.setNumColumns((int)col);
 		gridview.setAdapter(new ImageAdapter(this, CollectionActivity.collections.get(number)));
 		gridview.setOnItemClickListener(gridviewOnItemClickListener);
@@ -35,5 +42,12 @@ public class GridActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.grid, menu);
 		return true;
+	}
+	
+	private boolean isPortraitOrientation(){    
+		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+			return true;
+		else 
+			return false;
 	}
 }

@@ -2,7 +2,6 @@ package com.redlabrat.mozarttest;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Random;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -25,10 +24,11 @@ import android.widget.Toast;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.content.res.XmlResourceParser;
 import android.graphics.Bitmap;
 import android.view.Display;
-import android.view.MenuItem.OnMenuItemClickListener;
+import android.view.Surface;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -44,26 +44,18 @@ public class CollectionActivity extends Activity implements OnClickListener {
 	public static int w;
 	public static int h;
 /////////////////////////////	
+	public int Count = 0;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		mContext = getApplicationContext();
-		File extChacheDir = null;
-		File folderForPics = null;
-		//Must exist an external storage and the directory to save files imagesFolderName
-		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-			extChacheDir = mContext.getExternalCacheDir();
-			folderForPics = new File(extChacheDir, imagesFolderName);
-			// create folder for images if it not exist
-			if (!folderForPics.exists()) {
-				folderForPics.mkdir();
-			}
-		} else {
+		File extChacheDir = mContext.getExternalCacheDir();
+		if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
 			String errorText = mContext.getResources().getString(R.string.error_media_mount);
 			Toast.makeText(mContext, errorText, Toast.LENGTH_SHORT).show();
 			Log.e("ERROR", "Media not mounted!");
 		}
 		load = new LoadFromNet(getApplicationContext(), catalog, false);
-	
+		
 		//get from URL the name of the image to save
 		int startSubString = catalog.lastIndexOf("/");
 		String fileName = catalog.substring(startSubString);
@@ -101,9 +93,14 @@ public class CollectionActivity extends Activity implements OnClickListener {
         ImageLoader.getInstance().init(config);
 		//////////////////////////
 		Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
-		w = display.getWidth();
-		h = display.getHeight();
+		//w = display.getWidth();
+		//h = display.getHeight();
+		w = getWindowManager().getDefaultDisplay().getWidth();
+		h = getWindowManager().getDefaultDisplay().getHeight();
+		Log.i("Display", "Size : "+w+"x"+h);
 		/////////////////////////
+		getScreenOrientation();
+		getRotateOrientation();
 		addViews();
 	}
 	
@@ -116,15 +113,12 @@ public class CollectionActivity extends Activity implements OnClickListener {
 	
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		// TODO Auto-generated method stub
-		//Toast.makeText(this, "Меню", Toast.LENGTH_SHORT).show();
 		if (!isNetworkAvailable()) {
 			Toast.makeText(this, "Нет интернет соединения!", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 		if (item.getItemId() == R.id.action_settings) {
-			lin = (LinearLayout)findViewById(R.id.layoutCollection);
-			lin.removeAllViews();
+			Count = collections.size();
 			collections.clear();
 			if (collections.size() != 0) {
 				Log.i("onClick", "Cannot clear the collection set!");
@@ -146,15 +140,12 @@ public class CollectionActivity extends Activity implements OnClickListener {
 		}
 		return super.onMenuItemSelected(featureId, item);
 	}
+	
 	/**
 	 * Process the button click event 
 	 * @param v view of the button which was clicked
 	 */
 	public void onClick(View v) {
-		if (!isNetworkAvailable()) {
-			Toast.makeText(this, "Нет интернет соединения!", Toast.LENGTH_SHORT).show();
-			return;
-		}
 		int id = v.getId();
 		collectionNumber = id;
 		Intent intent = new Intent(getApplicationContext(), GridActivity.class);
@@ -162,36 +153,39 @@ public class CollectionActivity extends Activity implements OnClickListener {
 	}
 	
 	public void addViews() {
-		//File extChacheDir = mContext.getExternalCacheDir();
+		int i = 0;
+		Button button;
 		lin = (LinearLayout)findViewById(R.id.layoutCollection);
+		lin.removeAllViews();
 		ColorStateList colors = null;
 		try {
             XmlResourceParser parser = getResources().getXml(R.color.your_color);
             colors = ColorStateList.createFromXml(getResources(), parser);
         } catch (Exception e) {
-            // handle exceptions
+        	Log.i("ERROR", "Error while parsing file");
+			e.printStackTrace();
         }
 		
-		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
-		Button button;
-		int Count = collections.size();
-		int i = 0;
-	    for(i = 0; i < Count; i++){
+		TextView text = (TextView) findViewById(R.id.textView1);
+		text.setTextSize((float)0.03*h);
+		text.setTextColor(colors);
+		
+		int wrap = LayoutParams.WRAP_CONTENT;
+		LinearLayout.LayoutParams layoutParams = 
+				new LinearLayout.LayoutParams(wrap, wrap);
+		
+		int newCount = collections.size();
+	    for(i = 0; i < newCount; i++){
 	    	if (collections.get(i).getCountOfImages() != 0)
 	    	{
 	    		button = new Button(this);
 	            button.setText(collections.get(i).getName());
 	            button.setLayoutParams(layoutParams);
 	            button.setTextColor(colors);
-	            button.setTextSize(18);
+	            button.setTextSize((float)0.028*h);
 	            button.setId(i);
 	            button.setOnClickListener(this);
 	            lin.addView(button);
-	            //adding the folder for this collection
-	            /*File folderForCollection = new File(folderForPics, collections.get(i).getName());
-				if (!folderForCollection.exists()) {
-					folderForCollection.mkdir();
-				}*/
 	    	}
 	    }
 	}
@@ -201,5 +195,33 @@ public class CollectionActivity extends Activity implements OnClickListener {
 	          = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 	    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 	    return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+	}
+	
+	private void getScreenOrientation(){    
+		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+			Log.i("THREAD", "Портретная ориентация");
+		else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+			Log.i("THREAD", "Альбомная ориентация");
+	}
+	
+	private void getRotateOrientation() {
+		int rotate = getWindowManager().getDefaultDisplay().getRotation();
+		switch (rotate) {
+		case Surface.ROTATION_0:
+			Log.i("THREAD", "Не поворачивали");
+			break;
+		case Surface.ROTATION_90:
+			Log.i("THREAD", "Повернули на 90 градусов по часовой стрелке");
+			break;
+		case Surface.ROTATION_180:
+			Log.i("THREAD", "Повернули на 180 градусов");
+			break;
+		case Surface.ROTATION_270:
+			Log.i("THREAD", "Повернули на 90 градусов по часовой стрелке");
+			break;
+		default:
+			Log.i("THREAD", "Не понятно");
+			break;
+		}
 	}
 }

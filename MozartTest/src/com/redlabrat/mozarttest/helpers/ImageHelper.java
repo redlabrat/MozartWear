@@ -1,9 +1,6 @@
 package com.redlabrat.mozarttest.helpers;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.net.URL;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.redlabrat.mozarttest.ProductViewActivity;
@@ -11,11 +8,7 @@ import com.redlabrat.mozarttest.R;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.BitmapFactory.Options;
-import android.os.Handler;
 import android.util.Log;
-import android.widget.ImageView;
 import android.widget.Toast;
 /**
  * Help to organize the process of download and save the images from Network
