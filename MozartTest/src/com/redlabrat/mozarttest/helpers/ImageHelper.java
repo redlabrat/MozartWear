@@ -1,7 +1,10 @@
 package com.redlabrat.mozarttest.helpers;
 
 import java.net.URISyntaxException;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 262fa1c3976c21eb1f2ead86f8097a3653be19d8
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.redlabrat.mozarttest.ProductViewActivity;
 import com.redlabrat.mozarttest.R;

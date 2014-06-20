@@ -12,7 +12,10 @@ import java.util.ArrayList;
 
 import com.redlabrat.mozarttest.CollectionActivity;
 import com.redlabrat.mozarttest.R;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 262fa1c3976c21eb1f2ead86f8097a3653be19d8
 import static com.redlabrat.mozarttest.Constants.*;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -164,14 +167,14 @@ public class FileHelper {
 				double imHeight = image.getHeight();
 				double displayWidth = CollectionActivity.w;
 				double displayHeight = CollectionActivity.h;
-				Log.i("BITMAP", imWidth+" x "+imHeight);//Height - высота
-				Log.i("BITMAP display", displayWidth+" x "+displayHeight);//Height - высота
+				Log.i("BITMAP", imWidth+" x "+imHeight);//Height - пїЅпїЅпїЅпїЅпїЅпїЅ
+				Log.i("BITMAP display", displayWidth+" x "+displayHeight);//Height - пїЅпїЅпїЅпїЅпїЅпїЅ
 				double picture = 0.667;
 				double device = 0.6;
 				try {
 					picture = imWidth/imHeight;
 					device = displayWidth/displayHeight;
-					//Log.i("BITMAP", "Picture="+picture+" Device="+device);//Height - высота
+					//Log.i("BITMAP", "Picture="+picture+" Device="+device);//Height - пїЅпїЅпїЅпїЅпїЅпїЅ
 				}
 				catch (ArithmeticException e) {
 					Log.i("ERROR", "Divided by zero ");

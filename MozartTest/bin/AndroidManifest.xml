@@ -27,10 +27,10 @@
         </activity>
         <activity
             android:name="com.redlabrat.mozarttest.CollectionActivity"
-            android:label="@string/title_activity_collection" >
+            android:label="@string/title_activity_collection" 
+            android:configChanges="keyboardHidden|orientation|screenSize" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -40,8 +40,8 @@
         </activity>
         <activity
             android:name="com.redlabrat.mozarttest.FullImageActivity"
-            android:label="@string/title_activity_full_image" >
+            android:label="@string/title_activity_full_image" 
+            android:screenOrientation="portrait">
         </activity>
     </application>
-
 </manifest>
