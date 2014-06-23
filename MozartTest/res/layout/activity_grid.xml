@@ -6,7 +6,7 @@
     android:layout_height="match_parent" >
 
     <!-- The main content view -->
-     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/mainBackground"
@@ -25,7 +25,6 @@
 	</LinearLayout>
 	
     <!-- The navigation drawer -->
-
     <ListView
         android:id="@+id/left_drawer"
         android:layout_width="240dp"

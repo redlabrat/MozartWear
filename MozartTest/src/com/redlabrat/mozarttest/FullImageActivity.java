@@ -33,7 +33,6 @@ public class FullImageActivity extends Activity {
 		int num = GridActivity.collectionNumber;
 		//ImageAdapter imageAdapter = new ImageAdapter(this, CollectionActivity.collections.get(num));
 		String URL = GridActivity.collections.get(num).getImages().get(position).getURL();
-				//CollectionActivity.collections.get(num).getImages().get(position).getURL();
 		ImageView imageView = (ImageView) findViewById(R.id.full_image_view);
 		DisplayImageOptions options = new DisplayImageOptions.Builder()
 	        .cacheInMemory(true)
@@ -62,16 +61,14 @@ public class FullImageActivity extends Activity {
 		//mAttacher.onScale((float)scale, 0, 0);
 		
 		//Set the description frame
-		FrameLayout descriptionFrame = (FrameLayout)findViewById(R.id.descriptionFrame);
 		double minWidth = Math.min(GridActivity.w, GridActivity.h)/2;
-		
+		FrameLayout descriptionFrame = (FrameLayout)findViewById(R.id.descriptionFrame);
 		descriptionFrame.setMinimumWidth((int)minWidth);
 		
 		TextView textViewDescript = (TextView)findViewById(R.id.descriptionText);
 		String description = "";
 		textViewDescript.setWidth((int)minWidth);
 		Image img = GridActivity.collections.get(num).getImages().get(position);
-				//CollectionActivity.collections.get(num).getImages().get(position);
 		for (Product p : img.getProducts())
 		{
 			description += p.getNumber() + " :\n";
@@ -90,7 +87,7 @@ public class FullImageActivity extends Activity {
         setTitle(img.getName().substring(1));
 	}
 
-	 /* The click listner for ListView in the navigation drawer */
+	// The click listener for ListView in the navigation drawer
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
 		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 				long arg3) {
@@ -102,7 +99,6 @@ public class FullImageActivity extends Activity {
     	mDrawerList.setItemChecked(position, true);
     	mDrawerLayout.closeDrawer(mDrawerList);
     	GridActivity.collectionNumber = position;
-    	
     	Intent intent = new Intent(getApplicationContext(), GridActivity.class);
 		startActivity(intent);
     }
@@ -110,7 +106,7 @@ public class FullImageActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		//getMenuInflater().inflate(R.menu.full_image, menu);
+		//getMenuInflater().inflate(R.menu.collection, menu);
 		return true;
 	}
 }

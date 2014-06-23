@@ -1,7 +1,6 @@
 <resources>
 
-    <style name="AppTheme" parent="android:Theme.Light" >
-        </style>
+    <style name="AppTheme" parent="android:Theme.Light" ></style>
     <color name="blackHalfTransparent">#88000000</color>
     <color name="descriptionText">#FFF</color>
     <color name="mainBackground">#C6C7F5</color>

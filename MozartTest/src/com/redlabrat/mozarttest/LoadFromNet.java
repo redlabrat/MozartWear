@@ -203,7 +203,10 @@ public class LoadFromNet extends Thread {
 				// end of node
 				if (tempNode.getNodeName().contains("col")) {
 					//CollectionActivity.collections.add(col);
-					GridActivity.collections.add(col);
+					if (col.getCountOfImages() != 0)
+			    	{
+						GridActivity.collections.add(col);
+			    	}
 				}
 				if (tempNode.getNodeName().contains("im")) {
 					col.addImage(im);

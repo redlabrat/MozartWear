@@ -17,11 +17,9 @@ import android.os.Environment;
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
@@ -57,20 +55,17 @@ public class GridActivity extends Activity {
 		int startSubString = catalog.lastIndexOf("/");
 		String fileName = catalog.substring(startSubString);
 		File catalogFile = new File(extChacheDir, fileName);
-		
 		collections = new ArrayList<Collection>();
-		if (!catalogFile.exists())
-		{
+		if (!catalogFile.exists()){
 			load.start();//download the catalog from Net
-			if(load.isAlive())
-	      {
+			if(load.isAlive()) {
 				try {
 					load.join(); //wait till thread is over
 				} catch (InterruptedException e) {
 					Log.i("THREAD", "Was interrupted!!!");
 					e.printStackTrace();
 				}
-	      }
+			}
 		}
 		else load.ReadXml();
 	
@@ -81,11 +76,9 @@ public class GridActivity extends Activity {
 		
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        
         // set up the drawer's list view with items and click listener
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 R.layout.drawer_list_item, NavigationList.list);
-        
         mDrawerList.setAdapter(adapter);
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 		
@@ -104,27 +97,31 @@ public class GridActivity extends Activity {
         ImageLoader.getInstance().init(config);
 		
         //////////////////////////
-		Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+		//Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
 		w = getWindowManager().getDefaultDisplay().getWidth();
 		h = getWindowManager().getDefaultDisplay().getHeight();
-		//Log.i("Display", "Size : "+w+"x"+h);
+		Log.i("Display", "Size : " + w + "x" + h);
 		//////////////////////////////////
 		mDrawerList.setMinimumWidth((int)Math.min(w, h)/2);
-		int number = collectionNumber;
-		gridview = (GridView) findViewById(R.id.gridView1);
+		
 		//setting the number of columns showing on the screen
 		double col = w/160;
+		//by default it load the latest collection in list
+		if (savedInstanceState == null) {
+            collectionNumber = collections.size() - 1;
+        }
+		gridview = (GridView) findViewById(R.id.gridView1);
 		gridview.setNumColumns((int)col);
-		gridview.setAdapter(new ImageAdapter(this, collections.get(number)));
+		gridview.setAdapter(new ImageAdapter(this, collections.get(collectionNumber)));
 		gridview.setOnItemClickListener(gridviewOnItemClickListener);
-		
-		setTitle("Коллекция " + collections.get(number).getName());
+
+		setTitle("Коллекция " + collections.get(collectionNumber).getName());
 	}
-	 /* The click listner for ListView in the navigation drawer */
+	 
+	// The click listener for ListView in the navigation drawer
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
 		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 				long arg3) {
-			// TODO Auto-generated method stub
 			selectItem(arg2);
 		}
     }
@@ -135,8 +132,6 @@ public class GridActivity extends Activity {
     	collectionNumber = position;
     	gridview.setAdapter(new ImageAdapter(this, collections.get(collectionNumber)));
     	setTitle("Коллекция " + collections.get(position).getName());
-    	//Intent intent = new Intent(getApplicationContext(), GridActivity.class);
-		//startActivity(intent);
     }
 	
 	private GridView.OnItemClickListener gridviewOnItemClickListener = new GridView.OnItemClickListener() {
@@ -189,10 +184,11 @@ public class GridActivity extends Activity {
 		if (NavigationList.list.size() == 0) {
 			int newCount = collections.size();
 		    for(int i = 0; i < newCount; i++){
-		    	if (collections.get(i).getCountOfImages() != 0)
+		    	NavigationList.list.add(collections.get(i).getName());
+		    	/*if (collections.get(i).getCountOfImages() != 0)
 		    	{
 		    		NavigationList.list.add(collections.get(i).getName());
-		    	}
+		    	}*/
 		    }
 		}
 	}
@@ -203,11 +199,4 @@ public class GridActivity extends Activity {
 	    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 	    return activeNetworkInfo != null && activeNetworkInfo.isConnected();
 	}
-	
-	/*private boolean isPortraitOrientation(){    
-		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
-			return true;
-		else 
-			return false;
-	}*/
 }
