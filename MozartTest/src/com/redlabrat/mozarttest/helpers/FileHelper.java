@@ -12,10 +12,7 @@ import java.util.ArrayList;
 
 import com.redlabrat.mozarttest.CollectionActivity;
 import com.redlabrat.mozarttest.R;
-<<<<<<< HEAD
 
-=======
->>>>>>> 262fa1c3976c21eb1f2ead86f8097a3653be19d8
 import static com.redlabrat.mozarttest.Constants.*;
 import android.content.Context;
 import android.graphics.Bitmap;

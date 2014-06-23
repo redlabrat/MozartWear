@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-//import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -22,7 +21,6 @@ import android.content.Context;
 import android.util.Log;
 
 import com.redlabrat.mozarttest.Collection;
-import com.redlabrat.mozarttest.CollectionActivity;
 import com.redlabrat.mozarttest.Image;
 import com.redlabrat.mozarttest.Product;
 
@@ -204,7 +202,8 @@ public class LoadFromNet extends Thread {
 				}
 				// end of node
 				if (tempNode.getNodeName().contains("col")) {
-					CollectionActivity.collections.add(col);
+					//CollectionActivity.collections.add(col);
+					GridActivity.collections.add(col);
 				}
 				if (tempNode.getNodeName().contains("im")) {
 					col.addImage(im);

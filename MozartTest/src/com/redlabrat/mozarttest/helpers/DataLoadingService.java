@@ -21,10 +21,7 @@ public class DataLoadingService extends Service {
 
 	private ArrayList<String> imageURLs = null;
 	private ArrayList<String> imageNames = null;
-<<<<<<< HEAD
 	//private static ImageHelper ih = null;
-=======
->>>>>>> 262fa1c3976c21eb1f2ead86f8097a3653be19d8
 	private static FileHelper fh = null;
 	/*
 	 *  1. Load XML file
@@ -41,10 +38,7 @@ public class DataLoadingService extends Service {
 	 */
 	@Override
 	public IBinder onBind(Intent arg0) {
-<<<<<<< HEAD
 		//ih = new ImageHelper(getApplicationContext());
-=======
->>>>>>> 262fa1c3976c21eb1f2ead86f8097a3653be19d8
 		fh = new FileHelper(getApplicationContext(), ProductViewActivity.collectionName);
 		// 4. Load new data
 		// get URL of images from XML
