@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
+import java.net.UnknownServiceException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -24,10 +26,7 @@ import com.redlabrat.mozarttest.Collection;
 import com.redlabrat.mozarttest.Image;
 import com.redlabrat.mozarttest.Product;
 
-//import static com.redlabrat.mozarttest.Constants.*;
-
 public class LoadFromNet extends Thread {
-	// public String Catalog = "http://mozart.com.ru/catalog.xml"; //Catalog URL
 	public Collection col;
 	public Image im;
 	public Product pr;
@@ -52,32 +51,32 @@ public class LoadFromNet extends Thread {
 
 	@Override
 	public void run() {
-		/*
-		 * if
-		 * (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState
-		 * ())) { File folderForPics = new File(extChacheDir, imagesFolderName);
-		 * // create folder for images if (!folderForPics.exists()) {
-		 * folderForPics.mkdir(); }
-		 */
 		File imageFile = new File(extChacheDir, fileName);
-		if (!imageFile.exists() || update) // if file not exist or we choose to
-											// update everything
+		Log.i("GRID", "after new File(extChacheDir, fileName)"+imageFile.getAbsolutePath());
+		if (!imageFile.exists() || update) // if file not exist or we choose to update everything
 		{
+			Log.i("GRID", "in IF");
 			FileOutputStream fos = null;
 			try {
+				Log.i("GRID", "before new fileoutputstream");
 				fos = new FileOutputStream(imageFile);
 				// set the download URL, a url that points to a file on the
 				// internet
 				// this is the file to be downloaded
+				Log.i("GRID", "after new fileoutputstream");
 				URL url = new URL(Catalog);
+				Log.i("GRID", "after new URL "+ Catalog);
 				// create the new connection
 				HttpURLConnection urlConnection = (HttpURLConnection) url
 						.openConnection();
-
+				Log.i("GRID", "after url.openconnection");
 				// set up some things on the connection
 				urlConnection.setRequestMethod("GET");
+				Log.i("GRID", "after setRequest get");
 				urlConnection.setDoOutput(true);
+				Log.i("GRID", "after setDoOutput true");
 				urlConnection.connect();
+				Log.i("GRID", "after .connectt");
 				InputStream inputStream = urlConnection.getInputStream();
 				// create a buffer...
 				byte[] buffer = new byte[1024];
@@ -107,6 +106,9 @@ public class LoadFromNet extends Thread {
 			} catch (MalformedURLException e) {
 				Log.i("ERROR", "MalformedURL");
 				e.printStackTrace();
+			}  catch(UnknownHostException e) {
+				Log.i("ERROR","Hostname cannot be resolved!");
+				
 			} catch (IOException e) {
 				Log.i("ERROR", "IOEXception");
 				e.printStackTrace();
@@ -123,27 +125,8 @@ public class LoadFromNet extends Thread {
 		}
 
 		ReadXml();
-		/*
-		 * } else { String errorText =
-		 * mContext.getResources().getString(R.string.error_media_mount);
-		 * Log.e("ERROR", "Media not mounted! "+errorText); }
-		 */
 	}
-
-	/*
-	 * public String ReadFromFile() { File SDCardRoot =
-	 * Environment.getExternalStorageDirectory(); //create a new file,
-	 * specifying the path, and the filename //which we want to save the file
-	 * as. File file = new File(SDCardRoot, "catalog.xml"); //File file = new
-	 * File(fileName); int length = (int) file.length(); byte[] buffer = new
-	 * byte[length]; String xml = null; try { FileInputStream fi = new
-	 * FileInputStream(file); int readBytes = fi.read(buffer); if (length !=
-	 * readBytes) System.out.println("Read not all bytes!"); else { xml = new
-	 * String(buffer, "UTF8"); } fi.close(); } catch (FileNotFoundException e) {
-	 * // TODO Auto-generated catch block e.printStackTrace(); } catch
-	 * (IOException e) { // TODO Auto-generated catch block e.printStackTrace();
-	 * } return xml; }
-	 */
+	
 	public void ReadXml() {
 		try {
 			File fXmlFile = new File(extChacheDir, fileName);

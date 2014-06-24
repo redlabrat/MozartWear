@@ -20,4 +20,7 @@
 
     <string name="collection">Доступные коллекции :</string>
     <string name="update">Обновить</string>
+    
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 </resources>
