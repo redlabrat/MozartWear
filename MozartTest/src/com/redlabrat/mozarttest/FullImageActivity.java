@@ -1,87 +1,128 @@
 package com.redlabrat.mozarttest;
 
-import java.util.ArrayList;
-
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+//import android.R;
 import android.os.Bundle;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.view.MenuItem;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 
 public class FullImageActivity extends NavigationActivity {
-    public ArrayList<String> names;
+	public int num;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		Log.i("Full", "Size : ");
 		Intent i = getIntent();
 		// Selected image id
-		int position = i.getExtras().getInt("id");
-		String name = i.getExtras().getString("name");
-		names = i.getStringArrayListExtra("list");
-		int num = GridActivity.collectionNumber;
-		
-		super.ACTIVITY_LAYOUT = R.layout.activity_full_image;
-		super.col = names;
+		int position = i.getExtras().getInt(FullImageFragment.ARG_IMAGE_NUMBER);
+		String name = i.getExtras().getString(FullImageFragment.ARG_NAME);
+		num = i.getExtras().getInt(FullImageFragment.ARG_COLLECTION_NUMBER);//GridActivity.collectionNumber;
+
 		super.onCreate(savedInstanceState);
 		setTitle(name);
 		
-		//ImageAdapter imageAdapter = new ImageAdapter(this, CollectionActivity.collections.get(num));
-		String URL = GridActivity.collections.get(num).getImages().get(position).getURL();
-		ImageView imageView = (ImageView) findViewById(R.id.full_image_view);
-		DisplayImageOptions options = new DisplayImageOptions.Builder()
-	        .cacheInMemory(true)
-	        .cacheOnDisk(true)
-	        .bitmapConfig(Bitmap.Config.ARGB_8888)
-	        .build();
-		imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-		//ImageLoader.getInstance().displayImage(URL, imageView, options);
-		Bitmap image = ImageLoader.getInstance().loadImageSync(URL, options);
-		PhotoViewAttacher mAttacher = null;
-		
-		imageView.setImageBitmap(image);
-		mAttacher = new PhotoViewAttacher(imageView);
-		mAttacher.setScaleType(ScaleType.CENTER_CROP);
-		//mAttacher.onScale((float)scale, 0, 0);
-		
-		//Set the description frame
-		double minWidth = Math.min(GridActivity.w, GridActivity.h)/2;
-		FrameLayout descriptionFrame = (FrameLayout)findViewById(R.id.descriptionFrame);
-		descriptionFrame.setMinimumWidth((int)minWidth);
-		
-		TextView textViewDescript = (TextView)findViewById(R.id.descriptionText);
-		String description = "";
-		textViewDescript.setWidth((int)minWidth);
-		Image img = GridActivity.collections.get(num).getImages().get(position);
-		for (Product p : img.getProducts())
-		{
-			description += p.getNumber() + " :\n";
-			description += p.getDescription() + "\n";
-		}
-		textViewDescript.setText(description);
-		
-		super.mDrawerList.setItemChecked(num, true);
+		Fragment fragment = new FullImageFragment();
+        Bundle args = new Bundle();
+        args.putInt(FullImageFragment.ARG_COLLECTION_NUMBER, num);
+        args.putInt(FullImageFragment.ARG_IMAGE_NUMBER, position);
+        args.putString(FullImageFragment.ARG_NAME, name);
+        fragment.setArguments(args);
+        
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 	}
 
 	@Override
     public void selectItem(int position) {
     	super.selectItem(position);
     	GridActivity.collectionNumber = position;
+    	GridActivity.fromFull = true;
     	Intent intent = new Intent(getApplicationContext(), GridActivity.class);
-		startActivity(intent);
+    	if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        } else {
+            Log.i("App", "Not available");
+        }
     }
 	
-    @Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-		return super.onMenuItemSelected(featureId, item);
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		GridActivity.collectionNumber = num;
+		super.onDestroy();
 	}
+	/**
+     * Fragment that appears in the "content_frame", shows a full image view
+     */
+    public static class FullImageFragment extends Fragment {
+    	public static final String ARG_COLLECTION_NUMBER = "collection_number";
+    	public static final String ARG_IMAGE_NUMBER = "image_number";
+    	public static final String ARG_NAME = "name";
+        
+    	public FullImageFragment() {
+            // Empty constructor required for fragment subclasses
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                Bundle savedInstanceState) {
+        	Log.i("Full", "Fragment create");
+        	View rootView = inflater.inflate(R.layout.fragment_full_image, container, false);
+            int colNum = getArguments().getInt(ARG_COLLECTION_NUMBER);
+            int i = getArguments().getInt(ARG_IMAGE_NUMBER);
+            String name = getArguments().getString(ARG_NAME);
+    		
+    		Collection collection = NavigationActivity.collections.get(colNum);
+    		Image img = collection.getImages().get(i);
+    		//ImageAdapter imageAdapter = new ImageAdapter(this, CollectionActivity.collections.get(num));
+    		String URL = img.getURL();
+    		
+    		ImageView imageView = (ImageView) rootView.findViewById(R.id.full_image_view);
+    		DisplayImageOptions options = new DisplayImageOptions.Builder()
+    	        .cacheInMemory(true)
+    	        .cacheOnDisk(true)
+    	        .bitmapConfig(Bitmap.Config.ARGB_8888)
+    	        .build();
+    		imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+    		//ImageLoader.getInstance().displayImage(URL, imageView, options);
+    		Bitmap image = ImageLoader.getInstance().loadImageSync(URL, options);
+    		PhotoViewAttacher mAttacher = null;
+    		
+    		imageView.setImageBitmap(image);
+    		mAttacher = new PhotoViewAttacher(imageView);
+    		mAttacher.setScaleType(ScaleType.CENTER_CROP);
+    		
+    		//Set the description frame
+    		double minWidth = Math.min(GridActivity.w, GridActivity.h)/2;
+    		FrameLayout descriptionFrame = (FrameLayout)rootView.findViewById(R.id.descriptionFrame);
+    		descriptionFrame.setMinimumWidth((int)minWidth);
+    		
+    		TextView textViewDescript = (TextView)rootView.findViewById(R.id.descriptionText);
+    		String description = "";
+    		textViewDescript.setWidth((int)minWidth);
+    		for (Product p : img.getProducts())
+    		{
+    			description += p.getNumber() + " :\n";
+    			description += p.getDescription() + "\n";
+    		}
+    		textViewDescript.setText(description);
+    		
+    		getActivity().setTitle(name);
+            return rootView;
+        }
+    }
 }

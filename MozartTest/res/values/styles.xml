@@ -1,6 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- the theme applied to the application or activity -->
+    <style name="AppBaseTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="actionBarStyle">@style/MyActionBar</item>
+    </style>
 
-    <style name="AppTheme" parent="android:Theme.Light" ></style>
+    <!-- ActionBar styles -->
+    <style name="MyActionBar"
+           parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="background">@drawable/blue</item>
+    </style>
     <color name="blackHalfTransparent">#88000000</color>
     <color name="descriptionText">#FFF</color>
     <color name="mainBackground">#C6C7F5</color>

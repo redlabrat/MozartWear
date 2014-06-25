@@ -52,32 +52,20 @@ public class MainActivity extends Activity implements OnClickListener{
 	 * @param v view of the button which was clicked
 	 */
 	public synchronized  void onClick(View v) {
-		switch (v.getId()) {
+		/*switch (v.getId()) {
 		case R.id.loadDataButton: {
 			// Start update service
-	        /*if(mAnotherOpinion.isAlive())	//Если оппонент еще не сказал последнее слово
-	        {
-	            try{
-	                mAnotherOpinion.join();	//Подождать пока оппонент закончит высказываться.
-	            }catch(InterruptedException e)
-	            {
-	            	System.out.println("INTERRAPTED!!!!! OH");
-	            }
-	            System.out.println("Первым появилось яйцо!");
-	        }
-	        else	//если оппонент уже закончил высказываться
-	        {
-	            System.out.println("Первой появилась курица!");
-	        }*/
+	        
 			Intent intent = new Intent(getApplicationContext(), CollectionActivity.class);
 			startActivity(intent);
 			break;
 		}
+		
 		case R.id.showCollectionButton: {
 			Intent intent = new Intent(getApplicationContext(), ProductViewActivity.class);
 			startActivity(intent);
 			break;
 		}
-		}
+		}*/
 	}
 }

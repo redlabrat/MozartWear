@@ -23,4 +23,6 @@
     
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+     
+    <drawable name="blue">#B5ABF7</drawable>
 </resources>

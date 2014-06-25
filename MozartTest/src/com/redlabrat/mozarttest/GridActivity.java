@@ -1,165 +1,188 @@
 package com.redlabrat.mozarttest;
 
-import static com.redlabrat.mozarttest.Constants.catalog;
-
-import java.io.File;
-import java.util.ArrayList;
-
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-
 import android.os.Bundle;
-import android.os.Environment;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.util.Log;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
-import android.content.Context;
-import android.graphics.Bitmap;
+import android.support.v4.app.*;
 
 public class GridActivity extends NavigationActivity {
-	private GridView gridview;
-    private Context mContext;
-    private LoadFromNet load = null;
-/////////////////////////////
-    public static ArrayList<Collection> collections = new ArrayList<Collection>();
-	public ArrayList<String> names;
-    public static int collectionNumber = 0;
-	public static int w;
-	public static int h;
-/////////////////////////////
+	public static Context mContext;
+	public static boolean first = true;
+	public static boolean fromFull = false;
+	public static int ORIENTATION = Configuration.ORIENTATION_PORTRAIT;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		//For catalog.xml
-		names = new ArrayList<String>();
 		mContext = getApplicationContext();
-		File extChacheDir = mContext.getExternalCacheDir();
-		if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-			Toast.makeText(mContext, "Media not mounted!", Toast.LENGTH_SHORT).show();
-		}
-		load = new LoadFromNet(getApplicationContext(), catalog, false);
-		Log.i("GRID", "after new Load");
-		//get from URL the name of the image to save
-		int startSubString = catalog.lastIndexOf("/");
-		String fileName = catalog.substring(startSubString);
-		File catalogFile = new File(extChacheDir, fileName);
-		collections = new ArrayList<Collection>();
-		Log.i("GRID", "after new ArrayList");
-		if (!catalogFile.exists()){
-			load.start();//download the catalog from Net
-			if(load.isAlive()) {
-				try {
-					load.join(); //wait till thread is over
-				} catch (InterruptedException e) {
-					Log.i("THREAD", "Was interrupted!!!");
-					e.printStackTrace();
-				}
-			}
-		}
-		else load.ReadXml();
-		setList();
-		
-		super.ACTIVITY_LAYOUT = R.layout.activity_grid;
-		super.col = names;
-		
-		//by default it load the latest collection in list	
-		if (savedInstanceState == null) {
-            collectionNumber = collections.size() - 1;
-        }
-		setTitle("Коллекция " + collections.get(collectionNumber).getName());
 		super.onCreate(savedInstanceState);
-		
-		// Create global configuration and initialize ImageLoader with this configuration
-		DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-			.showImageOnLoading(R.drawable.search_icon)
-	        .cacheInMemory(true)
-	        .cacheOnDisk(true)
-	        .bitmapConfig(Bitmap.Config.RGB_565)
-	        .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)//EXACTLY)
-	        .build();
-		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
-			.defaultDisplayImageOptions(defaultOptions)   
-			.threadPoolSize(5)
-			.build();
-        ImageLoader.getInstance().init(config);
-        //////////////////////////
-		//Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+		Log.i("Grid", "Create : " + w + "x" + h);
+		//////////////////////////////////
+		//by default it load the latest collection in list
+		Log.i("Grid", "before if  "+ collectionNumber);
+		if (ORIENTATION == getResources().getConfiguration().orientation) {
+			Log.i("Grid", "without cnahges");
+			if (!fromFull) {
+	            collectionNumber = collections.size()-1;
+	            Log.i("Grid", "in if -> "+ collectionNumber);
+	        }
+			else {
+				fromFull = false;
+			}
+			selectItem(collectionNumber);
+		} else {
+			ORIENTATION = getResources().getConfiguration().orientation;
+		}
+	}
+    
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		// TODO Auto-generated method stub
+		super.onConfigurationChanged(newConfig);
 		w = getWindowManager().getDefaultDisplay().getWidth();
 		h = getWindowManager().getDefaultDisplay().getHeight();
-		Log.i("Display", "Size : " + w + "x" + h);
-		//////////////////////////////////
-		//setting the number of columns showing on the screen
-		double col = w/160;
-		gridview = (GridView) findViewById(R.id.gridView1);
-		gridview.setNumColumns((int)col);
-		gridview.setAdapter(new ImageAdapter(this, collections.get(collectionNumber)));
-		gridview.setOnItemClickListener(gridviewOnItemClickListener);
-		
-		super.mDrawerList.setItemChecked(collectionNumber, true);
+		//columnCount = w/160;
+		ORIENTATION = getResources().getConfiguration().orientation;
+		Log.i("Grid override config ", "Size : " + w + "x" + h);
 	}
-    
 	@Override
 	public void selectItem(int position) {
-        super.selectItem(position);
-        setTitle("Коллекция " + collections.get(position).getName());
+		//choose the collection
+		super.selectItem(position);
         collectionNumber = position;
-    	gridview.setAdapter(new ImageAdapter(this, collections.get(collectionNumber)));
+        setTitle("Коллекция " + collections.get(collectionNumber).getName());
+		// update the main content by replacing fragments
+        //Fragment fragment = new GridFragment();
+        Fragment fragment = new GridFragment();
+        Bundle args = new Bundle();
+        args.putInt(GridFragment.ARG_COLLECTION_NUMBER, collectionNumber);
+        fragment.setArguments(args);
+        
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
     }
 	
-	private GridView.OnItemClickListener gridviewOnItemClickListener = new GridView.OnItemClickListener() {
-		public void onItemClick(AdapterView<?> parent, View v, int position,long id) {
-			String name = "Коллекция " + collections.get(collectionNumber).getName() + " / " + position;
-			Intent i = new Intent(getApplicationContext(), FullImageActivity.class);
-			i.putExtra("id", position);
-			i.putExtra("name", name);
-			i.putExtra("list", names);
-			startActivity(i);
-		}
-	};
-    
-	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
+	/**
+     * Fragment that appears in the "content_frame", shows a grid with images
+     */
+    public static class GridFragment extends Fragment {
+        public static final String ARG_COLLECTION_NUMBER = "collection_number";
+        public static GridView gridview;
+        public GridFragment() {
+            // Empty constructor required for fragment subclasses
         }
-		if (!isNetworkAvailable()) {
-			Toast.makeText(this, "Нет интернет соединения!", Toast.LENGTH_SHORT).show();
-			return false;
-		}
-		if (item.getItemId() == R.id.action_settings) {
-			collections.clear();
-			if (collections.size() != 0) {
-				Log.i("onClick", "Cannot clear the collection set!");
-				return false;
-			}
-			load = new LoadFromNet(getApplicationContext(), catalog, true);
-			load.start();//download the catalog from Net
-			if(load.isAlive())
-	        {
-				try {
-					load.join(); //wait till thread is over
-				} catch (InterruptedException e) {
-					Log.i("THREAD", "Was interrupted!!!");
-					e.printStackTrace();
-				}
-	        }
-			//to update NagivationList !
-			setList();
-			Toast.makeText(this, "Обновлено!", Toast.LENGTH_SHORT).show();
-		}
-		return super.onMenuItemSelected(featureId, item);
-	}
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                Bundle savedInstanceState) {
+        	Log.i("Grid", "Fragment create");
+        	View rootView = inflater.inflate(R.layout.fragment_grid, container, false);
+            int i = getArguments().getInt(ARG_COLLECTION_NUMBER);
+
+    		//setting the number of columns showing on the screen
+            w = getActivity().getWindowManager().getDefaultDisplay().getWidth();
+    		h = getActivity().getWindowManager().getDefaultDisplay().getHeight();
+    		columnCount = w/160;
+    		gridview = (GridView) rootView.findViewById(R.id.gridView1);
+    		gridview.setNumColumns((int)columnCount);
+    		gridview.setAdapter(new ImageAdapter(GridActivity.mContext, GridActivity.collections.get(i)));
+    		gridview.setOnItemClickListener(gridviewOnItemClickListener);
+
+            return rootView;
+        }
+        
+        private GridView.OnItemClickListener gridviewOnItemClickListener = new GridView.OnItemClickListener() {
+    		public void onItemClick(AdapterView<?> parent, View v, int position,long id) {
+    			//choose the image in current collection
+    			Log.i("Grid in frag", "Col nomer = "+collectionNumber);
+    			String name = "Коллекция " + collections.get(collectionNumber).getName() + " / " + position;
+    			Intent intent = new Intent(getActivity().getApplicationContext(), FullImageActivity.class);
+    	    	intent.putExtra("collection_number", collectionNumber);
+    	    	intent.putExtra("image_number", position);
+    	    	intent.putExtra("name", name);
+    			if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+    	            startActivity(intent);
+    	        } else {
+    	            Log.i("App", "Not available");
+    	        }
+    			/*String name = "Коллекция " + collections.get(collectionNumber).getName() + " / " + position;
+    	        Fragment fragment = new FullImageFragment();
+    	        Bundle args = new Bundle();
+    	        args.putInt(FullImageFragment.ARG_COLLECTION_NUMBER, collectionNumber);
+    	        args.putInt(FullImageFragment.ARG_IMAGE_NUMBER, position);
+    	        args.putString(FullImageFragment.ARG_NAME, name);
+    	        fragment.setArguments(args);
+    	        
+    	        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+    	        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();*/
+    		}
+    	};
+    }
     
-	public void setList() {
-		names.clear();
-		for (Collection c : collections) 
-			names.add(c.getName());
-	}
+    /**
+     * Fragment that appears in the "content_frame", shows a full image view
+     */
+    /*public static class FullImageFragment extends Fragment {
+    	public static final String ARG_COLLECTION_NUMBER = "collection_number";
+    	public static final String ARG_IMAGE_NUMBER = "image_number";
+    	public static final String ARG_NAME = "name";
+        
+    	public FullImageFragment() {
+            // Empty constructor required for fragment subclasses
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_full_image, container, false);
+            int colNum = getArguments().getInt(ARG_COLLECTION_NUMBER);
+            int i = getArguments().getInt(ARG_IMAGE_NUMBER);
+            String name = getArguments().getString(ARG_NAME);
+    		
+    		Collection collection = NavigationActivity.collections.get(colNum);
+    		Image img = collection.getImages().get(i);
+    		//ImageAdapter imageAdapter = new ImageAdapter(this, CollectionActivity.collections.get(num));
+    		String URL = img.getURL();
+    		
+    		ImageView imageView = (ImageView) rootView.findViewById(R.id.full_image_view);
+    		DisplayImageOptions options = new DisplayImageOptions.Builder()
+    	        .cacheInMemory(true)
+    	        .cacheOnDisk(true)
+    	        .bitmapConfig(Bitmap.Config.ARGB_8888)
+    	        .build();
+    		imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+    		//ImageLoader.getInstance().displayImage(URL, imageView, options);
+    		Bitmap image = ImageLoader.getInstance().loadImageSync(URL, options);
+    		PhotoViewAttacher mAttacher = null;
+    		
+    		imageView.setImageBitmap(image);
+    		mAttacher = new PhotoViewAttacher(imageView);
+    		mAttacher.setScaleType(ScaleType.CENTER_CROP);
+    		
+    		//Set the description frame
+    		double minWidth = Math.min(GridActivity.w, GridActivity.h)/2;
+    		FrameLayout descriptionFrame = (FrameLayout)rootView.findViewById(R.id.descriptionFrame);
+    		descriptionFrame.setMinimumWidth((int)minWidth);
+    		
+    		TextView textViewDescript = (TextView)rootView.findViewById(R.id.descriptionText);
+    		String description = "";
+    		textViewDescript.setWidth((int)minWidth);
+    		for (Product p : img.getProducts())
+    		{
+    			description += p.getNumber() + " :\n";
+    			description += p.getDescription() + "\n";
+    		}
+    		textViewDescript.setText(description);
+    		
+    		getActivity().setTitle(name);
+            return rootView;
+        }
+    }*/
 }

@@ -1,17 +1,10 @@
-<TextView 
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@android:id/text1"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/navText"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    
-    android:textStyle="bold"
-    android:textSize="20sp"
-    android:textColor="#fff"
-    
     android:gravity="center_vertical"
     android:paddingLeft="8dp"
-    android:paddingRight="2dp" 
-    
-    android:textAppearance="?android:attr/textAppearanceListItemSmall"
-    android:background="?android:attr/activatedBackgroundIndicator"
-    android:minHeight="?android:attr/listPreferredItemHeightSmall" />
+    android:paddingRight="2dp"
+    android:textColor="#fff"
+    android:textSize="20sp"
+    android:textStyle="bold" />
