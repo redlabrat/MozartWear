@@ -3,8 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:paddingLeft="8dp"
-    android:paddingRight="2dp"
+    android:paddingLeft="2dp"
+    android:paddingRight="3dp"
     android:textColor="#fff"
-    android:textSize="20sp"
-    android:textStyle="bold" />
+    android:textSize="24sp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:textStyle="italic" />

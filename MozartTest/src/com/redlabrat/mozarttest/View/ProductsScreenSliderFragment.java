@@ -1,23 +1,29 @@
 package com.redlabrat.mozarttest.View;
 
+import uk.co.senab.photoview.PhotoViewAttacher;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.redlabrat.mozarttest.CollectionActivity;
+import com.redlabrat.mozarttest.Collection;
+import com.redlabrat.mozarttest.GridActivity;
 import com.redlabrat.mozarttest.Image;
+import com.redlabrat.mozarttest.NavigationActivity;
 import com.redlabrat.mozarttest.Product;
-import com.redlabrat.mozarttest.ProductViewActivity;
 import com.redlabrat.mozarttest.R;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ImageView.ScaleType;
+
 import static com.redlabrat.mozarttest.Constants.*;
+
 /**
  * Class represents how the fragment of the Product will be shown at the Screen
  * @author Alexandr Brich
@@ -25,16 +31,25 @@ import static com.redlabrat.mozarttest.Constants.*;
  */
 public class ProductsScreenSliderFragment extends Fragment {
 	/*** @serial Rectangle of the screen in which will be represented the product*/
-	private FrameLayout contentFrame = null;
+	private FrameLayout descriptionFrame = null;
 	/*** @serial Contains an image of the product*/
-	private ImageView image = null;
+	private ImageView imageView = null;
 	/*** @serial The View of description*/
 	private TextView textViewDescript = null;
 	/*** @serial string with description of the product*/
 	private String description = null;
-	/*** @serial path to the selected product(image)*/
-	private String imagePath = null;
+	/*** @serial URL of the selected product(image)*/
+	private String URL = null;
 
+	/*** @serial number of the collection the image belong*/
+	private int colNum = 0;
+	/*** @serial position of the image in collection*/
+	private int imageNum = 0;
+	/*** @serial the title of the image*/
+	private String name = null;
+	/*** @serial attacher to imageView in which the image can be zoomed, scales ...*/
+	private PhotoViewAttacher mAttacher = null;
+	
 	/**
 	 * Constructor invoke the call of constructor of super class
 	 */
@@ -45,73 +60,65 @@ public class ProductsScreenSliderFragment extends Fragment {
 	/** 
 	 * Creates a Fragment view of the product by using the view of the product and the device settings
 	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
-	 * @param inflater 
+	 * @param inflater builder for the view
 	 * @param container set of views in which the particular product will be shown
-	 * @param savedInstanceState State of the view
+	 * @param savedInstanceState saved state if the fragment
 	 * @return View of the product's fragment which will be shown on the screen
 	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		ViewGroup rootView = (ViewGroup) inflater.inflate(
-				R.layout.page_to_scroll, container, false);
-		contentFrame = (FrameLayout) rootView.findViewById(R.id.descriptionFrame);
-		image = (ImageView) rootView.findViewById(R.id.imageToShow);
+		View rootView = inflater.inflate(R.layout.page_to_scroll, container, false);
+		colNum = getArguments().getInt(collection_number);
+		imageNum = getArguments().getInt(image_number);
 		
-		//image
-		textViewDescript = (TextView) rootView.findViewById(R.id.descriptionText);
-
-		// TODO:  need to set valid for device frame size
-		int minHeight = (int) getResources().getDimension(R.dimen.descript_frame_default_height);
-		int minWidth = (int)getResources().getDimension(R.dimen.descript_frame_default_width);
-		LayoutParams lp = contentFrame.getLayoutParams();
-		lp.width = minWidth;
-		lp.height = minHeight;
-		//////////////////////////////////////
-		image.setMaxHeight(CollectionActivity.h);
-		image.setMaxWidth(CollectionActivity.w);
-		///////////////////////////////////////
+		Collection collection =  NavigationActivity.collections.get(colNum);
+		Image img = collection.getImages().get(imageNum);
+		name = collection.getName() + " " + (imageNum+1) + " / " + collection.getCountOfImages();
+		URL = img.getURL();
+		//ImageAdapter imageAdapter = new ImageAdapter(this, CollectionActivity.collections.get(num));
 		
-		contentFrame.setLayoutParams(lp);
-//		contentFrame.setMinimumHeight(minHeight);
-//		contentFrame.setMinimumWidth(minWidth);
+		imageView = (ImageView) rootView.findViewById(R.id.imageToShow);
+		DisplayImageOptions options = new DisplayImageOptions.Builder()
+	        .cacheInMemory(true)
+	        .cacheOnDisk(true)
+	        .bitmapConfig(Bitmap.Config.ARGB_8888)
+	        .build();
+		//ImageLoader.getInstance().displayImage(URL, imageView, options);
+		Bitmap image = ImageLoader.getInstance().loadImageSync(URL, options);
 		
-		addImageToScrollView();
+		imageView.setImageBitmap(image);
+		if (mAttacher == null) 
+			mAttacher = new PhotoViewAttacher(imageView);
+		
+		mAttacher.update();
+		mAttacher.setScaleType(ScaleType.CENTER_CROP);
+		
+		//Set the description frame
+		double minWidth = Math.min(GridActivity.w, GridActivity.h)/2;
+		descriptionFrame = (FrameLayout)rootView.findViewById(R.id.descriptionFrame);
+		descriptionFrame.setMinimumWidth((int)minWidth);
+		
+		textViewDescript = (TextView)rootView.findViewById(R.id.descriptionText);
 		description = "";
-		//Image i = CollectionActivity.collections.get(CollectionActivity.collectionNumber).images.get(ProductViewActivity.Pos);
-		Image i = CollectionActivity.collections.get(CollectionActivity.collectionNumber).getImages().get(ProductViewActivity.Pos);
-		for (Product p : i.getProducts())
+		textViewDescript.setWidth((int)minWidth);
+		for (Product p : img.getProducts())
 		{
 			description += p.getNumber() + " :\n";
 			description += p.getDescription() + "\n";
 		}
 		textViewDescript.setText(description);
-		return rootView;
-	}
-	
-	/**
-	 * Set the argument of the image path
-	 * @param args storages the image path
-	 * @see android.support.v4.app.Fragment#setArguments(android.os.Bundle)
-	 */
-	@Override
-	public void setArguments(Bundle args) {
-		imagePath = args.getString(fragmentImagePath);
-		Log.i("INFO", "Image path " + imagePath + " recived");
-	};
-	
-	/**
-	 * Add selected image to the Scroll View to enable scrolling
-	 * and customize the way it will be shown on the screen
-	 */
-	private void addImageToScrollView() {
-		//String uri = "http://mozartwear.com/assets/images/summer_14/prev/IMG_3122.JPG";
-		ImageLoader.getInstance().displayImage(imagePath, image);
-		/*Drawable drawable = Drawable.createFromPath(imagePath);
-		image.setImageDrawable(drawable);
-		image.setScaleType(ImageView.ScaleType.CENTER_CROP);//CENTER_CROP*/
-		//CENTER_INSIDE - the blank sides exist, can be by side or from all sides of the picture
-		//CENTER_CROP - none of the white sides 
+		
+		getActivity().setTitle(name);
+        return rootView;
+		/*
+		int minHeight = (int) getResources().getDimension(R.dimen.descript_frame_default_height);
+		int minWidth = (int)getResources().getDimension(R.dimen.descript_frame_default_width);
+		LayoutParams lp = contentFrame.getLayoutParams();
+		lp.width = minWidth;
+		lp.height = minHeight;
+		contentFrame.setLayoutParams(lp);
+		*/
 	}
 	
 	/*private void setPic(String imagePath, ImageView destination) {
@@ -135,9 +142,4 @@ public class ProductsScreenSliderFragment extends Fragment {
 	    Bitmap bitmap = BitmapFactory.decodeFile(imagePath, bmOptions);
 	    destination.setImageBitmap(bitmap);
 	}*/
-	
-	//Refresh the viewed fragment
-	public void Refresh() {
-		//image.refreshDrawableState();
-	}
 }

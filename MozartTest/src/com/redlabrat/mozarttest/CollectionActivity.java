@@ -19,13 +19,11 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Surface;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -54,7 +52,7 @@ public class CollectionActivity extends Activity implements OnClickListener {
 		if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
 			Toast.makeText(mContext, "Media not mounted!", Toast.LENGTH_SHORT).show();
 		}
-		load = new LoadFromNet(getApplicationContext(), catalog, false);
+		load = new LoadFromNet(getApplicationContext(), false);
 		
 		//get from URL the name of the image to save
 		int startSubString = catalog.lastIndexOf("/");
@@ -92,12 +90,12 @@ public class CollectionActivity extends Activity implements OnClickListener {
 			.build();
         ImageLoader.getInstance().init(config);
 		//////////////////////////
-		Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+		//Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
 		//w = display.getWidth();
 		//h = display.getHeight();
-		w = getWindowManager().getDefaultDisplay().getWidth();
-		h = getWindowManager().getDefaultDisplay().getHeight();
-		Log.i("Display", "Size : "+w+"x"+h);
+		//w = getWindowManager().getDefaultDisplay().getWidth();
+		//h = getWindowManager().getDefaultDisplay().getHeight();
+		//Log.i("Display", "Size : "+w+"x"+h);
 		/////////////////////////
 		getScreenOrientation();
 		getRotateOrientation();
@@ -124,7 +122,7 @@ public class CollectionActivity extends Activity implements OnClickListener {
 				Log.i("onClick", "Cannot clear the collection set!");
 				return false;
 			}
-			load = new LoadFromNet(getApplicationContext(), catalog, true);
+			load = new LoadFromNet(getApplicationContext(), true);
 			load.start();//download the catalog from Net
 			if(load.isAlive())
 	        {

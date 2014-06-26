@@ -24,5 +24,8 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
      
-    <drawable name="blue">#B5ABF7</drawable>
+    <drawable name="lilac">#B5ABF7</drawable>
+    <color name="lilaccolor">#B5ABF7</color>
+    <color name="transparent">#00000000</color>
+    <color name="light">#fff</color>
 </resources>

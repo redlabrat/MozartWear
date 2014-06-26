@@ -25,6 +25,8 @@ import com.redlabrat.mozarttest.Collection;
 import com.redlabrat.mozarttest.Image;
 import com.redlabrat.mozarttest.Product;
 
+import static com.redlabrat.mozarttest.Constants.catalog;
+
 public class LoadFromNet extends Thread {
 	public Collection col;
 	public Image im;
@@ -38,9 +40,9 @@ public class LoadFromNet extends Thread {
 
 	public boolean update = false;
 
-	public LoadFromNet(Context context, String catalogURL, boolean updateOptions) {
+	public LoadFromNet(Context context, boolean updateOptions) {
 		mContext = context;
-		Catalog = catalogURL;
+		Catalog = catalog;//catalogURL;
 		extChacheDir = mContext.getExternalCacheDir();
 		update = updateOptions;
 		// get from URL the name of the image to save
@@ -54,28 +56,20 @@ public class LoadFromNet extends Thread {
 		Log.i("GRID", "after new File(extChacheDir, fileName)"+imageFile.getAbsolutePath());
 		if (!imageFile.exists() || update) // if file not exist or we choose to update everything
 		{
-			Log.i("GRID", "in IF");
 			FileOutputStream fos = null;
 			try {
-				Log.i("GRID", "before new fileoutputstream");
 				fos = new FileOutputStream(imageFile);
 				// set the download URL, a url that points to a file on the
 				// internet
 				// this is the file to be downloaded
-				Log.i("GRID", "after new fileoutputstream");
 				URL url = new URL(Catalog);
-				Log.i("GRID", "after new URL "+ Catalog);
 				// create the new connection
 				HttpURLConnection urlConnection = (HttpURLConnection) url
 						.openConnection();
-				Log.i("GRID", "after url.openconnection");
 				// set up some things on the connection
 				urlConnection.setRequestMethod("GET");
-				Log.i("GRID", "after setRequest get");
 				urlConnection.setDoOutput(true);
-				Log.i("GRID", "after setDoOutput true");
 				urlConnection.connect();
-				Log.i("GRID", "after .connectt");
 				InputStream inputStream = urlConnection.getInputStream();
 				// create a buffer...
 				byte[] buffer = new byte[1024];
@@ -154,14 +148,10 @@ public class LoadFromNet extends Thread {
 			// make sure it's element node.
 			if (tempNode.getNodeType() == Node.ELEMENT_NODE) {
 				if (tempNode.getNodeName().contains("col")) {
-					// System.out.println("Collection " +
-					// tempNode.getAttributes().item(0).getNodeValue());
 					col = new Collection();
 					col.setName(tempNode.getAttributes().item(0).getNodeValue());
 				}
 				if (tempNode.getNodeName().contains("im")) {
-					// System.out.println("Image " +
-					// tempNode.getAttributes().item(0).getNodeValue());
 					im = new Image();
 					im.setURL("http://mozartwear.com/"
 							+ tempNode.getAttributes().item(0).getNodeValue());
@@ -169,9 +159,6 @@ public class LoadFromNet extends Thread {
 					im.setName(im.getURL().substring(startSubString));
 				}
 				if (tempNode.getNodeName().contains("pr")) {
-					// System.out.println("Product " +
-					// tempNode.getAttributes().item(0).getNodeValue() +
-					// " Description : " + tempNode.getTextContent());
 					pr = new Product();
 					pr.setNumber(tempNode.getAttributes().item(0)
 							.getNodeValue());
@@ -184,11 +171,8 @@ public class LoadFromNet extends Thread {
 				}
 				// end of node
 				if (tempNode.getNodeName().contains("col")) {
-					//CollectionActivity.collections.add(col);
 					if (col.getCountOfImages() != 0)
-			    	{
 						GridActivity.collections.add(col);
-			    	}
 				}
 				if (tempNode.getNodeName().contains("im")) {
 					col.addImage(im);

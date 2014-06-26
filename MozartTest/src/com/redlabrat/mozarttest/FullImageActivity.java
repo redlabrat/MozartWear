@@ -5,7 +5,6 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-//import android.R;
 import android.os.Bundle;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -20,26 +19,28 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 
+import static com.redlabrat.mozarttest.Constants.*;
+
 public class FullImageActivity extends NavigationActivity {
 	public int num;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		Log.i("Full", "Size : ");
+		Log.i("Full", "Create");
 		Intent i = getIntent();
 		// Selected image id
-		int position = i.getExtras().getInt(FullImageFragment.ARG_IMAGE_NUMBER);
-		String name = i.getExtras().getString(FullImageFragment.ARG_NAME);
-		num = i.getExtras().getInt(FullImageFragment.ARG_COLLECTION_NUMBER);//GridActivity.collectionNumber;
+		int position = i.getExtras().getInt(image_number);
+		String name = i.getExtras().getString(title);
+		num = i.getExtras().getInt(collection_number);
 
 		super.onCreate(savedInstanceState);
 		setTitle(name);
 		
 		Fragment fragment = new FullImageFragment();
         Bundle args = new Bundle();
-        args.putInt(FullImageFragment.ARG_COLLECTION_NUMBER, num);
-        args.putInt(FullImageFragment.ARG_IMAGE_NUMBER, position);
-        args.putString(FullImageFragment.ARG_NAME, name);
+        args.putInt(collection_number, num);
+        args.putInt(image_number, position);
+        args.putString(title, name);
         fragment.setArguments(args);
         
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -69,10 +70,6 @@ public class FullImageActivity extends NavigationActivity {
      * Fragment that appears in the "content_frame", shows a full image view
      */
     public static class FullImageFragment extends Fragment {
-    	public static final String ARG_COLLECTION_NUMBER = "collection_number";
-    	public static final String ARG_IMAGE_NUMBER = "image_number";
-    	public static final String ARG_NAME = "name";
-        
     	public FullImageFragment() {
             // Empty constructor required for fragment subclasses
         }
@@ -82,9 +79,9 @@ public class FullImageActivity extends NavigationActivity {
                 Bundle savedInstanceState) {
         	Log.i("Full", "Fragment create");
         	View rootView = inflater.inflate(R.layout.fragment_full_image, container, false);
-            int colNum = getArguments().getInt(ARG_COLLECTION_NUMBER);
-            int i = getArguments().getInt(ARG_IMAGE_NUMBER);
-            String name = getArguments().getString(ARG_NAME);
+            int colNum = getArguments().getInt(collection_number);
+            int i = getArguments().getInt(image_number);
+            String name = getArguments().getString(title);
     		
     		Collection collection = NavigationActivity.collections.get(colNum);
     		Image img = collection.getImages().get(i);

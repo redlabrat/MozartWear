@@ -15,6 +15,10 @@ public class Constants {
 	public static final String internalDataFileName = "names.dat";
 	
 	public static final String catalog = "http://mozart.com.ru/catalog.xml";
+	public static final String collection_number = "collection_number";
+	public static final String image_number = "image_number";
+	public static final String title = "title";
+	public static final String mozart = "Mozart";
 	
 	/**
 	 *  Method converts dp points to corresponding device specific value of pixels 

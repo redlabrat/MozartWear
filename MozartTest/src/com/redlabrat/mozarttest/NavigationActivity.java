@@ -1,6 +1,7 @@
 package com.redlabrat.mozarttest;
 
 import static com.redlabrat.mozarttest.Constants.catalog;
+import static com.redlabrat.mozarttest.Constants.mozart;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -31,36 +32,57 @@ import android.widget.Toast;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 
+/**
+ * Class of the base activity with action bar and navigation drawer
+ * @author Kate Zenevich
+ * @version 1.0
+ */
 public class NavigationActivity extends ActionBarActivity {
+	/*** @serial action bar of the application*/
 	public ActionBarDrawerToggle mDrawerToggle;
+	/*** @serial the title to the navigation drawer*/
 	public CharSequence mDrawerTitle;
+	/*** @serial the title of the action bar*/
 	public CharSequence mTitle;
-    
+	/*** @serial layout that handles the navigation drawer*/
     public DrawerLayout mDrawerLayout;
+    /*** @serial stores the navigation drawer content list*/
     public ListView mDrawerList;
     
+    /*** @serial navigation list*/
     public ArrayList<String> col = new ArrayList<String>();
+    /*** @serial context of the application*/
     private Context mContext;
+    /*** @serial helps to download and parse the xml file*/
     private LoadFromNet load = null;
-/////////////////////////////
+
+    /*** @serial list of available collection from xml file*/
     public static ArrayList<Collection> collections = new ArrayList<Collection>();
+    /*** @serial current collection position*/
     public static int collectionNumber = 0;
+    /*** @serial width of the current device's display*/
 	public static int w;
+	/*** @serial height of the current device's display*/
 	public static int h;
+	/*** @serial GridView column count for current device's display*/
     public static double columnCount = 0;
-/////////////////////////////
 	
+    /** 
+   	 * Create activity with navigation drawer and action bar
+   	 * @see android.app.Activity#onCreate(android.os.Bundle)
+   	 * @param savedInstanceState represents the saved state of the activity 
+   	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		//For catalog.xml
-		Log.i("Nav", "Size : ");
 		mContext = getApplicationContext();
+		
 		File extChacheDir = mContext.getExternalCacheDir();
 		if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
 			Toast.makeText(mContext, "Media not mounted!", Toast.LENGTH_SHORT).show();
 		}
-		
-		load = new LoadFromNet(getApplicationContext(), catalog, false);
+		//if file already exist then we only parsing it (second parameter - update options)
+		load = new LoadFromNet(getApplicationContext(), false); 
 		
 		//get from URL the name of the image to save
 		int startSubString = catalog.lastIndexOf("/");
@@ -102,7 +124,7 @@ public class NavigationActivity extends ActionBarActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
-        
+        actionBar.setIcon(R.color.transparent);
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the sliding drawer and the action bar app icon
         mDrawerToggle = new ActionBarDrawerToggle(
@@ -118,7 +140,7 @@ public class NavigationActivity extends ActionBarActivity {
             }
 
             public void onDrawerOpened(View drawerView) {
-            	//setTitle(mDrawerTitle);
+            	//setTitle(mozart);
             	supportInvalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
@@ -138,36 +160,65 @@ public class NavigationActivity extends ActionBarActivity {
 			.defaultDisplayImageOptions(defaultOptions)   
 			.threadPoolSize(5)
 			.build();
-		ImageLoader.getInstance().init(config);
+		if (ImageLoader.getInstance().isInited())
+			ImageLoader.getInstance().destroy();
 		
+		ImageLoader.getInstance().init(config);
 		//////////////////
 		w = getWindowManager().getDefaultDisplay().getWidth();
 		h = getWindowManager().getDefaultDisplay().getHeight();
     	//setting the number of columns showing on the screen
 		columnCount = w/160;
 		Log.i("Nav create ", "Size : " + w + "x" + h + " col = " + columnCount);
+		setTitle(mozart);
 	}
 	
-	// The click listener for ListView in the navigation drawer
+	/**
+	 * Class handles onClick event in navigation drawer list
+	 * @author Kate Zenevich
+	 * @version 1.0
+	 */
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
-		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+    	/** 
+    	 * Calling when the item in the navigation list was selected
+    	 * @param arg0 adapter of the data in the listView
+    	 * @param arg1 the listView in which was risen this event
+    	 * @param arg2 selected position in the list
+    	 * @param arg3 number of item
+    	 */
+    	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 				long arg3) {
 			selectItem(arg2);
 		}
     }
 
+    /** 
+	 * Select the navigation list item and hide the drawer
+	 * @param position position of the item in list of the navigation drawer 
+	 */
     public void selectItem(int position) {
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 
+    /** 
+	 * Set the title of the action bar
+	 * @see android.app.Activity#setTitle(java.lang.CharSequence)
+	 * @param title action bar title
+	 */
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;
         getSupportActionBar().setTitle(mTitle);
     }
     
+    /** 
+	 * Create the menu in this activity
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 * @param menu the menu to create
+	 * @return true if menu was created without a problems, false if it wasn't created or an error 
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -175,7 +226,14 @@ public class NavigationActivity extends ActionBarActivity {
         return super.onCreateOptionsMenu(menu);
 	}
 	
-	// Called whenever we call invalidateOptionsMenu() 
+	/** 
+	 * Inflate the menu in this activity
+	 * hide the options menu if the navigation drawer was opened
+	 * calling whenever the supportInvalidateOptionsMenu() is called
+	 * @see android.app.Activity#onPrepareOptionsMenu(android.view.Menu)
+	 * @param menu the menu to prepare
+	 * @return true if menu was updated without a problems, false if it was a problem
+	 */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
@@ -184,6 +242,12 @@ public class NavigationActivity extends ActionBarActivity {
         return super.onPrepareOptionsMenu(menu);
     }
 
+    /** 
+	 * Calling when was selected the options item (in Action bar or options menu)
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 * @param item the selected menu item
+	 * @return true if it was successfully handled, false if not
+	 */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
     	// ActionBarDrawerToggle will take care of this.
@@ -196,7 +260,8 @@ public class NavigationActivity extends ActionBarActivity {
 		}
 		if (item.getItemId() == R.id.action_settings) {
 			collections.clear();
-			load = new LoadFromNet(getApplicationContext(), catalog, true);
+			//forcing to update the xml file (second parameter - update options)
+			load = new LoadFromNet(getApplicationContext(), true);
 			load.start();//download the catalog from Net
 			if(load.isAlive())
 	        {
@@ -214,17 +279,24 @@ public class NavigationActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 	
-	/**
-     * When using the ActionBarDrawerToggle, you must call it during
-     * onPostCreate() and onConfigurationChanged()...
-     */
+    /** 
+	 * Calling after creating the activity before showing it
+	 * synchronize action bar
+	 * @see android.app.Activity#onPostCreate(android.os.Bundle)
+	 * @param savedInstanceState represents the state of the activity 
+	 */
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
     }
-
+    
+    /** 
+	 * Apply new configuration of activity
+	 * @see android.app.Activity#onConfigurationChanged(android.content.res.Configuration)
+	 * @param newConfig the new configuration of the activity
+	 */
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
     	super.onConfigurationChanged(newConfig);
@@ -232,6 +304,9 @@ public class NavigationActivity extends ActionBarActivity {
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
    
+    /** 
+	 * Sets the navigation list in Navigation drawer menu
+	 */
 	public void setNavigationList() {
 		col = new ArrayList<String>();
 		for (Collection c : collections) {
@@ -239,6 +314,10 @@ public class NavigationActivity extends ActionBarActivity {
 		}
 	}
 	
+	/** 
+	 * Checking for active network connection
+	 * @return true if there is active network connection, false if not
+	 */
 	public boolean isNetworkAvailable() {
 	    ConnectivityManager connectivityManager 
 	          = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

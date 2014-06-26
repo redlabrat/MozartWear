@@ -19,7 +19,8 @@
         android:theme="@style/AppBaseTheme" >
         <activity
             android:name="com.redlabrat.mozarttest.ProductViewActivity"
-            android:label="@string/title_activity_main" >
+            android:label="@string/title_activity_main" 
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.redlabrat.mozarttest.MainActivity"

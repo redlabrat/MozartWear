@@ -6,32 +6,39 @@ import com.redlabrat.mozarttest.View.ProductsScreenSliderFragment;
 
 import static com.redlabrat.mozarttest.Constants.*;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.Menu;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 /**
  * Class of the product view screen
  * @author Alexandr Brich
  * @version 1.1
  */
-public class ProductViewActivity extends FragmentActivity {
-
-	private ViewPager pager = null;
-	private PagerAdapter adapter = null;
+public class ProductViewActivity extends NavigationActivity {//FragmentActivity
+	/*** @serial make available handle the set of image pages*/
+	private static ViewPager pager = null;
+	/*** @serial handle the data which will be stored in the pages*/
+	private static PagerAdapter adapter = null;
+	//private static ScreenSlidePagerAdapter adapter = null;
 	
-	public static int num = 0;
-	public static int Pos = 0;
 	public static String collectionName = null;
-	public static String URL = null;
 	/*** @serial list of the image's paths*/
 	private ArrayList<String> imagesPaths = null;
-
+	
+	/*** @serial number of the collection the image belong*/
+	private int colNum = 0;
+	/*** @serial position of the image in collection*/
+	private int imageNum = 0;
+	
 	/**
 	 * Create an instance of main activity and initialize it
 	 * @param savedInstanceState previously saved state of the activity
@@ -40,30 +47,66 @@ public class ProductViewActivity extends FragmentActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_product_view);
-		
-		num = CollectionActivity.collectionNumber;
-		collectionName = CollectionActivity.collections.get(num).getName();
-		
+		Log.i("ProductView", "Create");
+		Intent i = getIntent();
+		imageNum = i.getExtras().getInt(image_number);
+		colNum = i.getExtras().getInt(collection_number);
 		getImagesPaths();
 		
-		pager = (ViewPager) findViewById(R.id.productsPager);
 		adapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
-		pager.setAdapter(adapter);
+		
+		Fragment fragment = new PageFragment();
+        Bundle args = new Bundle();
+        args.putInt(image_number, imageNum);
+        fragment.setArguments(args);
+        
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 	}
 
+	@Override
+    public void selectItem(int position) {
+    	super.selectItem(position);
+    	GridActivity.collectionNumber = position;
+    	GridActivity.fromFull = true;
+    	Intent intent = new Intent(getApplicationContext(), GridActivity.class);
+    	if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        } else {
+            Log.i("App", "Not available");
+        }
+    }
+	
 	/**
 	 * Get list of the images paths
 	 */
 	private void getImagesPaths() {
 		imagesPaths = new ArrayList<String>();
-		//FileHelper fh = new FileHelper(getApplicationContext(), collectionName);
-		//imagesPaths = fh.loadImagesNames();
-		for (Image im : CollectionActivity.collections.get(num).getImages())
+		for (Image im : NavigationActivity.collections.get(colNum).getImages())
 			imagesPaths.add(im.getURL());
-			//imagesPaths.add(fh.getImagePath(im.getURL(), 0));
-		//imagesPaths.add(fh.getImagePath("img1.jpg"));
 	}
+	
+	/**
+     * Fragment that appears in the "content_frame", consist of ViewPager
+     */
+    public static class PageFragment extends Fragment {
+    	public PageFragment() {
+            // Empty constructor required for fragment subclasses
+        }
+    	
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                Bundle savedInstanceState) {
+        	Log.i("Product", "Fragment create");
+        	View rootView = inflater.inflate(R.layout.activity_product_view, container, false);
+            int img = getArguments().getInt(image_number);
+    		
+            pager = (ViewPager) rootView.findViewById(R.id.productsPager);
+            pager.setAdapter(adapter);
+    		pager.setCurrentItem(img, true);
+            return rootView;
+        }
+    }
 
 	/**
 	 * Help to organize the possibility to switch between the product's views (each slides)
@@ -83,15 +126,11 @@ public class ProductViewActivity extends FragmentActivity {
 		 */
 		@Override
 		public Fragment getItem(int position) {
-			ProductsScreenSliderFragment fragment = new ProductsScreenSliderFragment();
+			Log.i("getItem", "Position " + position);
+			Fragment fragment = new ProductsScreenSliderFragment();
 			Bundle params = new Bundle();
-			
-			Pos = position;
-			//FileHelper fh = new FileHelper(getApplicationContext(), collectionName);
-			//URL = CollectionActivity.collections.get(num).getImages().get(Pos).getURL();
-			//fh.getImagePath(CollectionActivity.collections.get(num).getImages().get(Pos).getURL(), 1);
-			params.putString(fragmentImagePath, imagesPaths.get(Pos));
-			
+			params.putInt(collection_number, colNum);
+			params.putInt(image_number, position);
 			fragment.setArguments(params);
 			return fragment;
 		}
@@ -105,17 +144,5 @@ public class ProductViewActivity extends FragmentActivity {
 		public int getCount() {
 			return imagesPaths.size();
 		}
-	}
-
-	/** 
-	 * Inflate the menu in this activity
-	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
-	 * @param menu items to add like optional menu
-	 * @return true if menu was created without a problems, false if it wasn't created or an error 
-	 */
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_main, menu);
-		return true;
 	}
 }
