@@ -1,9 +1,7 @@
 package com.redlabrat.mozarttest;
 
-import static com.redlabrat.mozarttest.Constants.catalog;
 import static com.redlabrat.mozarttest.Constants.mozart;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -12,12 +10,12 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -66,7 +64,7 @@ public class NavigationActivity extends ActionBarActivity {
 	public static int h;
 	/*** @serial GridView column count for current device's display*/
     public static double columnCount = 0;
-	
+	public static boolean noConnect = false;
     /** 
    	 * Create activity with navigation drawer and action bar
    	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -76,44 +74,36 @@ public class NavigationActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		//For catalog.xml
 		mContext = getApplicationContext();
-		
-		File extChacheDir = mContext.getExternalCacheDir();
-		if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-			Toast.makeText(mContext, "Media not mounted!", Toast.LENGTH_SHORT).show();
-		}
+		boolean netAccess = isNetworkAvailable();
 		//if file already exist then we only parsing it (second parameter - update options)
-		load = new LoadFromNet(getApplicationContext(), false); 
-		
-		//get from URL the name of the image to save
-		int startSubString = catalog.lastIndexOf("/");
-		String fileName = catalog.substring(startSubString);
-		File catalogFile = new File(extChacheDir, fileName);
+		load = new LoadFromNet(mContext, false, netAccess); 
 		collections = new ArrayList<Collection>();
-		if (!catalogFile.exists()){
-			load.start();//download the catalog from Net
-			if(load.isAlive()) {
-				try {
-					load.join(); //wait till thread is over
-				} catch (InterruptedException e) {
-					Log.i("THREAD", "Was interrupted!!!");
-					e.printStackTrace();
-				}
+		load.start();//download the catalog from Net
+		if(load.isAlive()) {
+			try {
+				load.join(); //wait till thread is over
+			} catch (InterruptedException e) {
+				Log.i("THREAD", "Was interrupted!!!");
+				e.printStackTrace();
 			}
 		}
-		else load.ReadXml();
-		
-		/*if (savedInstanceState == null ) {
-            collectionNumber = collections.size() - 1;
-        }*/
 		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_grid);
-		setTitle("Коллекция " + collections.get(collectionNumber).getName());
+		
+		if (collections.size() == 0) { //first start without net access
+			noConnect = true;
+			Toast.makeText(this, "Нет интернет соединения!", Toast.LENGTH_LONG).show();
+		}
+		else 
+			setTitle("Коллекция " + collections.get(collectionNumber).getName());
+		
 		setNavigationList();
 		
 		mTitle = mDrawerTitle = getTitle();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
+       
         // set up the drawer's list view with items and click listener
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 R.layout.drawer_list_item, col);//NavigationList.list);
@@ -124,13 +114,13 @@ public class NavigationActivity extends ActionBarActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setIcon(R.color.transparent);
+        //actionBar.setIcon(R.color.transparent);
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the sliding drawer and the action bar app icon
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  // host Activity 
                 mDrawerLayout,         // DrawerLayout object 
-                R.drawable.ic_launcher,  // nav drawer image to replace 'Up' caret 
+                R.drawable.ic_drawer,  // nav drawer image to replace 'Up' caret 
                 R.string.drawer_open,  // "open drawer" description for accessibility 
                 R.string.drawer_close  // "close drawer" description for accessibility 
                 ) {
@@ -238,7 +228,7 @@ public class NavigationActivity extends ActionBarActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
         boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-        menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
+        menu.findItem(R.id.action_update).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -254,14 +244,15 @@ public class NavigationActivity extends ActionBarActivity {
     	if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-    	if (!isNetworkAvailable()) {
-			Toast.makeText(this, "Нет интернет соединения!", Toast.LENGTH_SHORT).show();
-			return false;
-		}
-		if (item.getItemId() == R.id.action_settings) {
+		if (item.getItemId() == R.id.action_update) {
+			boolean netAccess = isNetworkAvailable();
+			if (!netAccess) {
+				Toast.makeText(this, "Нет интернет соединения!", Toast.LENGTH_SHORT).show();
+				return false;
+			}
 			collections.clear();
 			//forcing to update the xml file (second parameter - update options)
-			load = new LoadFromNet(getApplicationContext(), true);
+			load = new LoadFromNet(getApplicationContext(), true, netAccess);
 			load.start();//download the catalog from Net
 			if(load.isAlive())
 	        {
@@ -274,6 +265,13 @@ public class NavigationActivity extends ActionBarActivity {
 	        }
 			//to update NagivationList !
 			setNavigationList();
+			if (noConnect) {
+				noConnect = false;
+				Intent intent = getIntent();
+			    finish();
+			    startActivity(intent);
+			}
+			
 			Toast.makeText(this, "Обновлено!", Toast.LENGTH_SHORT).show();
 		}
         return super.onOptionsItemSelected(item);

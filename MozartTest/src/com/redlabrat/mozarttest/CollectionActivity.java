@@ -5,6 +5,7 @@ import static com.redlabrat.mozarttest.Constants.catalog;
 import java.io.File;
 import java.util.ArrayList;
 import com.redlabrat.mozarttest.R;
+import android.annotation.SuppressLint;
 //import android.R;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
@@ -45,6 +46,7 @@ public class CollectionActivity extends Activity implements OnClickListener {
 	public static int h;
 /////////////////////////////	
 	public int Count = 0;
+	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		mContext = getApplicationContext();
@@ -52,7 +54,7 @@ public class CollectionActivity extends Activity implements OnClickListener {
 		if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
 			Toast.makeText(mContext, "Media not mounted!", Toast.LENGTH_SHORT).show();
 		}
-		load = new LoadFromNet(getApplicationContext(), false);
+		load = new LoadFromNet(getApplicationContext(), false, true);
 		
 		//get from URL the name of the image to save
 		int startSubString = catalog.lastIndexOf("/");
@@ -97,8 +99,8 @@ public class CollectionActivity extends Activity implements OnClickListener {
 		//h = getWindowManager().getDefaultDisplay().getHeight();
 		//Log.i("Display", "Size : "+w+"x"+h);
 		/////////////////////////
-		getScreenOrientation();
-		getRotateOrientation();
+		//getScreenOrientation();
+		//getRotateOrientation();
 		addViews();
 	}
 	
@@ -122,7 +124,7 @@ public class CollectionActivity extends Activity implements OnClickListener {
 				Log.i("onClick", "Cannot clear the collection set!");
 				return false;
 			}
-			load = new LoadFromNet(getApplicationContext(), true);
+			load = new LoadFromNet(getApplicationContext(), true, true);
 			load.start();//download the catalog from Net
 			if(load.isAlive())
 	        {
@@ -202,7 +204,7 @@ public class CollectionActivity extends Activity implements OnClickListener {
 			Log.i("THREAD", "Альбомная ориентация");
 	}
 	
-	private void getRotateOrientation() {
+	/*private void getRotateOrientation() {
 		int rotate = getWindowManager().getDefaultDisplay().getRotation();
 		switch (rotate) {
 		case Surface.ROTATION_0:
@@ -221,5 +223,5 @@ public class CollectionActivity extends Activity implements OnClickListener {
 			Log.i("THREAD", "Не понятно");
 			break;
 		}
-	}
+	}*/
 }

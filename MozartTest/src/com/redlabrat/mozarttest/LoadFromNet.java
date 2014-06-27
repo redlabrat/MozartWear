@@ -18,8 +18,11 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.redlabrat.mozarttest.Collection;
 import com.redlabrat.mozarttest.Image;
@@ -39,21 +42,44 @@ public class LoadFromNet extends Thread {
 	public File extChacheDir = null;
 
 	public boolean update = false;
+	public boolean networkAccess = false;
 
-	public LoadFromNet(Context context, boolean updateOptions) {
+	public LoadFromNet(Context context, boolean updateOptions, boolean netAccess) {
 		mContext = context;
-		Catalog = catalog;//catalogURL;
-		extChacheDir = mContext.getExternalCacheDir();
+		Catalog = catalog;
+		extChacheDir = getExternalCacheDir(mContext);
+		if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+			Toast.makeText(mContext, "Media not mounted!", Toast.LENGTH_SHORT).show();
+			return;
+		}
 		update = updateOptions;
+		networkAccess = netAccess;
 		// get from URL the name of the image to save
 		int startSubString = Catalog.lastIndexOf("/");
 		fileName = Catalog.substring(startSubString);
 	}
 
+	/** 
+	 * Get the external cache directory for this application
+	 * @param context context of the application
+	 * @return root to the cache directory
+	 */
+	private static File getExternalCacheDir(final Context context) {
+		//e.g. "<sdcard>/Android/data/<package_name>/cache/"
+		//Build.VERSION.SDK_INT < 8
+		final File extCacheDir = new File(Environment.getExternalStorageDirectory(),
+		        "/Android/data/" + context.getApplicationInfo().packageName + "/cache/");
+		extCacheDir.mkdirs();
+	    return extCacheDir;
+	}
+	
 	@Override
 	public void run() {
 		File imageFile = new File(extChacheDir, fileName);
-		Log.i("GRID", "after new File(extChacheDir, fileName)"+imageFile.getAbsolutePath());
+		//Log.i("THREAD", "after new File(extChacheDir, fileName)"+imageFile.getAbsolutePath());
+		if (!networkAccess && !imageFile.exists()) {
+			return ;
+		} 
 		if (!imageFile.exists() || update) // if file not exist or we choose to update everything
 		{
 			FileOutputStream fos = null;
@@ -123,8 +149,6 @@ public class LoadFromNet extends Thread {
 	public void ReadXml() {
 		try {
 			File fXmlFile = new File(extChacheDir, fileName);
-			// File SDCardRoot = Environment.getExternalStorageDirectory();
-			// File fXmlFile = new File(SDCardRoot, "catalog.xml");
 			if (!fXmlFile.exists()) {
 				Log.i("THREAD", "FILE NOT EXIST");
 				return;
@@ -142,6 +166,7 @@ public class LoadFromNet extends Thread {
 		}
 	}
 
+	@SuppressLint("NewApi")
 	public void printNote(NodeList nodeList) {
 		for (int count = 0; count < nodeList.getLength(); count++) {
 			Node tempNode = nodeList.item(count);
@@ -183,5 +208,4 @@ public class LoadFromNet extends Thread {
 			}
 		}
 	}
-
 }

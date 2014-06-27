@@ -20,7 +20,6 @@ import static com.redlabrat.mozarttest.Constants.*;
  * @version 1.0
  */
 public class GridActivity extends NavigationActivity {
-	//public static Context mContext;
 	public static boolean fromFull = false;
 	public static int ORIENTATION = Configuration.ORIENTATION_PORTRAIT;
 	
@@ -31,12 +30,12 @@ public class GridActivity extends NavigationActivity {
 		Log.i("Grid", "Create : " + w + "x" + h);
 		//////////////////////////////////
 		//by default it load the latest collection in list
-		Log.i("Grid", "before if  "+ collectionNumber);
 		int newOrientation = getResources().getConfiguration().orientation;
+		if (collections.size() != 0) {
 		if (ORIENTATION == newOrientation) {
 			Log.i("Grid", "without cnahges");
 			if (!fromFull) {
-	            collectionNumber = collections.size()-1;
+				collectionNumber = collections.size()-1;
 	            Log.i("Grid", "in if -> "+ collectionNumber);
 	        }
 			else {
@@ -46,16 +45,15 @@ public class GridActivity extends NavigationActivity {
 		} else {
 			Log.i("Grid", "Changes was!");
 			ORIENTATION = newOrientation;
+			setTitle("Коллекция " + collections.get(collectionNumber).getName());
+			if (fromFull) {
+				fromFull = false;
+				selectItem(collectionNumber);
+			}
 		}
-		setTitle("Коллекция " + collections.get(collectionNumber).getName());
+		}
+		//setTitle("Коллекция " + collections.get(collectionNumber).getName());
 	}
-    
-	/*@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		// TODO Auto-generated method stub
-		super.onConfigurationChanged(newConfig);
-		ORIENTATION = getResources().getConfiguration().orientation;
-	}*/
 	
 	@Override
 	public void selectItem(int position) {
@@ -89,7 +87,7 @@ public class GridActivity extends NavigationActivity {
         	Log.i("Grid", "Fragment create");
         	View rootView = inflater.inflate(R.layout.fragment_grid, container, false);
             int i = getArguments().getInt(collection_number);
-
+            Log.i("GridFrag", "ColNum = "+ i);
     		//setting the number of columns showing on the screen
             w = getActivity().getWindowManager().getDefaultDisplay().getWidth();
     		h = getActivity().getWindowManager().getDefaultDisplay().getHeight();
@@ -117,16 +115,6 @@ public class GridActivity extends NavigationActivity {
     	        } else {
     	            Log.i("App", "Not available");
     	        }
-    			/*String name = "Коллекция " + collections.get(collectionNumber).getName() + " / " + position;
-    	        Fragment fragment = new FullImageFragment();
-    	        Bundle args = new Bundle();
-    	        args.putInt(FullImageFragment.ARG_COLLECTION_NUMBER, collectionNumber);
-    	        args.putInt(FullImageFragment.ARG_IMAGE_NUMBER, position);
-    	        args.putString(FullImageFragment.ARG_NAME, name);
-    	        fragment.setArguments(args);
-    	        
-    	        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-    	        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();*/
     		}
     	};
     }
