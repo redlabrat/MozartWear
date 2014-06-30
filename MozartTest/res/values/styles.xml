@@ -1,17 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- the theme applied to the application or activity -->
     <style name="AppBaseTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="actionBarStyle">@style/MyActionBar</item>
+        <!-- Support library compatibility -->
+        <item name="actionBarStyle">@style/MyActionBar</item>
+        <item name="actionMenuTextColor">@color/blackText</item>
     </style>
 
     <!-- ActionBar styles -->
     <style name="MyActionBar"
            parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
-        <item name="background">@drawable/lilac</item>
+        <!-- Support library compatibility -->
+        <item name="titleTextStyle">@style/TitleTextStyle</item>
+        <item name="background">@drawable/white</item>
+        <item name="backgroundStacked">@drawable/white</item>
+        <item name="backgroundSplit">@drawable/white</item>
     </style>
+    
+    <!-- action bar title text -->
+    <style name="TitleTextStyle"
+           parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/blackText</item>
+        <item name="android:textStyle"></item>
+    </style>
+    
+    <drawable name="lilac">#B5ABF7</drawable>
+    <drawable name="white">#FAFBFC</drawable>
+    <drawable name="black">#393E3E</drawable>
+    
     <color name="blackHalfTransparent">#88000000</color>
     <color name="descriptionText">#FFF</color>
     <color name="mainBackground">#C6C7F5</color>
     <color name="greyBackground">#989FAB</color>
+    
+    <color name="blackText">#5D6362</color>
+    <color name="blackText1">#393E3E</color>
+    <color name="whiteBackground">#FFF</color>
+    
+    <color name="lilaccolor">#B5ABF7</color>
+    <color name="transparent">#00000000</color>
+    <color name="light">#fff</color>
 </resources>

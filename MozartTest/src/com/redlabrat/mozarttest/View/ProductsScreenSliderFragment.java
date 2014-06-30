@@ -45,8 +45,6 @@ public class ProductsScreenSliderFragment extends Fragment {
 	private int colNum = 0;
 	/*** @serial position of the image in collection*/
 	private int imageNum = 0;
-	/*** @serial the title of the image*/
-	private String name = null;
 	/*** @serial attacher to imageView in which the image can be zoomed, scales ...*/
 	private PhotoViewAttacher mAttacher = null;
 	
@@ -74,7 +72,7 @@ public class ProductsScreenSliderFragment extends Fragment {
 		
 		Collection collection =  NavigationActivity.collections.get(colNum);
 		Image img = collection.getImages().get(imageNum);
-		name = collection.getName() + " " + (imageNum+1) + " / " + collection.getCountOfImages();
+		//name = collection.getName() + " " + (ProductViewActivity.currentPage+1) + " / " + collection.getCountOfImages();
 		URL = img.getURL();
 		//ImageAdapter imageAdapter = new ImageAdapter(this, CollectionActivity.collections.get(num));
 		
@@ -108,8 +106,6 @@ public class ProductsScreenSliderFragment extends Fragment {
 			description += p.getDescription() + "\n";
 		}
 		textViewDescript.setText(description);
-		
-		getActivity().setTitle(name);
         return rootView;
 		/*
 		int minHeight = (int) getResources().getDimension(R.dimen.descript_frame_default_height);
@@ -120,26 +116,4 @@ public class ProductsScreenSliderFragment extends Fragment {
 		contentFrame.setLayoutParams(lp);
 		*/
 	}
-	
-	/*private void setPic(String imagePath, ImageView destination) {
-	    int targetW = destination.getWidth();
-	    int targetH = destination.getHeight();
-	    // Get the dimensions of the bitmap
-	    BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-	    bmOptions.inJustDecodeBounds = true;
-	    BitmapFactory.decodeFile(imagePath, bmOptions);
-	    int photoW = bmOptions.outWidth;
-	    int photoH = bmOptions.outHeight;
-
-	    // Determine how much to scale down the image
-	    int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-
-	    // Decode the image file into a Bitmap sized to fill the View
-	    bmOptions.inJustDecodeBounds = false;
-	    bmOptions.inSampleSize = scaleFactor;
-	    bmOptions.inPurgeable = true;
-
-	    Bitmap bitmap = BitmapFactory.decodeFile(imagePath, bmOptions);
-	    destination.setImageBitmap(bitmap);
-	}*/
 }

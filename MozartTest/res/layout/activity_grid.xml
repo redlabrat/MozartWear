@@ -10,7 +10,7 @@
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent" 
-        android:background="@color/mainBackground" />
+        android:background="@color/whiteBackground" />
 	
     <!-- The navigation drawer -->
     <ListView
@@ -18,8 +18,8 @@
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/mainBackground"
+        android:background="@color/whiteBackground"
         android:choiceMode="singleChoice"
-        android:divider="@color/lilaccolor"
-        android:dividerHeight="3dp" />
+        android:divider="@color/blackText"
+        android:dividerHeight="2dp" />
 </android.support.v4.widget.DrawerLayout>

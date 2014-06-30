@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +36,7 @@ public class ProductViewActivity extends NavigationActivity {//FragmentActivity
 	private ArrayList<String> imagesPaths = null;
 	
 	/*** @serial number of the collection the image belong*/
-	private int colNum = 0;
+	public static int colNum = 0;
 	/*** @serial position of the image in collection*/
 	private int imageNum = 0;
 	
@@ -46,15 +47,15 @@ public class ProductViewActivity extends NavigationActivity {//FragmentActivity
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		Log.i("Product", "ProductViewActivtiy");
 		super.onCreate(savedInstanceState);
-		Log.i("ProductView", "Create");
 		Intent i = getIntent();
 		imageNum = i.getExtras().getInt(image_number);
 		colNum = i.getExtras().getInt(collection_number);
 		getImagesPaths();
 		
 		adapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
-		
+
 		Fragment fragment = new PageFragment();
         Bundle args = new Bundle();
         args.putInt(image_number, imageNum);
@@ -76,7 +77,7 @@ public class ProductViewActivity extends NavigationActivity {//FragmentActivity
             Log.i("App", "Not available");
         }
     }
-	
+    
 	/**
 	 * Get list of the images paths
 	 */
@@ -97,12 +98,27 @@ public class ProductViewActivity extends NavigationActivity {//FragmentActivity
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
-        	Log.i("Product", "Fragment create");
         	View rootView = inflater.inflate(R.layout.activity_product_view, container, false);
             int img = getArguments().getInt(image_number);
     		
             pager = (ViewPager) rootView.findViewById(R.id.productsPager);
             pager.setAdapter(adapter);
+    		OnPageChangeListener listener = new OnPageChangeListener() {
+    			public void onPageSelected(int arg0) {
+    				// TODO Auto-generated method stub
+    				Log.i("Pager", "page selected " + arg0);
+                    Collection collection =  NavigationActivity.collections.get(ProductViewActivity.colNum);
+        			String name = collection.getName() + " " + (arg0+1) + " / " + collection.getCountOfImages();
+        			getActivity().setTitle(name);
+    			}
+    			public void onPageScrolled(int arg0, float arg1, int arg2) {
+    				// TODO Auto-generated method stub
+    			}
+    			public void onPageScrollStateChanged(int arg0) {
+    				// TODO Auto-generated method stub	
+    			}
+    		};
+    		pager.setOnPageChangeListener(listener);
     		pager.setCurrentItem(img, true);
             return rootView;
         }
@@ -128,6 +144,7 @@ public class ProductViewActivity extends NavigationActivity {//FragmentActivity
 		public Fragment getItem(int position) {
 			Log.i("getItem", "Position " + position);
 			Fragment fragment = new ProductsScreenSliderFragment();
+			
 			Bundle params = new Bundle();
 			params.putInt(collection_number, colNum);
 			params.putInt(image_number, position);

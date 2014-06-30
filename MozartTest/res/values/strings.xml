@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <resources>
-
     <string name="app_name">MozartTest</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
@@ -23,9 +22,4 @@
     
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
-     
-    <drawable name="lilac">#B5ABF7</drawable>
-    <color name="lilaccolor">#B5ABF7</color>
-    <color name="transparent">#00000000</color>
-    <color name="light">#fff</color>
 </resources>

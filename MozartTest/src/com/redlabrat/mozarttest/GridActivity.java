@@ -27,7 +27,6 @@ public class GridActivity extends NavigationActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		//mContext = getApplicationContext();
 		super.onCreate(savedInstanceState);
-		Log.i("Grid", "Create : " + w + "x" + h);
 		//////////////////////////////////
 		//by default it load the latest collection in list
 		int newOrientation = getResources().getConfiguration().orientation;
@@ -36,7 +35,6 @@ public class GridActivity extends NavigationActivity {
 			Log.i("Grid", "without cnahges");
 			if (!fromFull) {
 				collectionNumber = collections.size()-1;
-	            Log.i("Grid", "in if -> "+ collectionNumber);
 	        }
 			else {
 				fromFull = false;
@@ -45,14 +43,15 @@ public class GridActivity extends NavigationActivity {
 		} else {
 			Log.i("Grid", "Changes was!");
 			ORIENTATION = newOrientation;
-			setTitle("Коллекция " + collections.get(collectionNumber).getName());
+			
+			setTitle(collections.get(collectionNumber).getName());
+			
 			if (fromFull) {
 				fromFull = false;
 				selectItem(collectionNumber);
 			}
 		}
 		}
-		//setTitle("Коллекция " + collections.get(collectionNumber).getName());
 	}
 	
 	@Override
@@ -60,7 +59,7 @@ public class GridActivity extends NavigationActivity {
 		//choose the collection
 		super.selectItem(position);
         collectionNumber = position;
-        setTitle("Коллекция " + collections.get(collectionNumber).getName());
+        setTitle(collections.get(collectionNumber).getName());
 		// update the main content by replacing fragments
         Fragment fragment = new GridFragment();
         Bundle args = new Bundle();
@@ -84,10 +83,8 @@ public class GridActivity extends NavigationActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
-        	Log.i("Grid", "Fragment create");
         	View rootView = inflater.inflate(R.layout.fragment_grid, container, false);
             int i = getArguments().getInt(collection_number);
-            Log.i("GridFrag", "ColNum = "+ i);
     		//setting the number of columns showing on the screen
             w = getActivity().getWindowManager().getDefaultDisplay().getWidth();
     		h = getActivity().getWindowManager().getDefaultDisplay().getHeight();
@@ -96,7 +93,6 @@ public class GridActivity extends NavigationActivity {
     		gridview.setNumColumns((int)columnCount);
     		gridview.setAdapter(new ImageAdapter(getActivity().getApplicationContext(), GridActivity.collections.get(i)));
     		gridview.setOnItemClickListener(gridviewOnItemClickListener);
-
             return rootView;
         }
         
@@ -104,7 +100,7 @@ public class GridActivity extends NavigationActivity {
          *  click on the particular picture in the grid
          */
         private GridView.OnItemClickListener gridviewOnItemClickListener = new GridView.OnItemClickListener() {
-    		public void onItemClick(AdapterView<?> parent, View v, int position,long id) {
+    		public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
     			//choose the image in current collection
     			Intent intent = new Intent(getActivity().getApplicationContext(), //FullImageActivity.class);
     					ProductViewActivity.class);

@@ -12,19 +12,23 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import android.support.v7.app.ActionBar;
@@ -55,7 +59,7 @@ public class NavigationActivity extends ActionBarActivity {
     private LoadFromNet load = null;
 
     /*** @serial list of available collection from xml file*/
-    public static ArrayList<Collection> collections = new ArrayList<Collection>();
+    public static ArrayList<Collection> collections;// = new ArrayList<Collection>();
     /*** @serial current collection position*/
     public static int collectionNumber = 0;
     /*** @serial width of the current device's display*/
@@ -74,17 +78,21 @@ public class NavigationActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		//For catalog.xml
 		mContext = getApplicationContext();
-		boolean netAccess = isNetworkAvailable();
-		//if file already exist then we only parsing it (second parameter - update options)
-		load = new LoadFromNet(mContext, false, netAccess); 
-		collections = new ArrayList<Collection>();
-		load.start();//download the catalog from Net
-		if(load.isAlive()) {
-			try {
-				load.join(); //wait till thread is over
-			} catch (InterruptedException e) {
-				Log.i("THREAD", "Was interrupted!!!");
-				e.printStackTrace();
+		Intent intent = getIntent();
+		if (intent.getCategories() != null && 
+				intent.getCategories().contains("android.intent.category.LAUNCHER")) {
+			boolean netAccess = isNetworkAvailable();
+			//if file already exist then we only parsing it (second parameter - update options)
+			load = new LoadFromNet(mContext, false, netAccess); 
+			collections = new ArrayList<Collection>();
+			load.start();//download the catalog from Net
+			if(load.isAlive()) {
+				try {
+					load.join(); //wait till thread is over
+				} catch (InterruptedException e) {
+					Log.i("THREAD", "Was interrupted!!!");
+					e.printStackTrace();
+				}
 			}
 		}
 		
@@ -96,7 +104,7 @@ public class NavigationActivity extends ActionBarActivity {
 			Toast.makeText(this, "Нет интернет соединения!", Toast.LENGTH_LONG).show();
 		}
 		else 
-			setTitle("Коллекция " + collections.get(collectionNumber).getName());
+			setTitle(collections.get(collectionNumber).getName());
 		
 		setNavigationList();
 		
@@ -135,7 +143,6 @@ public class NavigationActivity extends ActionBarActivity {
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-        
         mDrawerList.setItemChecked(collectionNumber, true);
         
         // Create global configuration and initialize ImageLoader with this configuration
@@ -159,8 +166,11 @@ public class NavigationActivity extends ActionBarActivity {
 		h = getWindowManager().getDefaultDisplay().getHeight();
     	//setting the number of columns showing on the screen
 		columnCount = w/160;
-		Log.i("Nav create ", "Size : " + w + "x" + h + " col = " + columnCount);
 		setTitle(mozart);
+		TextView actionBarTitleView = (TextView)findViewById(R.id.action_bar_title);
+		Typeface type = Typeface.createFromAsset(getAssets(), CustomTextView.fontPath);
+		actionBarTitleView.setTextSize(Math.max(NavigationActivity.w, NavigationActivity.h)/30);
+		actionBarTitleView.setTypeface(type);
 	}
 	
 	/**
@@ -201,6 +211,7 @@ public class NavigationActivity extends ActionBarActivity {
     public void setTitle(CharSequence title) {
         mTitle = title;
         getSupportActionBar().setTitle(mTitle);
+        setTitleColor(getResources().getColor(R.color.blackText));
     }
     
     /** 
@@ -226,8 +237,8 @@ public class NavigationActivity extends ActionBarActivity {
 	 */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        // If the nav drawer is open, hide action items related to the content view
-        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+        // If the nav drawer is open, hide action items related to the content view    	
+    	boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
         menu.findItem(R.id.action_update).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
@@ -271,7 +282,6 @@ public class NavigationActivity extends ActionBarActivity {
 			    finish();
 			    startActivity(intent);
 			}
-			
 			Toast.makeText(this, "Обновлено!", Toast.LENGTH_SHORT).show();
 		}
         return super.onOptionsItemSelected(item);

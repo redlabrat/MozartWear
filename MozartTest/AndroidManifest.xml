@@ -20,6 +20,7 @@
         <activity
             android:name="com.redlabrat.mozarttest.ProductViewActivity"
             android:label="@string/title_activity_main" 
+            android:parentActivityName="com.redlabrat.mozarttest.GridActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
