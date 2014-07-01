@@ -25,9 +25,7 @@ public class GridActivity extends NavigationActivity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		//mContext = getApplicationContext();
 		super.onCreate(savedInstanceState);
-		//////////////////////////////////
 		//by default it load the latest collection in list
 		int newOrientation = getResources().getConfiguration().orientation;
 		if (collections.size() != 0) {

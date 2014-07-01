@@ -6,6 +6,11 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.TextView;
 
+/**
+ * Class of the TextView with custom typeface of the text
+ * @author Kate Zenevich
+ * @version 1.0
+ */
 public class CustomTextView extends TextView {
 	public static Typeface font = null;
 	public static String fontPath = "fonts/Roboto-Thin.ttf";
@@ -27,6 +32,9 @@ public class CustomTextView extends TextView {
 		setFont();
 	}
 	
+	/** 
+	 * Set up the typeface of the text in textView
+	 */
 	private void setFont() {
 	    if (!isInEditMode()) {
 	    	try {

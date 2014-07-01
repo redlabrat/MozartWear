@@ -56,7 +56,8 @@ public class ProductsScreenSliderFragment extends Fragment {
 	}
 	
 	/** 
-	 * Creates a Fragment view of the product by using the view of the product and the device settings
+	 * Creates a Fragment view of the product 
+	 * by using the view of the product and the device settings
 	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
 	 * @param inflater builder for the view
 	 * @param container set of views in which the particular product will be shown

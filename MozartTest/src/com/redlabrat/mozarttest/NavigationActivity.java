@@ -12,7 +12,6 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
@@ -21,7 +20,6 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,18 +39,18 @@ import android.support.v7.app.ActionBarActivity;
  */
 public class NavigationActivity extends ActionBarActivity {
 	/*** @serial action bar of the application*/
-	public ActionBarDrawerToggle mDrawerToggle;
+	private ActionBarDrawerToggle mDrawerToggle;
 	/*** @serial the title to the navigation drawer*/
-	public CharSequence mDrawerTitle;
+	//private CharSequence mDrawerTitle;
 	/*** @serial the title of the action bar*/
-	public CharSequence mTitle;
+	private CharSequence mTitle;
 	/*** @serial layout that handles the navigation drawer*/
-    public DrawerLayout mDrawerLayout;
+	private DrawerLayout mDrawerLayout;
     /*** @serial stores the navigation drawer content list*/
-    public ListView mDrawerList;
+    private ListView mDrawerList;
     
     /*** @serial navigation list*/
-    public ArrayList<String> col = new ArrayList<String>();
+    private ArrayList<String> collectionNames = new ArrayList<String>();
     /*** @serial context of the application*/
     private Context mContext;
     /*** @serial helps to download and parse the xml file*/
@@ -68,8 +66,10 @@ public class NavigationActivity extends ActionBarActivity {
 	public static int h;
 	/*** @serial GridView column count for current device's display*/
     public static double columnCount = 0;
-	public static boolean noConnect = false;
-    /** 
+    /*** @serial indicator of connection presence*/
+	public boolean noConnect = false;
+    
+	/** 
    	 * Create activity with navigation drawer and action bar
    	 * @see android.app.Activity#onCreate(android.os.Bundle)
    	 * @param savedInstanceState represents the saved state of the activity 
@@ -97,24 +97,24 @@ public class NavigationActivity extends ActionBarActivity {
 		}
 		
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_grid);
+		setContentView(R.layout.activity_navigation);
 		
 		if (collections.size() == 0) { //first start without net access
 			noConnect = true;
 			Toast.makeText(this, "Нет интернет соединения!", Toast.LENGTH_LONG).show();
 		}
-		else 
-			setTitle(collections.get(collectionNumber).getName());
+		//else setTitle(collections.get(collectionNumber).getName());
 		
 		setNavigationList();
 		
-		mTitle = mDrawerTitle = getTitle();
+		//mTitle = mDrawerTitle = getTitle();
+		mTitle = getTitle();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
        
         // set up the drawer's list view with items and click listener
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                R.layout.drawer_list_item, col);//NavigationList.list);
+                R.layout.drawer_list_item, collectionNames);
         mDrawerList.setAdapter(adapter);
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
         
@@ -136,7 +136,6 @@ public class NavigationActivity extends ActionBarActivity {
             	setTitle(mTitle);
             	supportInvalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
-
             public void onDrawerOpened(View drawerView) {
             	//setTitle(mozart);
             	supportInvalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
@@ -169,7 +168,7 @@ public class NavigationActivity extends ActionBarActivity {
 		setTitle(mozart);
 		TextView actionBarTitleView = (TextView)findViewById(R.id.action_bar_title);
 		Typeface type = Typeface.createFromAsset(getAssets(), CustomTextView.fontPath);
-		actionBarTitleView.setTextSize(Math.max(NavigationActivity.w, NavigationActivity.h)/30);
+		actionBarTitleView.setTextSize(Math.max(NavigationActivity.w, NavigationActivity.h)/32);
 		actionBarTitleView.setTypeface(type);
 	}
 	
@@ -316,9 +315,9 @@ public class NavigationActivity extends ActionBarActivity {
 	 * Sets the navigation list in Navigation drawer menu
 	 */
 	public void setNavigationList() {
-		col = new ArrayList<String>();
+		collectionNames = new ArrayList<String>();
 		for (Collection c : collections) {
-			col.add(c.getName());
+			collectionNames.add(c.getName());
 		}
 	}
 	

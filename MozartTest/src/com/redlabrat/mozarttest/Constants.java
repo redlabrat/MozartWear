@@ -2,8 +2,9 @@ package com.redlabrat.mozarttest;
 
 import android.content.Context;
 import android.util.DisplayMetrics;
+
 /**
- * Class contains all the constants strings used in the application
+ * Class contains the constants strings used in the application
  * @author Alexandr Brich
  * @version 1.1
  */

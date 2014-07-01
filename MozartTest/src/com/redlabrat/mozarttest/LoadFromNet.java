@@ -31,19 +31,33 @@ import com.redlabrat.mozarttest.Product;
 import static com.redlabrat.mozarttest.Constants.catalog;
 
 public class LoadFromNet extends Thread {
+	/*** @serial temporal collection to add in collection list*/
 	public Collection col;
+	/*** @serial temporal image to add in collection images list*/
 	public Image im;
+	/*** @serial temporal product to add in images products list*/
 	public Product pr;
-	public String Catalog = null;
 
+	/*** @serial context of the application*/
 	public Context mContext = null;
-	public String Catatog = null;
+	/*** @serial URL of the catalog.xml*/
+	public String Catalog = null;
+	/*** @serial name of the xml file to write in cache*/
 	public String fileName = null;
+	/*** @serial path to the external device cache folder*/
 	public File extChacheDir = null;
 
+	/*** @serial the working mode - with xml update or without*/
 	public boolean update = false;
+	/*** @serial indicator of the presence network connection*/
 	public boolean networkAccess = false;
 
+	/** 
+	 * Set the needed parameters
+	 * @param context context of the application
+	 * @param updateOptions indicator of the update mode 
+	 * @param netAccess indicator of the presence of network connection
+	 */
 	public LoadFromNet(Context context, boolean updateOptions, boolean netAccess) {
 		mContext = context;
 		Catalog = catalog;
@@ -62,7 +76,7 @@ public class LoadFromNet extends Thread {
 	/** 
 	 * Get the external cache directory for this application
 	 * @param context context of the application
-	 * @return root to the cache directory
+	 * @return path to the cache directory
 	 */
 	private static File getExternalCacheDir(final Context context) {
 		//e.g. "<sdcard>/Android/data/<package_name>/cache/"
@@ -73,10 +87,12 @@ public class LoadFromNet extends Thread {
 	    return extCacheDir;
 	}
 	
+	/** 
+	 * If needed load the catalog.xml from network, then parsing it
+	 */
 	@Override
 	public void run() {
 		File imageFile = new File(extChacheDir, fileName);
-		//Log.i("THREAD", "after new File(extChacheDir, fileName)"+imageFile.getAbsolutePath());
 		if (!networkAccess && !imageFile.exists()) {
 			return ;
 		} 
@@ -86,8 +102,7 @@ public class LoadFromNet extends Thread {
 			try {
 				fos = new FileOutputStream(imageFile);
 				// set the download URL, a url that points to a file on the
-				// internet
-				// this is the file to be downloaded
+				// internet - the file to be downloaded
 				URL url = new URL(Catalog);
 				// create the new connection
 				HttpURLConnection urlConnection = (HttpURLConnection) url
@@ -99,19 +114,14 @@ public class LoadFromNet extends Thread {
 				InputStream inputStream = urlConnection.getInputStream();
 				// create a buffer...
 				byte[] buffer = new byte[1024];
-				int bufferLength = 0; // used to store a temporary size of the
-										// buffer
+				int bufferLength = 0; 
+				// used to store a temporary size of the buffer
 				// now, read through the input buffer and write the contents to
 				// the file
 				while ((bufferLength = inputStream.read(buffer)) > 0) {
-					// content+=buffer.toString();
 					// add the data in the buffer to the file in the file output
-					// stream (the file on the sd card
+					// stream (the file on the sd card)
 					fos.write(buffer, 0, bufferLength);
-					// add up the size so we know how much is downloaded
-					// downloadedSize += bufferLength;
-					// this is where you would do something to report the
-					// progress, like this maybe
 				}
 				Log.i("THREAD",
 						"File length : " + String.valueOf(imageFile.length()));
@@ -127,7 +137,6 @@ public class LoadFromNet extends Thread {
 				e.printStackTrace();
 			}  catch(UnknownHostException e) {
 				Log.i("ERROR","Hostname cannot be resolved!");
-				
 			} catch (IOException e) {
 				Log.i("ERROR", "IOEXception");
 				e.printStackTrace();
@@ -146,6 +155,9 @@ public class LoadFromNet extends Thread {
 		ReadXml();
 	}
 	
+	/** 
+	 * Handle the parsing of the catalog.xml
+	 */
 	public void ReadXml() {
 		try {
 			File fXmlFile = new File(extChacheDir, fileName);
@@ -166,6 +178,10 @@ public class LoadFromNet extends Thread {
 		}
 	}
 
+	/** 
+	 * Get the list of objects according to the catalog.xml
+	 * @param nodeList the node list of the current branch of xml file
+	 */
 	@SuppressLint("NewApi")
 	public void printNote(NodeList nodeList) {
 		for (int count = 0; count < nodeList.getLength(); count++) {

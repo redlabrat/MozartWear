@@ -47,7 +47,6 @@ public class ProductViewActivity extends NavigationActivity {//FragmentActivity
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		Log.i("Product", "ProductViewActivtiy");
 		super.onCreate(savedInstanceState);
 		Intent i = getIntent();
 		imageNum = i.getExtras().getInt(image_number);
@@ -142,12 +141,10 @@ public class ProductViewActivity extends NavigationActivity {//FragmentActivity
 		 */
 		@Override
 		public Fragment getItem(int position) {
-			Log.i("getItem", "Position " + position);
-			Fragment fragment = new ProductsScreenSliderFragment();
-			
 			Bundle params = new Bundle();
 			params.putInt(collection_number, colNum);
 			params.putInt(image_number, position);
+			Fragment fragment = new ProductsScreenSliderFragment();
 			fragment.setArguments(params);
 			return fragment;
 		}

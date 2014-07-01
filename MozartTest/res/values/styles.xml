@@ -25,20 +25,15 @@
         <item name="android:textStyle"></item>
     </style>
     
-    <drawable name="lilac">#B5ABF7</drawable>
     <drawable name="white">#FAFBFC</drawable>
-    <drawable name="black">#393E3E</drawable>
     
     <color name="blackHalfTransparent">#88000000</color>
-    <color name="descriptionText">#FFF</color>
-    <color name="mainBackground">#C6C7F5</color>
     <color name="greyBackground">#989FAB</color>
-    
-    <color name="blackText">#5D6362</color>
-    <color name="blackText1">#393E3E</color>
     <color name="whiteBackground">#FFF</color>
-    
-    <color name="lilaccolor">#B5ABF7</color>
+    <color name="descriptionText">#FFF</color>
+    <color name="blackText">#5D6362</color>
+
+    <color name="lilac">#B5ABF7</color>
+    <color name="mainBackground">#C6C7F5</color>
     <color name="transparent">#00000000</color>
-    <color name="light">#fff</color>
 </resources>

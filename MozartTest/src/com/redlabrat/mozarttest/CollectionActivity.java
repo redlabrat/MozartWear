@@ -4,15 +4,15 @@ import static com.redlabrat.mozarttest.Constants.catalog;
 
 import java.io.File;
 import java.util.ArrayList;
+
 import com.redlabrat.mozarttest.R;
+
 import android.annotation.SuppressLint;
-//import android.R;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.content.res.Configuration;
 import android.content.res.XmlResourceParser;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
@@ -22,7 +22,6 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Surface;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -197,14 +196,14 @@ public class CollectionActivity extends Activity implements OnClickListener {
 	    return activeNetworkInfo != null && activeNetworkInfo.isConnected();
 	}
 	
-	private void getScreenOrientation(){    
+	/*private void getScreenOrientation(){    
 		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
 			Log.i("THREAD", "Портретная ориентация");
 		else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
 			Log.i("THREAD", "Альбомная ориентация");
 	}
 	
-	/*private void getRotateOrientation() {
+	private void getRotateOrientation() {
 		int rotate = getWindowManager().getDefaultDisplay().getRotation();
 		switch (rotate) {
 		case Surface.ROTATION_0:
