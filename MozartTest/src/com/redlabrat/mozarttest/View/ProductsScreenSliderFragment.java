@@ -94,13 +94,12 @@ public class ProductsScreenSliderFragment extends Fragment {
 		mAttacher.setScaleType(ScaleType.CENTER_CROP);
 		
 		//Set the description frame
-		double minWidth = Math.min(GridActivity.w, GridActivity.h)/2;
+		//double minWidth = Math.min(GridActivity.w, GridActivity.h)/2;
 		descriptionFrame = (FrameLayout)rootView.findViewById(R.id.descriptionFrame);
-		descriptionFrame.setMinimumWidth((int)minWidth);
-		
+		//descriptionFrame.setMinimumWidth((int)minWidth);
 		textViewDescript = (TextView)rootView.findViewById(R.id.descriptionText);
 		description = "";
-		textViewDescript.setWidth((int)minWidth);
+		//textViewDescript.setWidth((int)minWidth);
 		for (Product p : img.getProducts())
 		{
 			description += p.getNumber() + " :\n";

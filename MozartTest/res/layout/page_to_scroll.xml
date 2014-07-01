@@ -18,10 +18,12 @@
         android:id="@+id/descriptionFrame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="5dp"
         android:background="@drawable/rounded_rect" >
 
         <com.redlabrat.mozarttest.CustomTextView
