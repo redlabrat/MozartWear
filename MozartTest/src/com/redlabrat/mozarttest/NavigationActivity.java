@@ -101,7 +101,8 @@ public class NavigationActivity extends ActionBarActivity {
 		
 		if (collections.size() == 0) { //first start without net access
 			noConnect = true;
-			Toast.makeText(this, "Нет интернет соединения!", Toast.LENGTH_LONG).show();
+			Toast.makeText(this, R.string.error_no_internet, Toast.LENGTH_LONG).show();
+			//Toast.makeText(this, "Нет интернет соединения!", Toast.LENGTH_LONG).show();
 		}
 		//else setTitle(collections.get(collectionNumber).getName());
 		
@@ -257,7 +258,8 @@ public class NavigationActivity extends ActionBarActivity {
 		if (item.getItemId() == R.id.action_update) {
 			boolean netAccess = isNetworkAvailable();
 			if (!netAccess) {
-				Toast.makeText(this, "Нет интернет соединения!", Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, R.string.error_no_internet, Toast.LENGTH_SHORT).show();
+				//Toast.makeText(this, "Нет интернет соединения!", Toast.LENGTH_SHORT).show();
 				return false;
 			}
 			collections.clear();
@@ -281,7 +283,8 @@ public class NavigationActivity extends ActionBarActivity {
 			    finish();
 			    startActivity(intent);
 			}
-			Toast.makeText(this, "Обновлено!", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, R.string.updated, Toast.LENGTH_SHORT).show();
+			//Toast.makeText(this, "Обновлено!", Toast.LENGTH_SHORT).show();
 		}
         return super.onOptionsItemSelected(item);
     }

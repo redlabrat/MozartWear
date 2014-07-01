@@ -17,9 +17,12 @@
     <string name="title_activity_grid">GridActivity</string>
     <string name="title_activity_full_image">FullImageActivity</string>
 
-    <string name="collection">Доступные коллекции :</string>
-    <string name="update">Обновить</string>
+    <string name="collection">Available collection :</string>
+    <string name="update">Update</string>
     
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    
+    <string name="error_no_internet">No internet access</string>
+    <string name="updated">Updated</string>
 </resources>

@@ -13,4 +13,13 @@
     <string name="error_save_image">Ошибка. Невозможно сохранить файла на SD карту</string>
     <string name="error_media_mount">Ошибка. Нет доступа к SD карте</string>
     <string name="error_404"> файл не найден</string>
+    
+    <string name="collection">Доступные коллекции :</string>
+    <string name="update">Обновить</string>
+    
+    <string name="drawer_open">Открыть панель навигации</string>
+    <string name="drawer_close">Закрыть панель навигации</string>
+    
+    <string name="error_no_internet">Нет интернет соединения</string>
+    <string name="updated">Обновлено</string>
 </resources>

@@ -63,7 +63,8 @@ public class LoadFromNet extends Thread {
 		Catalog = catalog;
 		extChacheDir = getExternalCacheDir(mContext);
 		if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-			Toast.makeText(mContext, "Media not mounted!", Toast.LENGTH_SHORT).show();
+			//Toast.makeText(mContext, "Media not mounted!", Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, R.string.error_media_mount, Toast.LENGTH_SHORT).show();
 			return;
 		}
 		update = updateOptions;
@@ -133,7 +134,7 @@ public class LoadFromNet extends Thread {
 				imageFile.delete();
 				e.printStackTrace();
 			} catch (MalformedURLException e) {
-				Log.i("ERROR", "MalformedURL");
+				Log.i("ERROR", "Malformed URL");
 				e.printStackTrace();
 			}  catch(UnknownHostException e) {
 				Log.i("ERROR","Hostname cannot be resolved!");
