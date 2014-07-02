@@ -13,9 +13,6 @@
     <string name="error_save_image">Error. Can not save image to SD card</string>
     <string name="error_media_mount">Error. Can not access SD card</string>
     <string name="error_404"> file not found</string>
-    <string name="title_activity_collection">CollectionActivity</string>
-    <string name="title_activity_grid">GridActivity</string>
-    <string name="title_activity_full_image">FullImageActivity</string>
 
     <string name="collection">Available collection :</string>
     <string name="update">Update</string>

@@ -59,8 +59,8 @@ public class ImageAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// set the dimension of the imageView based on the device dimensions
 		// and desired column count
-		float width = (float) (NavigationActivity.w/NavigationActivity.columnCount);
-		float height = (float) (width * 1.5);
+		float width = 160;//(float) (NavigationActivity.w/NavigationActivity.columnCount);
+		float height = 240;//(float) (width * 1.5);
 		
 		ImageView imageView;
 		String URL = collection.getImages().get(position).getURL();

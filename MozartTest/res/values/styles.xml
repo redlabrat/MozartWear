@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- the theme applied to the application or activity -->
-    <style name="AppBaseTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppBaseTheme" parent="@style/Theme.AppCompat.Light">
         <item name="actionBarStyle">@style/MyActionBar</item>
         <!-- Support library compatibility -->
         <item name="actionBarStyle">@style/MyActionBar</item>
@@ -11,6 +11,7 @@
     <!-- ActionBar styles -->
     <style name="MyActionBar"
            parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@drawable/white</item>
         <!-- Support library compatibility -->
         <item name="titleTextStyle">@style/TitleTextStyle</item>
         <item name="background">@drawable/white</item>
@@ -22,7 +23,6 @@
     <style name="TitleTextStyle"
            parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">@color/blackText</item>
-        <item name="android:textStyle"></item>
     </style>
     
     <drawable name="white">#FAFBFC</drawable>

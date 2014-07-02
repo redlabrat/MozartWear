@@ -19,7 +19,6 @@
         android:theme="@style/AppBaseTheme" >
         <activity
             android:name="com.redlabrat.mozarttest.ProductViewActivity"
-            android:label="@string/title_activity_main" 
             android:parentActivityName="com.redlabrat.mozarttest.GridActivity"
             android:screenOrientation="portrait" >
         </activity>
@@ -28,30 +27,21 @@
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="com.redlabrat.mozarttest.CollectionActivity"
-            android:label="@string/title_activity_collection" 
-             >
+            android:name="com.redlabrat.mozarttest.CollectionActivity" >
         </activity>
         <activity
-            android:name="com.redlabrat.mozarttest.GridActivity"
-            android:label="@string/title_activity_grid" >
+            android:name="com.redlabrat.mozarttest.GridActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.redlabrat.mozarttest.NavigationActivity"
-            android:label="@string/title_activity_grid" >
+            android:name="com.redlabrat.mozarttest.NavigationActivity" >
         </activity>
         <activity
             android:name="com.redlabrat.mozarttest.FullImageActivity"
-            android:label="@string/title_activity_full_image" 
             android:screenOrientation="portrait">
-        </activity>
-        <activity
-            android:name="com.redlabrat.mozarttest.DrawerActivity"
-            android:label="@string/title_activity_full_image" >
         </activity>
     </application>
 </manifest>

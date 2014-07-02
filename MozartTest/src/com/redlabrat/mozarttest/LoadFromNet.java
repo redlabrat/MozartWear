@@ -183,7 +183,7 @@ public class LoadFromNet extends Thread {
 	 * Get the list of objects according to the catalog.xml
 	 * @param nodeList the node list of the current branch of xml file
 	 */
-	@SuppressLint("NewApi")
+	//@SuppressLint("NewApi")
 	public void printNote(NodeList nodeList) {
 		for (int count = 0; count < nodeList.getLength(); count++) {
 			Node tempNode = nodeList.item(count);

@@ -7,7 +7,7 @@
     <string name="main_activity_load_butt">Загрузить изображения</string>
     <string name="back_image_descript">Фоновое изображение</string>
     <string name="action_settings">Настройки</string>
-    <string name="app_name">Mozart test</string>
+    <string name="app_name">MozartTest</string>
     <string name="butt_details_text">Подробнее</string>
     <string name="main_activity_show_butt">Показать коллекцию</string>
     <string name="error_save_image">Ошибка. Невозможно сохранить файла на SD карту</string>

@@ -11,15 +11,18 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,6 +51,10 @@ public class NavigationActivity extends ActionBarActivity {
 	private DrawerLayout mDrawerLayout;
     /*** @serial stores the navigation drawer content list*/
     private ListView mDrawerList;
+    /*** @serial action bar textView*/
+    private TextView actionBarTitleView;
+    /*** @serial action bar view with custom typeface*/
+    private View mCustomActionView = null;
     
     /*** @serial navigation list*/
     private ArrayList<String> collectionNames = new ArrayList<String>();
@@ -69,6 +76,8 @@ public class NavigationActivity extends ActionBarActivity {
     /*** @serial indicator of connection presence*/
 	public boolean noConnect = false;
     
+	public static float smallSize = 0;
+	public static boolean first = true;
 	/** 
    	 * Create activity with navigation drawer and action bar
    	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -80,7 +89,10 @@ public class NavigationActivity extends ActionBarActivity {
 		mContext = getApplicationContext();
 		Intent intent = getIntent();
 		if (intent.getCategories() != null && 
-				intent.getCategories().contains("android.intent.category.LAUNCHER")) {
+				intent.getCategories().contains("android.intent.category.LAUNCHER") &&
+				first ) {
+			GridActivity.ORIENTATION = getResources().getConfiguration().orientation;
+			first = false;
 			boolean netAccess = isNetworkAvailable();
 			//if file already exist then we only parsing it (second parameter - update options)
 			load = new LoadFromNet(mContext, false, netAccess); 
@@ -101,6 +113,7 @@ public class NavigationActivity extends ActionBarActivity {
 		
 		if (collections.size() == 0) { //first start without net access
 			noConnect = true;
+			setTitle(mozart);
 			Toast.makeText(this, R.string.error_no_internet, Toast.LENGTH_LONG).show();
 			//Toast.makeText(this, "Нет интернет соединения!", Toast.LENGTH_LONG).show();
 		}
@@ -112,7 +125,7 @@ public class NavigationActivity extends ActionBarActivity {
 		mTitle = getTitle();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
-       
+
         // set up the drawer's list view with items and click listener
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 R.layout.drawer_list_item, collectionNames);
@@ -138,7 +151,6 @@ public class NavigationActivity extends ActionBarActivity {
             	supportInvalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
             public void onDrawerOpened(View drawerView) {
-            	//setTitle(mozart);
             	supportInvalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
@@ -164,13 +176,34 @@ public class NavigationActivity extends ActionBarActivity {
 		//////////////////
 		w = getWindowManager().getDefaultDisplay().getWidth();
 		h = getWindowManager().getDefaultDisplay().getHeight();
+		Log.i("Nav", "Device : "+w+"x"+h);
     	//setting the number of columns showing on the screen
 		columnCount = w/160;
-		setTitle(mozart);
-		TextView actionBarTitleView = (TextView)findViewById(R.id.action_bar_title);
-		Typeface type = Typeface.createFromAsset(getAssets(), CustomTextView.fontPath);
-		actionBarTitleView.setTextSize(Math.max(NavigationActivity.w, NavigationActivity.h)/32);
-		actionBarTitleView.setTypeface(type);
+		float titleSize = Math.max(w, h)/32;
+		smallSize = Math.max(w, h)/50;
+		actionBarTitleView = null;
+		if (Build.VERSION.SDK_INT < 11) {
+			actionBarTitleView = (TextView)findViewById(R.id.action_bar_title);
+			AssetManager manager = getAssets();
+			Typeface type = null;
+			if (manager != null && actionBarTitleView != null) {
+				type = Typeface.createFromAsset(getAssets(), CustomTextView.fontPath);
+			}
+			actionBarTitleView.setTextSize(titleSize);
+			actionBarTitleView.setTypeface(type);
+		} else {
+			// set action bar custom view
+			LayoutInflater inflator = (LayoutInflater) this
+		            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		    getSupportActionBar().setDisplayShowCustomEnabled(true);
+		    getSupportActionBar().setDisplayShowTitleEnabled(false);
+		    mCustomActionView = inflator.inflate(R.layout.action_bar_text, null);
+		    // assign the view to the actionbar
+		    getSupportActionBar().setCustomView(mCustomActionView);
+		    actionBarTitleView = ((TextView) mCustomActionView.findViewById(R.id.actionBarText));
+		    actionBarTitleView.setTextSize(titleSize);
+		}
+	    //setTitle(mozart);
 	}
 	
 	/**
@@ -210,8 +243,13 @@ public class NavigationActivity extends ActionBarActivity {
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;
-        getSupportActionBar().setTitle(mTitle);
-        setTitleColor(getResources().getColor(R.color.blackText));
+        if (Build.VERSION.SDK_INT <11) {
+        	getSupportActionBar().setTitle(mTitle);
+        }
+        else {
+        	actionBarTitleView.setText(mTitle);
+        	getSupportActionBar().setTitle("");
+        }
     }
     
     /** 
