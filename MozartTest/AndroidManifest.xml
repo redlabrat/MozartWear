@@ -19,7 +19,7 @@
         android:theme="@style/AppBaseTheme" >
         <activity
             android:name="com.wideweb.mozarttest.ProductViewActivity"
-            android:parentActivityName="com.redlabrat.mozarttest.GridActivity"
+            android:parentActivityName="com.wideweb.mozarttest.GridActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity

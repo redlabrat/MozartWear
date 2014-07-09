@@ -26,7 +26,7 @@
         android:layout_marginRight="5dp"
         android:background="@drawable/rounded_rect" >
 
-        <com.redlabrat.mozarttest.CustomTextView
+        <com.wideweb.mozarttest.CustomTextView
             android:id="@+id/descriptionText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

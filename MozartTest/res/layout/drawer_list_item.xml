@@ -1,4 +1,4 @@
-<com.redlabrat.mozarttest.CustomTextView 
+<com.wideweb.mozarttest.CustomTextView 
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/navText"
     android:layout_width="match_parent"
