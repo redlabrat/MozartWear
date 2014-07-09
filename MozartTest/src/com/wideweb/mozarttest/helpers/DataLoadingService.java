@@ -1,11 +1,11 @@
-package com.redlabrat.mozarttest.helpers;
+package com.wideweb.mozarttest.helpers;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-import com.redlabrat.mozarttest.ProductViewActivity;
+import com.wideweb.mozarttest.ProductViewActivity;
 
 import android.app.Service;
 import android.content.Intent;

@@ -1,4 +1,4 @@
-package com.redlabrat.mozarttest;
+package com.wideweb.mozarttest;
 
 import android.os.Bundle;
 import android.content.Intent;
@@ -12,7 +12,7 @@ import android.widget.GridView;
 
 import android.support.v4.app.*;
 
-import static com.redlabrat.mozarttest.Constants.*;
+import static com.wideweb.mozarttest.Constants.*;
 
 /**
  * Class for the base activity with added grid view with images

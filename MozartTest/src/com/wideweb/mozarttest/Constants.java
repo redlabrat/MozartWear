@@ -1,4 +1,4 @@
-package com.redlabrat.mozarttest;
+package com.wideweb.mozarttest;
 
 import android.content.Context;
 import android.util.DisplayMetrics;

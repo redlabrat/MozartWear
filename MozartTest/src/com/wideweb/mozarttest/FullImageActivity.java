@@ -1,4 +1,4 @@
-package com.redlabrat.mozarttest;
+package com.wideweb.mozarttest;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
@@ -19,7 +19,7 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 
-import static com.redlabrat.mozarttest.Constants.*;
+import static com.wideweb.mozarttest.Constants.*;
 
 public class FullImageActivity extends NavigationActivity {
 	public int num;

@@ -1,10 +1,10 @@
-package com.redlabrat.mozarttest;
+package com.wideweb.mozarttest;
 
 import java.util.ArrayList;
 
-import com.redlabrat.mozarttest.View.ProductsScreenSliderFragment;
+import com.wideweb.mozarttest.View.ProductsScreenSliderFragment;
 
-import static com.redlabrat.mozarttest.Constants.*;
+import static com.wideweb.mozarttest.Constants.*;
 
 import android.content.Intent;
 import android.os.Bundle;

@@ -1,4 +1,4 @@
-package com.redlabrat.mozarttest;
+package com.wideweb.mozarttest;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -16,7 +16,7 @@ public class MainActivity extends Activity implements OnClickListener{
 
 	private Button loadButton = null;
 	private Button showButton = null;
-	static LoadFromNet mAnotherOpinion;	//Побочный поток
+	static LoadFromNet mAnotherOpinion;	//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 	
 	/**
 	 * Create an instance of main activity and initialize it by creating buttons

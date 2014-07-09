@@ -1,4 +1,4 @@
-package com.redlabrat.mozarttest;
+package com.wideweb.mozarttest;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -24,11 +24,11 @@ import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.redlabrat.mozarttest.Collection;
-import com.redlabrat.mozarttest.Image;
-import com.redlabrat.mozarttest.Product;
+import com.wideweb.mozarttest.Collection;
+import com.wideweb.mozarttest.Image;
+import com.wideweb.mozarttest.Product;
 
-import static com.redlabrat.mozarttest.Constants.catalog;
+import static com.wideweb.mozarttest.Constants.catalog;
 
 public class LoadFromNet extends Thread {
 	/*** @serial temporal collection to add in collection list*/

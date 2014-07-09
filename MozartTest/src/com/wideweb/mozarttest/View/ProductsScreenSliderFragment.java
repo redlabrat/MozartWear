@@ -1,14 +1,14 @@
-package com.redlabrat.mozarttest.View;
+package com.wideweb.mozarttest.View;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.redlabrat.mozarttest.Collection;
-import com.redlabrat.mozarttest.Image;
-import com.redlabrat.mozarttest.NavigationActivity;
-import com.redlabrat.mozarttest.Product;
-import com.redlabrat.mozarttest.R;
+import com.wideweb.mozarttest.Collection;
+import com.wideweb.mozarttest.Image;
+import com.wideweb.mozarttest.NavigationActivity;
+import com.wideweb.mozarttest.Product;
+import com.wideweb.mozarttest.R;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -20,7 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ImageView.ScaleType;
 
-import static com.redlabrat.mozarttest.Constants.*;
+import static com.wideweb.mozarttest.Constants.*;
 
 /**
  * Class represents how the fragment of the Product will be shown at the Screen

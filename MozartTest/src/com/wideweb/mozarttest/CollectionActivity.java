@@ -1,11 +1,11 @@
-package com.redlabrat.mozarttest;
+package com.wideweb.mozarttest;
 
-import static com.redlabrat.mozarttest.Constants.catalog;
+import static com.wideweb.mozarttest.Constants.catalog;
 
 import java.io.File;
 import java.util.ArrayList;
 
-import com.redlabrat.mozarttest.R;
+import com.wideweb.mozarttest.R;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
@@ -113,7 +113,7 @@ public class CollectionActivity extends Activity implements OnClickListener {
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		if (!isNetworkAvailable()) {
-			Toast.makeText(this, "Нет интернет соединения!", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 		if (item.getItemId() == R.id.action_settings) {
@@ -134,7 +134,7 @@ public class CollectionActivity extends Activity implements OnClickListener {
 					e.printStackTrace();
 				}
 	        }
-			Toast.makeText(this, "Обновлено!", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!", Toast.LENGTH_SHORT).show();
 			addViews();
 		}
 		return super.onMenuItemSelected(featureId, item);
@@ -198,28 +198,28 @@ public class CollectionActivity extends Activity implements OnClickListener {
 	
 	/*private void getScreenOrientation(){    
 		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
-			Log.i("THREAD", "Портретная ориентация");
+			Log.i("THREAD", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
 		else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
-			Log.i("THREAD", "Альбомная ориентация");
+			Log.i("THREAD", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
 	}
 	
 	private void getRotateOrientation() {
 		int rotate = getWindowManager().getDefaultDisplay().getRotation();
 		switch (rotate) {
 		case Surface.ROTATION_0:
-			Log.i("THREAD", "Не поворачивали");
+			Log.i("THREAD", "пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
 			break;
 		case Surface.ROTATION_90:
-			Log.i("THREAD", "Повернули на 90 градусов по часовой стрелке");
+			Log.i("THREAD", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ 90 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
 			break;
 		case Surface.ROTATION_180:
-			Log.i("THREAD", "Повернули на 180 градусов");
+			Log.i("THREAD", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ 180 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
 			break;
 		case Surface.ROTATION_270:
-			Log.i("THREAD", "Повернули на 90 градусов по часовой стрелке");
+			Log.i("THREAD", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ 90 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
 			break;
 		default:
-			Log.i("THREAD", "Не понятно");
+			Log.i("THREAD", "пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
 			break;
 		}
 	}*/

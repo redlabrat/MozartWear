@@ -1,10 +1,10 @@
-package com.redlabrat.mozarttest.helpers;
+package com.wideweb.mozarttest.helpers;
 
 import java.net.URISyntaxException;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.redlabrat.mozarttest.ProductViewActivity;
-import com.redlabrat.mozarttest.R;
+import com.wideweb.mozarttest.ProductViewActivity;
+import com.wideweb.mozarttest.R;
 
 import android.content.Context;
 import android.graphics.Bitmap;

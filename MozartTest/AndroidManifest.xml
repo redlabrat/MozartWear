@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.redlabrat.mozarttest"
-    android:versionCode="1"
+    package="com.wideweb.mozarttest"
+    android:versionCode="2"
     android:versionName="1.0" >
 
     <uses-sdk
         android:minSdkVersion="7"
-        android:targetSdkVersion="17" />
+        android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -18,29 +18,29 @@
         android:label="@string/app_name"
         android:theme="@style/AppBaseTheme" >
         <activity
-            android:name="com.redlabrat.mozarttest.ProductViewActivity"
+            android:name="com.wideweb.mozarttest.ProductViewActivity"
             android:parentActivityName="com.redlabrat.mozarttest.GridActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.redlabrat.mozarttest.MainActivity"
+            android:name="com.wideweb.mozarttest.MainActivity"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="com.redlabrat.mozarttest.CollectionActivity" >
+            android:name="com.wideweb.mozarttest.CollectionActivity" >
         </activity>
         <activity
-            android:name="com.redlabrat.mozarttest.GridActivity" >
+            android:name="com.wideweb.mozarttest.GridActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.redlabrat.mozarttest.NavigationActivity" >
+            android:name="com.wideweb.mozarttest.NavigationActivity" >
         </activity>
         <activity
-            android:name="com.redlabrat.mozarttest.FullImageActivity"
+            android:name="com.wideweb.mozarttest.FullImageActivity"
             android:screenOrientation="portrait">
         </activity>
     </application>

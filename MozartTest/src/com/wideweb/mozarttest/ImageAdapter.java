@@ -1,4 +1,4 @@
-package com.redlabrat.mozarttest;
+package com.wideweb.mozarttest;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 

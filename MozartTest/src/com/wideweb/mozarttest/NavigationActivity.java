@@ -1,6 +1,6 @@
-package com.redlabrat.mozarttest;
+package com.wideweb.mozarttest;
 
-import static com.redlabrat.mozarttest.Constants.mozart;
+import static com.wideweb.mozarttest.Constants.mozart;
 
 import java.util.ArrayList;
 
@@ -115,7 +115,7 @@ public class NavigationActivity extends ActionBarActivity {
 			noConnect = true;
 			setTitle(mozart);
 			Toast.makeText(this, R.string.error_no_internet, Toast.LENGTH_LONG).show();
-			//Toast.makeText(this, "Нет интернет соединения!", Toast.LENGTH_LONG).show();
+			//Toast.makeText(this, "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!", Toast.LENGTH_LONG).show();
 		}
 		//else setTitle(collections.get(collectionNumber).getName());
 		
@@ -297,7 +297,7 @@ public class NavigationActivity extends ActionBarActivity {
 			boolean netAccess = isNetworkAvailable();
 			if (!netAccess) {
 				Toast.makeText(this, R.string.error_no_internet, Toast.LENGTH_SHORT).show();
-				//Toast.makeText(this, "Нет интернет соединения!", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(this, "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!", Toast.LENGTH_SHORT).show();
 				return false;
 			}
 			collections.clear();
@@ -322,7 +322,7 @@ public class NavigationActivity extends ActionBarActivity {
 			    startActivity(intent);
 			}
 			Toast.makeText(this, R.string.updated, Toast.LENGTH_SHORT).show();
-			//Toast.makeText(this, "Обновлено!", Toast.LENGTH_SHORT).show();
+			//Toast.makeText(this, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!", Toast.LENGTH_SHORT).show();
 		}
         return super.onOptionsItemSelected(item);
     }

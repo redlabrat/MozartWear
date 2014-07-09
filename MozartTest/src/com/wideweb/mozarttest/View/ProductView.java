@@ -1,4 +1,4 @@
-package com.redlabrat.mozarttest.View;
+package com.wideweb.mozarttest.View;
 
 import android.content.Context;
 import android.widget.FrameLayout;

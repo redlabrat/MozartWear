@@ -1,4 +1,4 @@
-package com.redlabrat.mozarttest.helpers;
+package com.wideweb.mozarttest.helpers;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,10 +10,10 @@ import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 
-import com.redlabrat.mozarttest.CollectionActivity;
-import com.redlabrat.mozarttest.R;
+import com.wideweb.mozarttest.CollectionActivity;
+import com.wideweb.mozarttest.R;
 
-import static com.redlabrat.mozarttest.Constants.*;
+import static com.wideweb.mozarttest.Constants.*;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
