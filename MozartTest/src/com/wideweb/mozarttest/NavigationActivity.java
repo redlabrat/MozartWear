@@ -111,12 +111,12 @@ public class NavigationActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_navigation);
 		
-		if (collections.size() == 0) { //first start without net access
-			noConnect = true;
-			setTitle(mozart);
-			Toast.makeText(this, R.string.error_no_internet, Toast.LENGTH_LONG).show();
-			//Toast.makeText(this, "��� �������� ����������!", Toast.LENGTH_LONG).show();
-		}
+//		if (collections.size() == 0) { //first start without net access
+//			noConnect = true;
+//			setTitle(mozart);
+//			Toast.makeText(this, R.string.error_no_internet, Toast.LENGTH_LONG).show();
+//			//Toast.makeText(this, "��� �������� ����������!", Toast.LENGTH_LONG).show();
+//		}
 		//else setTitle(collections.get(collectionNumber).getName());
 		
 		setNavigationList();
@@ -202,6 +202,12 @@ public class NavigationActivity extends ActionBarActivity {
 		    getSupportActionBar().setCustomView(mCustomActionView);
 		    actionBarTitleView = ((TextView) mCustomActionView.findViewById(R.id.actionBarText));
 		    actionBarTitleView.setTextSize(titleSize);
+		}
+		if (collections.size() == 0) { //first start without net access
+			noConnect = true;
+			setTitle(mozart);
+			Toast.makeText(this, R.string.error_no_internet, Toast.LENGTH_LONG).show();
+			//Toast.makeText(this, "��� �������� ����������!", Toast.LENGTH_LONG).show();
 		}
 	    //setTitle(mozart);
 	}

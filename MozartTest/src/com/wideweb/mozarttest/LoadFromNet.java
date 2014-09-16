@@ -1,5 +1,7 @@
 package com.wideweb.mozarttest;
 
+import static com.wideweb.mozarttest.Constants.catalog;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -18,17 +20,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
-
-import com.wideweb.mozarttest.Collection;
-import com.wideweb.mozarttest.Image;
-import com.wideweb.mozarttest.Product;
-
-import static com.wideweb.mozarttest.Constants.catalog;
 
 public class LoadFromNet extends Thread {
 	/*** @serial temporal collection to add in collection list*/

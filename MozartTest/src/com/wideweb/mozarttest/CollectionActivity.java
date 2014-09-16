@@ -81,7 +81,7 @@ public class CollectionActivity extends Activity implements OnClickListener {
 		// Create global configuration and initialize ImageLoader with this
 		// configuration
 		DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-				.showImageOnLoading(R.drawable.search_icon).cacheInMemory(true)
+				.showImageOnLoading(R.drawable.progress_bar_medium).cacheInMemory(true)
 				.cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565)
 				.imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)// EXACTLY)
 				.build();
