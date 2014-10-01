@@ -83,11 +83,11 @@ public class FullImageActivity extends NavigationActivity {
 			View rootView = inflater.inflate(R.layout.fragment_full_image,
 					container, false);
 			int colNum = getArguments().getInt(collection_number);
-			int i = getArguments().getInt(image_number);
+			int img_num = getArguments().getInt(image_number);
 			String name = getArguments().getString(title);
 
 			Collection collection = NavigationActivity.collections.get(colNum);
-			Image img = collection.getImages().get(i);
+			Image img = collection.getImages().get(img_num);
 			// ImageAdapter imageAdapter = new ImageAdapter(this,
 			// CollectionActivity.collections.get(num));
 			String URL = img.getURL();

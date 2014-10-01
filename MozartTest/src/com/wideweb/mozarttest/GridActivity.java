@@ -3,15 +3,14 @@ package com.wideweb.mozarttest;
 import android.os.Bundle;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-
 import android.support.v4.app.*;
-
 import static com.wideweb.mozarttest.Constants.*;
 
 /**
@@ -86,9 +85,10 @@ public class GridActivity extends NavigationActivity {
 					false);
 			int i = getArguments().getInt(collection_number);
 			// setting the number of columns showing on the screen
-			w = getActivity().getWindowManager().getDefaultDisplay().getWidth();
-			h = getActivity().getWindowManager().getDefaultDisplay()
-					.getHeight();
+			DisplayMetrics metrics = new DisplayMetrics();
+			getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+			w = metrics.widthPixels;
+			h = metrics.heightPixels;
 			columnCount = w / 160;
 			gridview = (GridView) rootView.findViewById(R.id.gridView1);
 			gridview.setNumColumns((int) columnCount);
